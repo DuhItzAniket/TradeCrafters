@@ -2,6 +2,18 @@
 
 **Planning baseline:** 20 October 2026. Scope is US first, India later; personal portfolio project with a near-free first deployment. Estimates are focused contributor-days, not deadlines or promises. Re-estimate after the first working slice.
 
+GitHub entry points: [research PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1) and [roadmap tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
+
+| Implementation issue | Work |
+| --- | --- |
+| [#3](https://github.com/DuhItzAniket/TradeCrafters/issues/3) | M1 foundation and verified identity |
+| [#4](https://github.com/DuhItzAniket/TradeCrafters/issues/4) | M2 trading integrity and accounting |
+| [#5](https://github.com/DuhItzAniket/TradeCrafters/issues/5) | M3 responsive workbench and order experience |
+| [#6](https://github.com/DuhItzAniket/TradeCrafters/issues/6) | M4 deployment and hardening |
+| [#7](https://github.com/DuhItzAniket/TradeCrafters/issues/7) | M5 data entitlements and US real-market mode |
+| [#8](https://github.com/DuhItzAniket/TradeCrafters/issues/8) | Later worker and resting orders |
+| [#9](https://github.com/DuhItzAniket/TradeCrafters/issues/9) | Later Indian-market discovery |
+
 ## Milestones and dependencies
 
 ```mermaid

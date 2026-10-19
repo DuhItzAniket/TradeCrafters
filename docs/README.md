@@ -6,6 +6,8 @@ TradeCrafters began as a DBMS course project by **Aniket Kumar and Annapurna S**
 
 The project owner's direction is **US stocks first, Indian markets later, with a free or near-free portfolio-project budget**. This package turns that direction into reviewable engineering and design work.
 
+Review [draft PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use [tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2) for the linked implementation backlog. No implementation task has been marked complete by the research phase.
+
 ## Recommended direction
 
 - Build a **TypeScript modular monolith**: Next.js for React UI and same-origin API routes; MySQL/InnoDB for durable state; a supported authentication library for server-verified sessions. Keep trading rules independent of the web framework.
