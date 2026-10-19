@@ -1,0 +1,22 @@
+name: Bug report
+description: Report a functional issue with a reproducible scenario. Use private reporting for sensitive security details.
+title: "[Bug] "
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include data mode, browser, version/commit and relevant timestamps. Do not include passwords, tokens or another user's data.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence and impact
+      description: Screenshots or error codes are useful. Remove credentials and personal information.

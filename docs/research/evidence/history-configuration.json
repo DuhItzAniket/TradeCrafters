@@ -1,0 +1,13 @@
+{
+  "checkedDate": "2026-10-20",
+  "commit": "661c8675c1a84ace7bb2296bb0894695a51d3c60",
+  "scope": "In-memory configuration inventory of a retained historical archive; not a complete secret scan",
+  "archivePresentInHistory": true,
+  "findings": [
+    { "category": "database password", "nonPlaceholderValuePresent": true, "currentValidity": "not tested" },
+    { "category": "market-data API key", "nonPlaceholderValuePresent": true, "currentValidity": "not tested" }
+  ],
+  "secretValuesIncluded": false,
+  "recommendedDisposition": "Treat as exposed; rotate or revoke before reuse; review activity privately. Current-tree removal alone is insufficient.",
+  "historyModified": false
+}

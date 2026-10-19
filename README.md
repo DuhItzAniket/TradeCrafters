@@ -1,5 +1,9 @@
 # TradeCrafters - Stock Market Simulation Application
 
+> **Modernization research — October 2026:** Start with the [research and architecture index](docs/README.md), [roadmap](docs/ROADMAP.md), and [workbench design study](docs/design/README.md). The redesign targets a near-free US-first simulator, with Indian markets later. The original course project was created by **Aniket Kumar and Annapurna S**.
+>
+> **Legacy status:** The application below is coursework source, not a verified production-ready release. The [audit](docs/research/01-current-state-audit.md) documents authentication, accounting, setup, and data-freshness gaps. The original JWT/real-time claims below should be read as intended features; JWT sessions are not implemented in the reviewed server. Historical configuration values require rotation before reuse. This research change does not fix or deploy the application.
+
 A full-stack application that simulates stock market trading with real-time data and user portfolio management.
 
 ## 🚀 Features

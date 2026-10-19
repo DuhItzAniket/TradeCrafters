@@ -1,0 +1,50 @@
+{
+  "baseline": "8fa026527631bbfa51bcd0ba5e3412eaa8df5b16",
+  "controllerSha256": "91ba3d87aeb96ea251dfa5ca6b7daa9a25cd704df7033cf148f85db54e65c1f2",
+  "scope": "Pinned controller with injected fake database; no integration or live endpoint test",
+  "baselineDatabaseModuleTracked": false,
+  "verifiedKnownDefects": [
+    {
+      "name": "unknown side credits without changing holdings",
+      "inputs": {
+        "side": "UNKNOWN",
+        "quantity": 2,
+        "balance": 100,
+        "held": 5
+      },
+      "status": 200,
+      "controllerReportsSuccess": true,
+      "attemptedCashBinding": 120,
+      "attemptedPositionQuantity": null,
+      "positionWriteCount": 0
+    },
+    {
+      "name": "string quantity concatenates on buy",
+      "inputs": {
+        "side": "buy",
+        "quantity": "2",
+        "balance": 1000,
+        "held": 5
+      },
+      "status": 200,
+      "controllerReportsSuccess": true,
+      "attemptedCashBinding": 980,
+      "attemptedPositionQuantity": "52",
+      "positionWriteCount": 1
+    },
+    {
+      "name": "string DECIMAL balance concatenates on sell",
+      "inputs": {
+        "side": "sell",
+        "quantity": 2,
+        "balance": "100.00",
+        "held": 5
+      },
+      "status": 200,
+      "controllerReportsSuccess": true,
+      "attemptedCashBinding": "100.0020",
+      "attemptedPositionQuantity": 3,
+      "positionWriteCount": 1
+    }
+  ]
+}
