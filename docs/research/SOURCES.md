@@ -13,6 +13,15 @@ All references below were checked on **20 October 2026**. Prefer current provide
 
 | Primary source | Used for |
 | --- | --- |
+| [ISO 10383 MIC register](https://www.iso20022.org/market-identifier-codes) | Global venue identity and operating/segment/effective-date handling; not every MIC is an equity exchange |
+| [Twelve Data exchange directory](https://twelvedata.com/exchanges) and [July 2026 directory update](https://twelvedata.com/news/july-2026-update) | Worldwide discovery differs from actual supplied price coverage |
+| [Twelve Data EOD coverage/licensing note](https://support.twelvedata.com/en/articles/12682324-end-of-day-eod-pricing-market-data) | Per-market historical/EOD availability and licensing gaps; no universal live assumption |
+| [EODHD exchange API](https://eodhd.com/financial-apis/exchanges-api-list-of-tickers-and-trading-hours) | Provider exchange codes, MIC mapping, composite universes and endpoint-specific calendar identifiers |
+| [EODHD pricing](https://eodhd.com/pricing), [business pricing](https://eodhd.com/commercial-pricing) and [license terms](https://eodhd.com/financial-apis/commercial-vs-personal-license-use) | Broad-coverage personal versus public/business procurement; internal use is distinct from external display |
+| [EODHD data sources](https://eodhd.com/financial-apis/our-data-sources-and-data-partners) | Exchange versus indicative/derived provenance requires endpoint/venue-specific confirmation |
+| [JPX cash-equity sessions](https://www.jpx.co.jp/english/equities/trading/domestic/01.html) | Local morning/afternoon session requirements |
+| [HKEX securities-market operations](https://www.hkex.com.hk/Global/Exchange/FAQ/Securities-Market/Trading/Securities-Market-Operations?sc_lang=en) | Board-lot versus odd-lot behavior as a venue-policy requirement |
+| [LSE quote/trade display](https://www.londonstockexchange.com/stock/SGBX/wisdomtree/company-page) | Distinguishing minor quote units from major cash currencies |
 | [Alpha Vantage support](https://www.alphavantage.co/support/) | Normal daily quota, verified educational/open-source exception, premium real-time/delayed entitlements |
 | [Alpaca Market Data API](https://docs.alpaca.markets/us/docs/about-market-data-api) | IEX versus wider coverage, plan quotas and stream limits, recent historical restrictions |
 | [Alpaca paper trading](https://docs.alpaca.markets/us/v1.4.2/docs/paper-trading) | Simulation limitations; not authorization to redistribute data |
@@ -63,4 +72,4 @@ No production deployment was found or exercised as part of this review. The olde
 
 Provider websites can change, differ by endpoint/account/region, or render incomplete pricing. Where exact information could not be verified, it is marked unresolved instead of filled with a remembered quota. Business pricing is not inferred from personal plans. Fees, taxes, and exchange rights need account-specific confirmation.
 
-The design study is an original product concept with fictional data. It validates composition and limited interactions, not market accuracy, production performance, authentication, or trading correctness. Its browser checks are recorded in the [verification note](evidence/verification.md).
+The design study is an original single-USD-listing concept with fictional data. It validates composition and limited interactions, not the later global discovery/multi-wallet UX, market accuracy, production performance, authentication, or trading correctness. The global-scope correction changes the proposed design/contracts; it does not implement venue integrations. Browser checks are recorded in the [verification note](evidence/verification.md).

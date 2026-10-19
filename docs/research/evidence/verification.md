@@ -2,6 +2,8 @@
 
 Checked on **20 October 2026**. This verifies the research package and its design study, not a production application.
 
+**Global-scope correction:** architecture, data research, contracts, roadmap and GitHub issue descriptions were revised for all stock exchanges worldwide. This is a documentation change. The earlier browser evidence covers the unchanged fictional USD listing study, not global exchange discovery, FX wallets or actual market integrations. New global acceptance criteria remain future verification work.
+
 ## Repository investigation
 
 - Cloned the public GitHub repository and recorded baseline `8fa026527631bbfa51bcd0ba5e3412eaa8df5b16`.

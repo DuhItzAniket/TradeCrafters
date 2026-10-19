@@ -2,6 +2,8 @@
 
 **Status:** proposed, 20 October 2026. Designed for one or two contributors and a near-free personal demo. This is a deployable design, not a claim that infrastructure or the new application already exists.
 
+**Market scope: all stock exchanges globally.** The [global exchange design](global-markets.md) is part of this architecture, including the initial schema and contracts. US-only data and USD examples are regional examples, not scope restrictions.
+
 ## Alternatives considered
 
 | Option | Strength | Cost/complexity | Decision |
@@ -40,10 +42,13 @@ flowchart TB
   subgraph App[One application, separate modules]
     V --> I[Identity and authorization]
     V --> M[Market data service]
+    M --> G[Global venues, listings, policies and coverage]
+    V --> X[Currency wallets and FX service]
     V --> T[Trading service]
     V --> P[Portfolio read model]
     V --> O[Admin and audit]
     T --> M
+    T --> X
   end
   I --> D[(MySQL: sessions and users)]
   T --> D
@@ -65,6 +70,8 @@ Real-data refresh is request-driven and globally coalesced. Quiet periods need n
 | --- | --- | --- |
 | Identity | User mapping, sessions, role checks, account access | Trust a username/role/account owner from the browser |
 | Market data | Instruments, provider normalization, snapshots, freshness, trading calendar | Change balances or silently alter an account's feed |
+| Global market catalog | Securities/listings, operating/segment MICs, aliases, capability evidence, calendar/rule versions | Equate a directory entry with live or simulation-enabled coverage |
+| Currency/FX | Native wallets, quote-unit conversion, explicit virtual FX, timestamped reporting conversion | Treat reporting-currency totals as spendable native cash or mix currencies in a balanced journal |
 | Trading | Orders, idempotency, fill policy, account locks, fills, ledger writes | Accept a client execution price or make network requests while holding a financial lock |
 | Portfolio | Positions, marks, cash/equity/P&L reads and reconciliation | Infer cash from formatted description text or value missing marks at zero |
 | Admin | Suspension, pause switch, instrument allowlist, audited resets | Rewrite fills, grant roles via profile edits, or expose provider secrets |
@@ -78,6 +85,7 @@ packages/domain/          Orders, ledger rules, P&L, fill model; no Next imports
 packages/contracts/       Validated request/response and error contracts
 packages/database/        MySQL schema, migrations, transactions, repositories
 packages/market-data/     Synthetic and real adapters; calendar and quality rules
+packages/market-catalog/  Global venues, listings, provider mappings and coverage
 docs/                     Research, architecture, decisions, roadmap, design
 ```
 
@@ -113,7 +121,7 @@ Read the [domain design](trading-and-data-model.md) for precise atomicity, round
 
 ## Later realtime topology
 
-An optional ingest/evaluation worker can run on AWS ECS/Fargate while the frontend remains on Vercel. It consumes entitled prices, acquires a renewable feed-leader lease, evaluates eligible resting orders, and uses the same trading service and SQL transactions. Use a transactional outbox before publishing durable order events; consumers deduplicate by event ID. Queue delivery is at least once, not exactly once.
+An optional ingest/evaluation worker can run on AWS ECS/Fargate while the frontend remains on Vercel. It consumes entitled prices, acquires renewable provider/feed leader leases, evaluates orders against venue-local sessions, and uses the same trading service and SQL transactions. Isolate failures by venue/feed. Use a transactional outbox before publishing durable order events; consumers deduplicate by event ID. Queue delivery is at least once, not exactly once.
 
 Vercel currently documents [WebSockets in beta](https://vercel.com/docs/functions/websockets). Connections are bounded by function duration and reconnects can land on another instance. That makes sockets an option for later UI updates, not an excuse to put a durable order book or a globally unique feed connection in function memory. Polling is sufficient for the budget MVP.
 

@@ -2,6 +2,8 @@
 
 **Proposed, 20 October 2026.** No deployment was performed. Recheck plans, regions, networking, runtime versions, and entitlements before provisioning.
 
+The market scope is **all stock exchanges globally**. Global identity, currencies, calendars and capability controls are initial application requirements; enabling real data is governed by the [global coverage plan](global-markets.md). The prototype budget below does not price universal worldwide real-time data.
+
 ## Path A: near-free Vercel demo (recommended first)
 
 Run the Next.js app and API on Vercel; use external managed MySQL with TLS and server-generated synthetic data. Relative `/api/v1` URLs remove the legacy localhost coupling. All private account endpoints use `private, no-store`; only genuinely public, non-personal data can be CDN-cached.
@@ -27,6 +29,10 @@ Free-tier public database endpoints require authenticated encrypted access with 
 | Domain, email, monitoring add-ons | Optional, separately budgeted | Start with the platform subdomain, built-in logs, and minimal metrics |
 
 **Target: $0–5/month for a small synthetic personal demo, not a guarantee at arbitrary traffic.** [Vercel Pro currently starts at $20/month](https://vercel.com/pricing) with usage/seat conditions. A public real-data product can cost much more than its hosting. Do not provision paid resources just to satisfy an architecture diagram.
+
+For global data, estimate cost by provider + venue/segment + capability + permitted audience + active subscription/retention volume. A directory entry, global EOD plan, or permission for one exchange is not permission for all venues live. Show the unresolved cost/coverage gaps explicitly rather than reducing scope to the US. The near-free synthetic prototype does not complete the real-exchange rollout.
+
+Worldwide exchanges have different local sessions, so data workers/schedulers use venue calendars and provider/feed partitions. One provider/venue outage disables affected paths rather than all markets. Keep the ledger on one authoritative database initially; add read caching/replicas only when measured latency/load justify them. Global market scope does not require active-active multi-region writes.
 
 ## Path B: Vercel frontend + AWS API/worker
 

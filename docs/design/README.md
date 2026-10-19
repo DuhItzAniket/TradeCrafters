@@ -4,6 +4,8 @@ An original visual direction for TradeCrafters: graphite surfaces, warm amber fo
 
 **This is an interactive design document, not the upgraded trading application.** All instruments, prices, positions, and account values are fictional. No backend, sign-in, persistence, external data feed, or trading endpoint is connected.
 
+**Global scope:** the product targets all stock exchanges. This study illustrates one fictional USD listing/workbench view; global exchange discovery, native-currency wallets and FX flows still need design and verification. See the [global architecture](../architecture/global-markets.md). These screenshots are not evidence of worldwide data or trading support.
+
 Open [workbench.html](workbench.html) in a browser, or serve the design folder locally from the repository root:
 
 ```text
