@@ -1,17 +1,44 @@
 # Contributing to TradeCrafters
 
-Start with the [research index](docs/README.md), [roadmap](docs/ROADMAP.md), and [proposed decisions](docs/DECISIONS.md). This is a research-stage modernization of a DBMS project by Aniket Kumar and Annapurna S. Do not assume every legacy README feature is implemented.
+TradeCrafters is the modernization of a DBMS project by **Aniket Kumar and Annapurna S**. Start with the [current implementation status](docs/implementation/foundation-status.md), [architecture](docs/architecture/README.md), [roadmap](docs/ROADMAP.md), and [decisions](docs/DECISIONS.md). The modern app lives in `apps/web` and `packages`; legacy coursework is preserved separately.
 
-Use an issue for a concrete milestone/task, branch from the current main branch, and submit a focused pull request. Include the behavior changed, evidence of verification, and any data/model/migration implications. Do not claim a security finding is fixed without checking its relevant acceptance criteria.
+## Development
 
-Never commit `.env` values, account exports, database dumps with user data, provider credentials, or raw support agreements. Track database connection **code**, while keeping secrets in environment/secret stores. The legacy `database/` ignore rule must be resolved during implementation so required source is reproducible.
+Follow the [local setup](docs/implementation/local-development.md) with Node 24.22.0 and Docker/MySQL. Use `npm ci` at the repository root; do not install the legacy client/server as part of modern development. `npm run setup:local` creates fresh ignored local credentials. Never point development or CI at a production account database.
 
-Financial changes need exact-arithmetic, retry and concurrency evidence with real MySQL integration tests. UI changes need desktop/mobile screenshots and loading/error/keyboard checks. New providers need verified permitted use and quota behavior. Update ADRs and documentation with the implementation rather than letting them drift.
+Use an issue for a concrete task, create a branch from current `main`, and submit a focused PR back to `main`. Include the resulting behavior, verification evidence and any migration/data implications. Do not claim an audit finding is fixed without its acceptance evidence.
 
-The current documentation-only verification command is:
+```sh
+npm run typecheck
+npm run lint
+npm run format:check
+npm test
+npm run test:integration
+npm run build
+```
+
+Integration checks require the app and MySQL to be running. Use `npm run format` to apply the repository style. UI changes need desktop/mobile screenshots and loading/error/keyboard verification. Financial changes need exact-arithmetic, retry and concurrency evidence against real MySQL. New data providers need verified permitted use, coverage and quota behavior.
+
+## Review and merge
+
+`main` requires a pull request, the `verify` status check, an up-to-date branch and resolved review conversations. These rules apply to administrators too. The project currently uses zero mandatory approvals so a solo maintainer can work without self-approval; this does not authorize merging failing checks or unreviewed external contributions.
+
+Auto-merge is enabled at repository level and is an explicit per-PR choice. Maintainers can opt in using `gh pr merge <number> --squash --auto` after a change is ready. Keep PRs as drafts while implementation or required evidence is missing. Do not add a bot that blindly enables auto-merge on every outside contribution. Branches with citations are retained so historical research links remain available.
+
+## Data and security
+
+Never commit `.env` values, account exports, database dumps with user data, provider credentials, authenticator secrets, recovery codes or private agreements. Track database connection code and reviewed SQL migrations; secrets belong in ignored environment files or the hosting secret store. Report vulnerabilities through the [security policy](SECURITY.md), not public issues containing exploit details or credentials.
+
+Do not edit migrations already applied to a retained database; add the next numbered migration. MySQL DDL commits implicitly, so partial migration recovery needs explicit inspection. Keep securities, listings, quote units, native wallet currencies and provider aliases distinct. Directory membership never establishes a price or simulation entitlement.
+
+Update docs and decisions with implementation changes. Preserve creator attribution. Be respectful, make review comments specific and evidence based, and keep private information out of screenshots and logs.
+
+## Historical audit probes
+
+The original audit reproduction command is:
 
 ```text
 node docs/research/evidence/verify-legacy.cjs
 ```
 
-It confirms known baseline defects in isolation; it is **not** a passing security or application test suite. The future implementation must add the checks described in the roadmap.
+It confirms known legacy defects in isolation. It does not establish that a legacy endpoint is safe, and it is separate from the modern application checks above.

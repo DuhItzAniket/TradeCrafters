@@ -1,19 +1,9 @@
 name: Global foundation
 on:
   pull_request:
-    paths:
-      - "apps/**"
-      - "packages/**"
-      - "scripts/**"
-      - "tests/**"
-      - "package*.json"
-      - "*.config.*"
-      - "tsconfig.json"
-      - "compose.yaml"
-      - ".nvmrc"
-      - ".github/workflows/foundation.yml"
+    branches: [main]
   push:
-    branches: [main, feat/global-foundation]
+    branches: [main]
 permissions:
   contents: read
 concurrency:

@@ -1,8 +1,25 @@
 # TradeCrafters
 
-A global paper-trading laboratory, originally created by **Aniket Kumar and Annapurna S** for a DBMS course.
+[![Global foundation checks](https://github.com/DuhItzAniket/TradeCrafters/actions/workflows/foundation.yml/badge.svg?branch=main)](https://github.com/DuhItzAniket/TradeCrafters/actions/workflows/foundation.yml)
+
+**A global paper-trading laboratory built with Next.js, TypeScript and MySQL.** Originally created by **Aniket Kumar and Annapurna S** for a DBMS course, now being rebuilt around trustworthy accounts, explicit market coverage and a purposeful trading interface.
+
+[Get started](#run-locally) · [Architecture](docs/architecture/README.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 The first modernization implementation is now in `apps/web` and `packages/`. It provides a working global explorer, a searchable **2,889-record worldwide MIC reference snapshot**, sign-in/session handling, and persistent native-currency wallets on MySQL. Ten clearly labeled fictional listings span six regions. **Order execution, virtual FX conversion, real-data integration and public deployment are still being built.** Directory presence is not verified exchange trading coverage.
+
+<img src="docs/implementation/previews/foundation-desktop.png" width="1100" alt="TradeCrafters global market explorer with regional filters, venue and native-currency listing information, and a fictional scenario spotlight">
+
+## Current capabilities
+
+| Capability                                                     | Status                                                          |
+| -------------------------------------------------------------- | --------------------------------------------------------------- |
+| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                                |
+| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open    |
+| Server sessions, ownership checks and native-currency wallets  | Working locally with MySQL                                      |
+| GitHub OAuth                                                   | Configuration supported; real callback verification in progress |
+| Order execution, holdings and explicit FX conversion           | Planned implementation                                          |
+| Real exchange data and public deployment                       | Coverage, licensing and operational gates pending               |
 
 ## Run locally
 
@@ -23,16 +40,16 @@ See the [complete setup, commands and environment contract](docs/implementation/
 
 ## Project layout
 
-| Path | Purpose |
-| --- | --- |
-| `apps/web` | Next.js + React explorer, identity, wallets and same-origin APIs |
-| `packages/domain` | Exact currency/quote-unit arithmetic, opening-grant rules, session-policy helper |
-| `packages/contracts` | Strict request validation |
-| `packages/database` | MySQL queries, authentication adapter, checked-in SQL migrations |
-| `packages/market-catalog` | Dated worldwide MIC reference and separate fictional scenarios |
-| `tests` | Domain and real HTTP/MySQL integration checks |
-| `docs` | Audit, provider research, global architecture, roadmap, design and execution records |
-| `client`, `server`, `sql` | Preserved legacy coursework, separate from the new app |
+| Path                      | Purpose                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `apps/web`                | Next.js + React explorer, identity, wallets and same-origin APIs                     |
+| `packages/domain`         | Exact currency/quote-unit arithmetic, opening-grant rules, session-policy helper     |
+| `packages/contracts`      | Strict request validation                                                            |
+| `packages/database`       | MySQL queries, authentication adapter, checked-in SQL migrations                     |
+| `packages/market-catalog` | Dated worldwide MIC reference and separate fictional scenarios                       |
+| `tests`                   | Domain and real HTTP/MySQL integration checks                                        |
+| `docs`                    | Audit, provider research, global architecture, roadmap, design and execution records |
+| `client`, `server`, `sql` | Preserved legacy coursework, separate from the new app                               |
 
 ## Direction and tracking
 
@@ -41,6 +58,12 @@ The scope is **stock exchanges worldwide**, including smaller and frontier marke
 Start with the [research index](docs/README.md), [global architecture](docs/architecture/global-markets.md), [market-data comparison](docs/research/02-market-data.md), [roadmap](docs/ROADMAP.md), and [GitHub tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
 The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. A hosted MySQL database and registered OAuth application still need configuration and verification. No billable resource has been provisioned.
+
+## Engineering workflow
+
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers clean installation, MySQL migrations and seed, type/lint/format, domain and HTTP/database tests, a dependency audit, and a production build.
+
+Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 
 ## Legacy project
 
