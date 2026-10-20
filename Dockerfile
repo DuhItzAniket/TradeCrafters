@@ -8,7 +8,9 @@ COPY packages/contracts/package.json packages/contracts/package.json
 COPY packages/database/package.json packages/database/package.json
 COPY packages/domain/package.json packages/domain/package.json
 COPY packages/market-catalog/package.json packages/market-catalog/package.json
-RUN npm ci
+# Match the hosted workspace install: web builds must declare their own tools,
+# without relying on unrelated repository-root development dependencies.
+RUN npm ci --include=dev --workspace=@tradecrafters/web
 COPY tsconfig.json ./
 COPY apps/web/next.config.ts apps/web/tsconfig.json apps/web/
 COPY apps/web/src apps/web/src

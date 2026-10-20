@@ -2,7 +2,7 @@
 
 M1/#3 and M2/#4 are complete; their [80-check foundation](m1-acceptance.md) and [108-check accounting](m2-acceptance.md) records remain historical baselines. The [M3 workbench implementation](workbench.md) adds integrated discovery/chart/ticket and account-record interactions, with **116 automated checks** and responsive/failure-state browser evidence. **M3/#5 remains open for 3–5 observed student walkthroughs**, deferred by the owner. The worldwide real-market and public-deployment roadmap remains open.
 
-**M4/#6 is now in progress.** Its [deployment foundations and release runbook](deployment-foundations.md) add database acquisition deadlines, an exact runtime grant inspector, an isolated encrypted restore/aggregate-cap rehearsal and a non-root standalone container. The current suite has **127 checks (52 domain/configuration + 75 integration)** plus recovery and container verification. Hosted setup and release acceptance remain open; the owner confirmed neither Vercel nor managed MySQL is provisioned yet.
+**M4/#6 is now in progress.** Its [deployment foundations and release runbook](deployment-foundations.md) add database acquisition deadlines, an exact runtime grant inspector, an isolated encrypted restore/aggregate-cap rehearsal and a non-root standalone container. The current suite has **127 checks (52 domain/configuration + 75 integration)** plus recovery and container verification. The owner has started Vercel setup; the initial build exposed missing workspace TypeScript dependencies, addressed by the 21 October build repair. Managed database readiness and hosted release acceptance remain open.
 
 ## Implemented
 
