@@ -6,6 +6,11 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "@types/node"
+        versions: [">=25.0.0"] # Runtime is Node 24 LTS.
+      - dependency-name: "typescript"
+        versions: [">=6.1.0"] # Current lint parser supports TypeScript <6.1.
     groups:
       compatible-development-updates:
         dependency-type: development

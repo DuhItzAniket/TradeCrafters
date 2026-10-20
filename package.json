@@ -23,20 +23,21 @@
     "test:integration": "tsx --env-file=.env.local --test --test-concurrency=1 tests/integration.test.ts",
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
     "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "admin": "tsx --env-file=.env.local scripts/admin.ts",
     "setup:local": "node scripts/setup-local.mjs",
     "legacy:server": "npm start --prefix server",
     "legacy:client": "npm start --prefix client"
   },
   "devDependencies": {
-    "@types/node": "26.6.5",
+    "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "eslint": "10.13.0",
     "eslint-plugin-react-hooks": "7.1.1",
-    "typescript-eslint": "8.72.0",
-    "tsx": "4.23.15",
     "prettier": "3.9.10",
-    "typescript": "6.0.3"
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
   },
   "contributors": [
     "Aniket Kumar",

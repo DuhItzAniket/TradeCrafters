@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./auth": "./src/auth.ts",
+    "./security": "./src/security.ts",
     "./migrate": "./src/migrate.ts"
   },
   "dependencies": {

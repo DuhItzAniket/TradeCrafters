@@ -5,6 +5,7 @@ const links = [
   { href: "/", title: "Market explorer", icon: "◎", number: "01" },
   { href: "/directory", title: "Venue directory", icon: "▦", number: "02" },
   { href: "/account", title: "Account & wallets", icon: "◫", number: "03" },
+  { href: "/security", title: "Account security", icon: "◇", number: "04" },
 ];
 export function Navigation() {
   const pathname = usePathname();

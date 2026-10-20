@@ -2,6 +2,10 @@ import type { z } from "zod";
 import type { ApiErrorCode } from "@tradecrafters/contracts";
 import { consumeMutationBudget } from "@tradecrafters/database";
 import { authConfiguration, getAuth } from "@tradecrafters/database/auth";
+import {
+  securityState,
+  SimulationPausedError,
+} from "@tradecrafters/database/security";
 
 export class ApiError extends Error {
   constructor(
@@ -18,6 +22,11 @@ export async function api(run: () => Promise<Response>) {
   try {
     return await run();
   } catch (error) {
+    if (error instanceof SimulationPausedError)
+      return json(
+        { error: { code: "SIMULATION_PAUSED", message: error.message } },
+        503,
+      );
     if (error instanceof ApiError)
       return json(
         { error: { code: error.code, message: error.message } },
@@ -112,7 +121,7 @@ export async function parseBody<T>(
     );
   return result.data;
 }
-export async function requireIdentity(request: Request, mutation = false) {
+export async function requireSession(request: Request, mutation = false) {
   if (mutation) assertOrigin(request);
   const session = await getAuth().api.getSession({ headers: request.headers });
   if (!session)
@@ -136,5 +145,21 @@ export async function requireIdentity(request: Request, mutation = false) {
       429,
       "Too many changes. Please wait a minute.",
     );
-  return session.user;
+  return session;
+}
+export async function requireIdentity(request: Request, mutation = false) {
+  return (await requireSession(request, mutation)).user;
+}
+export async function requireAdmin(request: Request, mutation = false) {
+  const session = await requireSession(request, mutation);
+  const state = await securityState(session.user.id, session.session.id);
+  if (!session.user.emailVerified || !state.isAdmin)
+    throw new ApiError("FORBIDDEN", 403, "Administrator access is required.");
+  if (!state.mfaEnabled || !state.stepUpExpiresAt)
+    throw new ApiError(
+      "MFA_REQUIRED",
+      403,
+      "Verify your authenticator to unlock administrator controls for five minutes.",
+    );
+  return session;
 }

@@ -18,6 +18,12 @@ export const createAccountSchema = z
   .object({ reportingCurrency: currencyCode })
   .strict();
 export const createWalletSchema = z.object({ currency: currencyCode }).strict();
+export const verifyFactorSchema = z
+  .object({ code: z.string().regex(/^\d{6}$/) })
+  .strict();
+export const simulationControlSchema = z
+  .object({ paused: z.boolean(), reason: z.string().trim().min(10).max(300) })
+  .strict();
 export const directoryQuery = z
   .object({
     q: z.string().trim().max(80).default(""),
@@ -37,5 +43,10 @@ export type ApiErrorCode =
   | "FORBIDDEN_ORIGIN"
   | "PAYLOAD_TOO_LARGE"
   | "RATE_LIMITED"
+  | "FORBIDDEN"
+  | "MFA_REQUIRED"
+  | "REAUTH_REQUIRED"
+  | "INVALID_FACTOR"
+  | "SIMULATION_PAUSED"
   | "INTERNAL_ERROR";
 export type ApiFailure = { error: { code: ApiErrorCode; message: string } };

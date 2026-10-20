@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { twoFactor } from "better-auth/plugins/two-factor";
 import { getPool } from "./pool";
 
 export function authConfiguration() {
@@ -53,6 +54,7 @@ function createAuth() {
       updateAge: 60 * 60 * 24,
       cookieCache: { enabled: false },
     },
+    plugins: [twoFactor({ issuer: "TradeCrafters", allowPasswordless: true })],
     account: { accountLinking: { enabled: false } },
     rateLimit: {
       enabled: true,
@@ -62,6 +64,7 @@ function createAuth() {
       customRules: {
         "/sign-in/email": { window: 60, max: 8 },
         "/sign-up/email": { window: 60, max: 5 },
+        "/two-factor/*": { window: 60, max: 5 },
       },
     },
   });
