@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { ListingRules } from "./listing-rules";
 import { scenarios } from "@tradecrafters/market-catalog/scenarios";
 import { formatMinor, quoteToMinor, currency } from "@tradecrafters/domain";
 
@@ -320,6 +321,11 @@ export function Explorer() {
               Prepare your account <span aria-hidden="true">→</span>
             </Link>
           </section>
+          <ListingRules
+            key={selected.id}
+            listingId={selected.id}
+            quoteUnit={selected.quoteUnit}
+          />
           <section className="global-note">
             <span className="eyebrow">GLOBAL BY DESIGN</span>
             <h3>A ticker isn’t an identity.</h3>
