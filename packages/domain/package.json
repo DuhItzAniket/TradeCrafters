@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./market-policy": "./src/market-policy.ts"
+    "./market-policy": "./src/market-policy.ts",
+    "./catalog": "./src/catalog.ts",
+    "./fx": "./src/fx.ts"
   },
   "dependencies": {
     "@js-temporal/polyfill": "0.5.1",

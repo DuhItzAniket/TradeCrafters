@@ -170,7 +170,7 @@ export async function updateSimulationControl(
     ]);
     // Recheck authorization inside the write transaction; an HTTP precheck is not enough.
     const [roles] = await connection.execute<RowDataPacket[]>(
-      "SELECT user_id FROM admin_roles WHERE user_id = ? FOR UPDATE",
+      "SELECT user_id FROM admin_roles WHERE user_id = ? FOR SHARE",
       [userId],
     );
     const [proof] = await connection.execute<RowDataPacket[]>(

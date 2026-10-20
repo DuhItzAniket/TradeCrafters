@@ -6,7 +6,8 @@ import {
   currency,
   type CurrencyCode,
 } from "@tradecrafters/domain";
-import { directorySource, micDirectory } from "@tradecrafters/market-catalog";
+import { micDirectory } from "@tradecrafters/market-catalog";
+import { catalogReference } from "./catalog";
 import { scenarios } from "@tradecrafters/market-catalog/scenarios";
 import { getPool } from "./pool";
 import { SimulationPausedError } from "./security";
@@ -113,7 +114,7 @@ export async function createWallet(userId: string, code: CurrencyCode) {
   try {
     await connection.beginTransaction();
     const [accounts] = await connection.execute<RowDataPacket[]>(
-      "SELECT id FROM simulation_accounts WHERE user_id = ? FOR UPDATE",
+      "SELECT id FROM simulation_accounts WHERE user_id = ? FOR SHARE",
       [userId],
     );
     if (!accounts.length) throw new Error("ACCOUNT_NOT_FOUND");
@@ -150,37 +151,52 @@ export async function directory(query: {
   q: string;
   country?: string;
   kind?: string;
+  classification?: string;
   page: number;
 }) {
-  const clauses = ["snapshot_id = ?"];
-  const params: (string | number)[] = [directorySource.publishedOn];
+  const source = await catalogReference();
+  const clauses = ["m.snapshot_id = ?"];
+  const params: (string | number)[] = [source.publishedOn];
   if (query.q) {
     // Escape LIKE wildcards; parameterization alone does not escape their meaning.
     const search = `%${query.q.replace(/[!%_]/g, "!$&")}%`;
     clauses.push(
-      "(mic LIKE ? ESCAPE '!' OR name LIKE ? ESCAPE '!' OR city LIKE ? ESCAPE '!')",
+      "(m.mic LIKE ? ESCAPE '!' OR m.name LIKE ? ESCAPE '!' OR m.city LIKE ? ESCAPE '!')",
     );
     params.push(search, search, search);
   }
   if (query.country) {
-    clauses.push("country = ?");
+    clauses.push("m.country = ?");
     params.push(query.country);
   }
   if (query.kind) {
-    clauses.push("kind = ?");
+    clauses.push("m.kind = ?");
     params.push(query.kind);
   }
+  const classification =
+    "CASE WHEN c.reviewed_at<=UTC_TIMESTAMP(3) AND c.expires_at>UTC_TIMESTAMP(3) THEN c.classification ELSE 'unknown' END";
+  if (query.classification) {
+    clauses.push(`(${classification}) = ?`);
+    params.push(query.classification);
+  }
+  const from =
+    "mic_records m LEFT JOIN venue_classifications c ON c.snapshot_id=m.snapshot_id AND c.mic=m.mic";
   const where = clauses.join(" AND ");
   const [counts] = await getPool().execute<RowDataPacket[]>(
-    `SELECT COUNT(*) AS total FROM mic_records WHERE ${where}`,
+    `SELECT COUNT(*) AS total FROM ${from} WHERE ${where}`,
     params,
   );
   const [rows] = await getPool().query<RowDataPacket[]>(
-    `SELECT mic, operating_mic AS operatingMic, kind, name, country, city, category, source_status AS sourceStatus FROM mic_records WHERE ${where} ORDER BY mic LIMIT 30 OFFSET ?`,
+    `SELECT m.mic,m.operating_mic AS operatingMic,m.kind,m.name,m.country,m.city,m.category,m.source_status AS sourceStatus,${classification} AS classification FROM ${from} WHERE ${where} ORDER BY m.mic LIMIT 30 OFFSET ?`,
     [...params, (query.page - 1) * 30],
   );
+  const [countries] = await getPool().execute<RowDataPacket[]>(
+    "SELECT DISTINCT country FROM mic_records WHERE snapshot_id=? ORDER BY country",
+    [source.publishedOn],
+  );
   return {
-    source: directorySource,
+    source,
+    countries: countries.map((row) => row.country as string),
     records: rows,
     total: Number(counts[0].total),
     page: query.page,
@@ -197,24 +213,6 @@ export async function seedCatalog() {
         "INSERT INTO currencies (code, exponent, name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)",
         [item.code, item.exponent, item.name],
       );
-    for (let offset = 0; offset < micDirectory.length; offset += 100) {
-      const batch = micDirectory.slice(offset, offset + 100);
-      const values = batch.map((row) => [
-        directorySource.publishedOn,
-        row.mic,
-        row.operatingMic,
-        row.kind,
-        row.name,
-        row.country,
-        row.city,
-        row.category,
-        row.status,
-      ]);
-      await connection.query(
-        "INSERT INTO mic_records (snapshot_id, mic, operating_mic, kind, name, country, city, category, source_status) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name)",
-        [values],
-      );
-    }
     for (const row of scenarios) {
       await connection.execute(
         "INSERT INTO securities (id, name, fictional) VALUES (?, ?, true) ON DUPLICATE KEY UPDATE name = VALUES(name)",

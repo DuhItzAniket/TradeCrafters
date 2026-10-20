@@ -21,12 +21,14 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+      - run: npm run verify:source
       - run: npm ci
       - run: npm run setup:local
       - run: docker compose --env-file .env.local up -d --wait
       - run: npm run db:migrate
       - run: npm run db:seed
       - run: npm run db:migrate
+      - run: npm run setup:db-identities
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run format:check

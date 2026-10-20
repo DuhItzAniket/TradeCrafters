@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { directoryQuery } from "@tradecrafters/contracts";
 import { directory } from "@tradecrafters/database";
-import { directorySource, micDirectory } from "@tradecrafters/market-catalog";
+import { catalogCoverage } from "@tradecrafters/database/catalog";
 export const metadata = { title: "Worldwide venue directory" };
 const names = new Intl.DisplayNames(["en"], { type: "region" });
-const countries = [...new Set(micDirectory.map((row) => row.country))]
-  .filter((code) => /^[A-Z]{2}$/.test(code))
-  .sort((a, b) => (names.of(a) || a).localeCompare(names.of(b) || b));
 export default async function DirectoryPage({
   searchParams,
 }: {
@@ -18,13 +15,20 @@ export default async function DirectoryPage({
   );
   const parsed = directoryQuery.safeParse(values);
   const query = parsed.success ? parsed.data : { q: "", page: 1 };
-  const data = await directory(query);
+  const [data, coverage] = await Promise.all([
+    directory(query),
+    catalogCoverage(),
+  ]);
+  const countries = data.countries
+    .filter((code) => /^[A-Z]{2}$/.test(code))
+    .sort((a, b) => (names.of(a) || a).localeCompare(names.of(b) || b));
   const href = (page: number) => {
     const params = new URLSearchParams({
       q: query.q,
       page: String(page),
       ...(query.country ? { country: query.country } : {}),
       ...(query.kind ? { kind: query.kind } : {}),
+      ...(query.classification ? { classification: query.classification } : {}),
     });
     return `/directory?${params}`;
   };
@@ -39,7 +43,8 @@ export default async function DirectoryPage({
           </p>
         </div>
         <span className="large-number">
-          2,889<small>MIC records</small>
+          {data.source.records.toLocaleString("en")}
+          <small>MIC records</small>
         </span>
       </section>
       <div className="context-strip">
@@ -47,8 +52,9 @@ export default async function DirectoryPage({
           ◈
         </span>
         <p>
-          <strong>Dated reference snapshot.</strong> Published 12 October 2026;
-          changes effective 26 October 2026. Includes non-equity facilities and
+          <strong>Dated reference snapshot.</strong> Published{" "}
+          {data.source.publishedOn}; changes effective{" "}
+          {data.source.changesEffectiveOn}. Includes non-equity facilities and
           expired MICs. Source status below is the snapshot status, not current
           trading eligibility.
         </p>
@@ -60,7 +66,7 @@ export default async function DirectoryPage({
             <h2>Find a market identifier</h2>
           </div>
           <a
-            href={directorySource.url}
+            href={data.source.url}
             target="_blank"
             rel="noreferrer"
             className="source-link"
@@ -102,6 +108,18 @@ export default async function DirectoryPage({
               <option value="SGMT">Segment MIC</option>
             </select>
           </label>
+          <label className="field">
+            <span>Classification review</span>
+            <select
+              name="classification"
+              defaultValue={query.classification || ""}
+            >
+              <option value="">All classifications</option>
+              <option value="cash_equity">Reviewed cash equity</option>
+              <option value="other_facility">Other facility</option>
+              <option value="unknown">Awaiting review</option>
+            </select>
+          </label>
           <button className="button primary" type="submit">
             Find venues
           </button>
@@ -112,11 +130,24 @@ export default async function DirectoryPage({
           </span>
           <span className="muted">Real simulation rights: unverified</span>
         </div>
+        <p className="directory-disclosure">
+          Classification register:{" "}
+          {coverage.classification.cash_equity.toLocaleString("en")}{" "}
+          cash-equity,{" "}
+          {coverage.classification.other_facility.toLocaleString("en")} other
+          facilities, {coverage.classification.unknown.toLocaleString("en")}{" "}
+          awaiting review.{" "}
+          {coverage.effectiveSnapshot
+            ? `Effective reference baseline: ${coverage.effectiveSnapshot}.`
+            : "The first registered baseline is not effective yet."}{" "}
+          All records remain accounted for; reviewed worldwide exchange coverage
+          is still being established.
+        </p>
         <div className="table-scroll">
           <table className="directory-table">
             <caption className="sr-only">
-              ISO MIC reference records from the upcoming October 2026 snapshot.
-              Real data and trading coverage are unverified.
+              ISO MIC reference records from the dated {data.source.publishedOn}{" "}
+              publication. Real data and trading coverage are unverified.
             </caption>
             <thead>
               <tr>
@@ -125,6 +156,7 @@ export default async function DirectoryPage({
                 <th scope="col">Country</th>
                 <th scope="col">Type</th>
                 <th scope="col">Snapshot status</th>
+                <th scope="col">Classification</th>
               </tr>
             </thead>
             <tbody>
@@ -152,6 +184,13 @@ export default async function DirectoryPage({
                       {row.sourceStatus}
                     </span>
                     <small>Data rights unknown</small>
+                  </td>
+                  <td>
+                    {row.classification === "cash_equity"
+                      ? "Reviewed cash equity"
+                      : row.classification === "other_facility"
+                        ? "Other facility"
+                        : "Awaiting review"}
                   </td>
                 </tr>
               ))}
@@ -185,11 +224,11 @@ export default async function DirectoryPage({
         </div>
       </section>
       <p className="directory-disclosure">
-        Source: ISO 10383 Registration Authority (SWIFT), retrieved 20 October
-        2026. A MIC identifies a facility; it does not prove that it is a
-        cash-equity exchange or that TradeCrafters can display its prices.
-        Cash-equity classification, provider coverage and effective-dated review
-        remain open in{" "}
+        Source: ISO 10383 Registration Authority (SWIFT), retrieved{" "}
+        {data.source.retrievedOn}. A MIC identifies a facility; it does not
+        prove that it is a cash-equity exchange or that TradeCrafters can
+        display its prices. Cash-equity classification, provider coverage and
+        effective-dated review remain open in{" "}
         <a href="https://github.com/DuhItzAniket/TradeCrafters/issues/9">
           issue #9 ↗
         </a>
