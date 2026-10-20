@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TradeCrafters sidebar mark export</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 2048px;
+        height: 1024px;
+      }
+      body {
+        display: flex;
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+      }
+      .tile {
+        width: 1024px;
+        height: 1024px;
+        flex: none;
+        position: relative;
+        overflow: hidden;
+      }
+      #avatar {
+        background: #15181a;
+      }
+      #transparent {
+        background: transparent;
+      }
+      .mark-holder {
+        position: absolute;
+        left: 112px;
+        top: 112px;
+        width: 800px;
+        height: 800px;
+      }
+      .brand-mark {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: scale(25);
+        transform-origin: top left;
+        color: #edbc6b;
+        font-size: 30px;
+        letter-spacing: -0.18em;
+        font-weight: 450;
+        width: 32px;
+        line-height: 1;
+      }
+      .brand-mark span {
+        display: inline-block;
+        transform: translateY(5px);
+        font-weight: 650;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="avatar" class="tile">
+      <div class="mark-holder">
+        <div class="brand-mark">t<span>c</span></div>
+      </div>
+    </div>
+    <div id="transparent" class="tile">
+      <div class="mark-holder">
+        <div class="brand-mark">t<span>c</span></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    // Center the visible glyphs, rather than the sidebar's wider layout box.
+    const context = document.createElement("canvas").getContext("2d");
+    for (const tile of document.querySelectorAll(".tile")) {
+      const holder = tile.querySelector(".mark-holder");
+      const mark = tile.querySelector(".brand-mark");
+      const bounds = [];
+      for (const text of [
+        mark.firstChild,
+        mark.querySelector("span").firstChild,
+      ]) {
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        const box = range.getBoundingClientRect();
+        const style = getComputedStyle(text.parentElement);
+        context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const metrics = context.measureText(text.textContent);
+        const scale = 25;
+        const baseline = box.top + metrics.fontBoundingBoxAscent * scale;
+        bounds.push({
+          left: box.left - metrics.actualBoundingBoxLeft * scale,
+          right: box.left + metrics.actualBoundingBoxRight * scale,
+          top: baseline - metrics.actualBoundingBoxAscent * scale,
+          bottom: baseline + metrics.actualBoundingBoxDescent * scale,
+        });
+      }
+      const tileBox = tile.getBoundingClientRect();
+      const centerX =
+        (Math.min(...bounds.map((b) => b.left)) +
+          Math.max(...bounds.map((b) => b.right))) /
+        2;
+      const centerY =
+        (Math.min(...bounds.map((b) => b.top)) +
+          Math.max(...bounds.map((b) => b.bottom))) /
+        2;
+      holder.style.left = `${112 + tileBox.left + 512 - centerX}px`;
+      holder.style.top = `${112 + tileBox.top + 512 - centerY}px`;
+    }
+  </script>
+</html>
