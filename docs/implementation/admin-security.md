@@ -31,7 +31,7 @@ npm run admin -- revoke --user-id USER_ID --reason "Administrator responsibility
 
 The commands validate prerequisites and record a reason in `security_audit`. Revocation removes the role and all saved step-up proofs. Supplying a browser role field or enrolling an authenticator cannot grant a role.
 
-`OPERATOR_DATABASE_URL` optionally selects the operator identity for this CLI only. Keep it out of the web runtime. Locally, the generated development database identity also runs migrations; it is not a production privilege model. Hosted deployment must use separate migration/operator/runtime identities. The web identity needs reads on roles and insertion into audit records, but must not grant/revoke roles or update/delete audit history. Verify the complete table-level grants before deployment; they are an M4 gate.
+`OPERATOR_DATABASE_URL` optionally selects the operator identity for the operator CLIs. Keep it out of the web runtime. Local `setup:db-identities` now separates the web connection from the root env's migration/operator connection. The web can read roles and insert audit records but cannot grant/revoke roles, rewrite audits/catalogs/journals or change schema; actual denied SQL operations are tested. Hosted deployment must independently provision migration/operator/runtime identities and verify all table-level grants under M4. See the [environment contract](local-development.md).
 
 ## Privileged session verification
 
@@ -49,4 +49,4 @@ The page shows the latest 20 role/control audit events with UTC timestamps and r
 
 See the [security verification record](security-verification.md). Local GitHub OAuth callback and reload persistence were verified with the owner on 20 October 2026. The owner subsequently completed authenticator enrollment and session verification; the operator CLI granted the local administrator role, recorded its audit event, and the browser successfully loaded the protected funding controls.
 
-An actual HTTPS deployment, production callback, production identity/operator provisioning and provider outage/recovery testing remain separate gates. The local role and enrollment belong to the local database, not a future hosted environment. Do not mark all of M1 complete from this slice.
+The later [M1 acceptance record](m1-acceptance.md) includes isolated provider failure/recovery checks and database privilege tests alongside this earlier owner verification. A public HTTPS deployment/callback and production identity/operator provisioning remain M4 gates. The local role and enrollment belong to the local database, not a future hosted environment.

@@ -4,6 +4,14 @@ Changes are recorded when implemented; this file does not imply a tagged or publ
 
 ## Unreleased
 
+### Catalog integrity and M1 acceptance — 20 October 2026
+
+- Added case-sensitive dated provider aliases, serialized overlap checks, idempotent publication, audits and a server-clock read API.
+- Added immutable source snapshots, MIC definitions/hashes, parent/diff history, dated promotion, audited classification and independent provider/use capability contracts. Directory filters expose unknown coverage; all 2,889 records remain unreviewed and real simulation stays disabled.
+- Added account-bound synthetic FX quote/rounding contracts; executable wallet conversion remains M2.
+- Separated local web/operator database identities and removed operator/Docker credentials from the web env. Added actual privilege-denial tests, exact-origin auth configuration, sanitized logging and OAuth state/failure/recovery fixtures.
+- Expanded verification to 29 domain/configuration and 51 integration checks, source-pattern CI review, responsive browser evidence and a production build. Documented M1 acceptance, owner-attested historical credential disposition and open M2–M7 gates.
+
 ### Versioned market policies — 20 October 2026
 
 - Added immutable calendar/rule versions, effective listing assignments, dated permission gates, listing halts and transactional publication audits.

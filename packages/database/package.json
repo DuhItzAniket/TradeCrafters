@@ -8,6 +8,8 @@
     "./auth": "./src/auth.ts",
     "./security": "./src/security.ts",
     "./policies": "./src/policies.ts",
+    "./aliases": "./src/aliases.ts",
+    "./catalog": "./src/catalog.ts",
     "./migrate": "./src/migrate.ts"
   },
   "dependencies": {

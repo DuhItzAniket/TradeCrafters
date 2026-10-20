@@ -32,6 +32,9 @@ export const directoryQuery = z
       .regex(/^[A-Z]{2}$/)
       .optional(),
     kind: z.enum(["OPRT", "SGMT"]).optional(),
+    classification: z
+      .enum(["cash_equity", "other_facility", "unknown"])
+      .optional(),
     page: z.coerce.number().int().min(1).max(1000).default(1),
   })
   .strict();

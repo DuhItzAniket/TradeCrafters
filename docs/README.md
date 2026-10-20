@@ -1,12 +1,12 @@
 # TradeCrafters: modernization research
 
-**Research date:** 20 October 2026 · **Execution:** foundation, account security and versioned fictional market policies are implemented; see [current status and open gates](implementation/foundation-status.md), [local setup](implementation/local-development.md), [verification](implementation/verification.md) and [market policies](implementation/market-policies.md). The research below remains the architecture baseline. No public deployment or real-data integration is complete.
+**Research date:** 20 October 2026 · **Execution:** the M1 global foundation and verified local identity are implemented; see [M1 acceptance evidence](implementation/m1-acceptance.md), [current status and open gates](implementation/foundation-status.md), [local setup](implementation/local-development.md) and [catalog operations](implementation/catalog-operations.md). The research below remains the architecture baseline. No public deployment or real-data integration is complete.
 
 TradeCrafters began as a DBMS course project by **Aniket Kumar and Annapurna S**, using React, Node.js, MySQL, and Alpha Vantage. The next version should be a credible place to practice trading: understandable orders, consistent accounting, honest data freshness, and a focused trading workspace.
 
 The project owner's direction is **all stock exchanges globally**, with a free or near-free portfolio-project budget. The earlier US-first/India-later interpretation is superseded. Global listing identity, multiple currencies, exchange calendars, discovery and coverage management belong in the foundation; rollout batches do not redefine the product's scope.
 
-Review [draft PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use [tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2) for the linked implementation backlog. No implementation task has been marked complete by the research phase.
+The research was merged through [PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use [tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2) for the current implementation backlog. The original research delivery itself marked no implementation work complete; later acceptance is tracked separately.
 
 ## Recommended direction
 
@@ -20,19 +20,19 @@ Review [draft PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use 
 
 ## Read in this order
 
-| Document | Purpose |
-| --- | --- |
-| [Current-state audit](research/01-current-state-audit.md) | Source-backed bugs, vulnerabilities, reproducibility gaps, and dependency evidence |
-| [Market-data options](research/02-market-data.md) | Broad/regional providers, per-exchange coverage and rights, quotas, constraints, and cost control |
-| [Product and experience](research/03-product-and-experience.md) | Audience, competitor lessons, scope, workflows, and UI specification |
-| [Design study and screenshots](design/README.md) | Original workbench concept, mobile/light previews, and instructions to try it |
-| [Architecture](architecture/README.md) | Alternatives, recommended components, boundaries, and request flows |
-| [Global exchange architecture](architecture/global-markets.md) | Worldwide coverage inventory, security master, currencies/FX, local market rules, and rollout gates |
-| [Trading and data model](architecture/trading-and-data-model.md) | Accounting, fill rules, schema, contracts, and concurrency guarantees |
-| [Deployment and operations](architecture/deployment-and-operations.md) | Vercel, AWS, costs, security controls, observability, and migration |
-| [Decisions](DECISIONS.md) | Proposed ADRs and unresolved decisions |
-| [Roadmap](ROADMAP.md) | Sequenced milestones, acceptance criteria, estimates, and GitHub workflow |
-| [Sources](research/SOURCES.md) | Official references, access date, and research limitations |
+| Document                                                               | Purpose                                                                                             |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [Current-state audit](research/01-current-state-audit.md)              | Source-backed bugs, vulnerabilities, reproducibility gaps, and dependency evidence                  |
+| [Market-data options](research/02-market-data.md)                      | Broad/regional providers, per-exchange coverage and rights, quotas, constraints, and cost control   |
+| [Product and experience](research/03-product-and-experience.md)        | Audience, competitor lessons, scope, workflows, and UI specification                                |
+| [Design study and screenshots](design/README.md)                       | Original workbench concept, mobile/light previews, and instructions to try it                       |
+| [Architecture](architecture/README.md)                                 | Alternatives, recommended components, boundaries, and request flows                                 |
+| [Global exchange architecture](architecture/global-markets.md)         | Worldwide coverage inventory, security master, currencies/FX, local market rules, and rollout gates |
+| [Trading and data model](architecture/trading-and-data-model.md)       | Accounting, fill rules, schema, contracts, and concurrency guarantees                               |
+| [Deployment and operations](architecture/deployment-and-operations.md) | Vercel, AWS, costs, security controls, observability, and migration                                 |
+| [Decisions](DECISIONS.md)                                              | Proposed ADRs and unresolved decisions                                                              |
+| [Roadmap](ROADMAP.md)                                                  | Sequenced milestones, acceptance criteria, estimates, and GitHub workflow                           |
+| [Sources](research/SOURCES.md)                                         | Official references, access date, and research limitations                                          |
 
 ## What the audit establishes
 
@@ -40,10 +40,10 @@ The GitHub baseline is [`8fa0265`](https://github.com/DuhItzAniket/TradeCrafters
 
 The dependency snapshot reports **13 affected packages in the server lockfile and 108 in the client lockfile**. These are audit results, including transitive and tooling dependencies, not counts of proven exploitable endpoints. Read the [audit scope and evidence](research/01-current-state-audit.md#dependency-snapshot) before interpreting them.
 
-An older ZIP retained in Git history contains non-placeholder configuration secrets. Their validity is unverified; treat them as exposed and rotate/revoke before reuse. The audit includes sanitized evidence only.
+An older ZIP retained in Git history contains non-placeholder configuration secrets. The owner has since confirmed rotation/revocation; see the [attestation and its limits](implementation/m1-acceptance.md#credential-disposition). The original audit includes sanitized evidence only. Never reuse these historical credentials.
 
 ## Scope of this delivery
 
-Completed: repository review, official-source research, isolated legacy logic probes, dependency audit, global architecture/coverage design, domain rules, deployment paths, product/design brief, a sample listing-view design study, and implementation roadmap. Population of the complete worldwide inventory and global UI flows remain implementation/research work; no actual exchange coverage is claimed. Application behavior remains unchanged. No cloud resources, provider accounts, paid subscriptions, or production migrations have been created.
+The original research delivery completed repository review, official-source research, isolated legacy logic probes, dependency audit, global architecture/coverage design, domain rules, deployment paths, product/design brief, a sample listing-view design study and implementation roadmap. Later code changes are recorded in [implementation status](implementation/foundation-status.md). Population of the complete reviewed worldwide inventory remains work; no actual exchange coverage is claimed. No cloud resources, provider accounts, paid subscriptions or production migrations have been created.
 
 Open decisions: approve the design direction; confirm educational/data entitlements; select the exact deployment region after database provisioning options are known. Exact framework and library versions must be resolved and audited at implementation time.

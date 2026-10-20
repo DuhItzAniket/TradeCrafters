@@ -6,7 +6,7 @@
 
 [Get started](#run-locally) · [Architecture](docs/architecture/README.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-The first modernization implementation is now in `apps/web` and `packages/`. It provides a working global explorer, a searchable **2,889-record worldwide MIC reference snapshot**, sign-in/session handling, and persistent native-currency wallets on MySQL. Ten clearly labeled fictional listings span six regions. **Order execution, virtual FX conversion, real-data integration and public deployment are still being built.** Directory presence is not verified exchange trading coverage.
+The M1 global foundation is implemented in `apps/web` and `packages/`; see the [acceptance evidence](docs/implementation/m1-acceptance.md). It provides a working global explorer, a searchable **2,889-record worldwide MIC reference snapshot**, verified local GitHub sign-in, authenticator/admin controls and persistent native-currency wallets on MySQL. Ten clearly labeled fictional listings span six regions. **Order execution, virtual FX conversion, real-data integration and public deployment are still being built.** Directory presence is not verified exchange trading coverage.
 
 <img src="docs/implementation/previews/foundation-desktop.png" width="1100" alt="TradeCrafters global market explorer with regional filters, venue and native-currency listing information, and a fictional scenario spotlight">
 
@@ -16,10 +16,12 @@ The first modernization implementation is now in `apps/web` and `packages/`. It 
 | -------------------------------------------------------------- | ------------------------------------------------------------ |
 | Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                             |
 | Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open |
+| Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown   |
 | Server sessions, ownership checks and native-currency wallets  | Working locally with MySQL                                   |
 | GitHub OAuth                                                   | Local callback and reload verified; production HTTPS pending |
 | Authenticator, admin roles and audited funding pause           | Working locally; explicit operator provisioning required     |
 | Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled      |
+| Exact account-bound FX quote and rounding contracts            | Verified calculation; conversion posting belongs to M2       |
 | Order execution, holdings and explicit FX conversion           | Planned implementation                                       |
 | Real exchange data and public deployment                       | Coverage, licensing and operational gates pending            |
 
@@ -33,12 +35,13 @@ npm run setup:local
 docker compose --env-file .env.local up -d --wait
 npm run db:migrate
 npm run db:seed
+npm run setup:db-identities
 npm run dev
 ```
 
-Open **http://127.0.0.1:3000**. Setup creates fresh ignored local credentials. Local sign-up uses made-up test details; this mode is explicitly blocked in production. No market-data API key is required.
+Open **http://127.0.0.1:3000**. Setup creates fresh ignored local credentials and separates the restricted web database identity from operator tooling. Local sign-up uses made-up test details; this mode is explicitly blocked in production. No market-data API key is required.
 
-See the [complete setup, commands and environment contract](docs/implementation/local-development.md), [admin/security runbook](docs/implementation/admin-security.md), [market-policy implementation](docs/implementation/market-policies.md), [implementation status and open gates](docs/implementation/foundation-status.md), and [verification evidence](docs/implementation/verification.md). The [project logo](apps/web/public/brand/tradecrafters-mark.png) is available for the GitHub OAuth app avatar.
+See the [complete setup and environment contract](docs/implementation/local-development.md), [admin/security runbook](docs/implementation/admin-security.md), [catalog operator workflow](docs/implementation/catalog-operations.md), [market policies](docs/implementation/market-policies.md), [implementation status](docs/implementation/foundation-status.md), and [M1 verification evidence](docs/implementation/m1-acceptance.md). The [project logo](apps/web/public/brand/tradecrafters-mark.png) is available for the GitHub OAuth app avatar.
 
 ## Project layout
 
@@ -63,7 +66,7 @@ The new workspace pins a supported stack, runs on Node 24, and emits a productio
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers clean installation, MySQL migrations and seed, type/lint/format, domain and HTTP/database tests, a dependency audit, and a production build.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning, type/lint/format, 29 domain/configuration and 51 integration checks, a dependency audit, and a production build.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 

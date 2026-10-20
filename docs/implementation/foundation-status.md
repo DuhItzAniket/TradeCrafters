@@ -1,6 +1,6 @@
 # Foundation execution status — 20 October 2026
 
-This records the foundation, account-security and market-policy implementation slices of [M1 / #3](https://github.com/DuhItzAniket/TradeCrafters/issues/3), with initial discovery and inventory work from #5/#9. It is not completion of the roadmap or every M1 exit criterion.
+The [M1 foundation acceptance record](m1-acceptance.md) maps the implemented global foundation and verified local identity to the original milestone criteria, with 80 automated checks and browser evidence. Issue [#3](https://github.com/DuhItzAniket/TradeCrafters/issues/3) closes only after required CI and merge. Initial discovery/inventory work also contributes to #5/#9. The worldwide real-market roadmap remains open.
 
 ## Implemented
 
@@ -11,16 +11,21 @@ This records the foundation, account-security and market-policy implementation s
 - Owner-assisted local GitHub OAuth callback and reload persistence verified. Authenticator enrollment with locally rendered QR and single-use recovery codes; explicit operator role grants; five-minute session-specific admin verification; audited pause/resume of new simulation funding. See the [operator runbook](admin-security.md) and [security verification](security-verification.md).
 - Owner local authenticator enrollment, session verification and explicit operator administrator grant completed. Protected administrator controls loaded successfully in the owner's browser; the grant is recorded in the local audit log.
 - Native wallets and exact bigint/minor-unit helpers, zero/two/three currency exponents, GBX/ZAC quote multipliers, one fixed synthetic USD-equivalent opening grant with immutable rate provenance, one grant journal and balanced entries in its native currency. Repeated account creation and wallet creation cannot grant more money.
-- Security/listing separation, dated alias schema and unknown/disabled real-simulation capability records. Persisted immutable calendar/rule versions, non-overlapping effective assignments, dated permission checks, listing halts and a transactional publication audit now back the scenario-rule panel. Tests cover breaks, holidays, early closes, overnight sessions, DST, Sunday trading weeks and exact lots/ticks/bands. See [market-policy implementation](market-policies.md); all ten seeded policies remain fictional.
+- Security/listing separation and case-sensitive provider aliases with dated non-overlap, canonical mapping checks, namespace/listing locks, idempotent retries, audit and server-clock lookup. Ten aliases are explicitly fictional.
+- Immutable reference snapshots, complete normalized MIC definitions/hashes, parent/diff history, future-effective promotion gates and audited classification/capability publication through a trusted operator CLI. The directory keeps all unknown classifications visible. Provider/dataset/feed/audience/retention/display/replay/simulation contracts independently default to disabled. See [catalog operations](catalog-operations.md).
+- Persisted immutable calendar/rule versions, non-overlapping effective assignments, dated permission checks, listing halts and transactional publication audits back the scenario-rule panel. Tests cover breaks, holidays, early closes, overnight sessions, DST, Sunday trading weeks and exact lots/ticks/bands. See [market-policy implementation](market-policies.md); all ten seeded policies remain fictional.
+- Account-bound synthetic FX quote/request contracts, exact exponent-aware rounding/remainders, five-minute validity and rejection of wrong-account, future/expired, dust or overflowing calculations. Wallet posting and executable conversion remain M2.
+- Restricted local web database identity with actual privilege-denial checks, sanitized authentication logging, exact-origin configuration checks and OAuth state/failure/recovery fixtures against the real handler and MySQL. Operator/Docker credentials stay outside the web env. The owner confirmed historical credential rotation/revocation; this is recorded as attestation, not an independent issuer activity audit.
 
 ## Still open
 
-- End-to-end verification of GitHub OAuth on the intended HTTPS domain; production identities and provider failure/recovery behavior.
-- Production identity/operator provisioning, self-service factor management and assisted recovery, hosted database privilege separation and external audit retention. The implemented admin API currently controls only new opening grants.
-- Reviewed real venue calendars/rules and provider capability/entitlement evidence. The versioned schema and publication/read gates are implemented with fictional fixtures; real simulation and order execution remain disabled. Alias-overlap enforcement and a complete operator catalog workflow remain future work.
-- Full reviewed worldwide **cash-equity** classification and effective-dated prior-baseline/diff handling. The newly retrieved October MIC publication has changes effective 26 October, so it is an upcoming reference snapshot only. Directory count is not a stock-exchange integration count.
-- Actual order execution, order idempotency and receipts, positions, explicit virtual FX conversion, reporting-currency valuation and durable workers (M2 onward).
-- Public deployment, cloud credentials, TLS/ingress and connection-budget checks, credential-rotation disposition, persistent anonymous abuse controls at the trusted ingress, retention/backup restore and operational gates. Existing legacy endpoints have not been hardened; do not deploy them alongside this app.
+- **M2 / #4:** order execution, idempotency and receipts, positions, executable virtual FX, journal posting and reporting valuation; durable workers are M6.
+- **M3 / #5:** complete trading workbench and chart/order/portfolio interactions, broader accessibility checks and observed student walkthroughs.
+- **M4 / #6:** intended-domain HTTPS OAuth verification, production identity/operator provisioning, factor/recovery operations, hosted database/TLS/grant/connection checks, ingress abuse controls, backups/restore, external audit retention and public deployment. Local operator grants/enrollment do not provision a hosted environment.
+- **M5 / #7 and #9:** reviewed real venue calendars/rules, listing/provider capability evidence, permitted use, quota/freshness/outage verification and real-data enablement. All real simulation remains disabled.
+- **Inventory #9 / M7:** full reviewed worldwide cash-equity classification and missing smaller/frontier/non-MIC markets. All 2,889 current reference rows are unreviewed. Version/diff software is implemented, but an actual prior effective source baseline has not been acquired. October changes become effective 26 October; the product discloses this upcoming-reference gap. Directory count is not a stock-exchange integration count.
+
+Existing legacy endpoints have not been hardened; do not deploy them alongside the new app. Historical dependency advisories remain visible.
 
 ## Implementation decisions
 
@@ -28,4 +33,4 @@ For this slice, `mysql2` parameterized SQL and one checked-in SQL migration runn
 
 The reference snapshot is loaded only by server/catalog code. The interactive explorer imports a separate lightweight fictional-scenarios entry point. No provider API keys or historical credentials are copied. No paid resource or public deployment was created.
 
-See [local setup and environment contract](local-development.md) and the [verification record](verification.md). GitHub issues remain open until their full exit criteria are met.
+See [local setup and environment contract](local-development.md), [M1 acceptance](m1-acceptance.md) and the earlier [foundation verification](verification.md). GitHub issues remain open until their own exit criteria are met.

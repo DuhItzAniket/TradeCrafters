@@ -4,6 +4,17 @@ import { getPool } from "./pool";
 
 export function authConfiguration() {
   const url = new URL(process.env.BETTER_AUTH_URL || "http://127.0.0.1:3000");
+  if (
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash ||
+    url.pathname !== "/" ||
+    !["http:", "https:"].includes(url.protocol)
+  )
+    throw Error(
+      "BETTER_AUTH_URL must be an exact HTTP(S) origin without credentials, path, query or fragment.",
+    );
   const developmentCredentials = process.env.AUTH_DEV_CREDENTIALS === "true";
   if (
     developmentCredentials &&
@@ -21,8 +32,11 @@ export function authConfiguration() {
     );
   if (process.env.NODE_ENV === "production" && url.protocol !== "https:")
     throw new Error("Production auth requires HTTPS.");
-  const github =
-    process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET;
+  const hasGithubId = Boolean(process.env.GITHUB_CLIENT_ID);
+  const hasGithubSecret = Boolean(process.env.GITHUB_CLIENT_SECRET);
+  if (hasGithubId !== hasGithubSecret)
+    throw Error("Configure both GitHub OAuth values together.");
+  const github = hasGithubId && hasGithubSecret;
   if (process.env.NODE_ENV === "production" && !github)
     throw new Error("Configure GitHub OAuth before production sign-in.");
   return { url, secret, developmentCredentials, github };
@@ -36,6 +50,13 @@ function createAuth() {
     baseURL: config.url.origin,
     secret: config.secret,
     trustedOrigins: [config.url.origin],
+    logger: {
+      level: "warn",
+      // Provider response bodies and SDK errors may include credentials or personal data.
+      log(level) {
+        console.error("TradeCrafters authentication event", { level });
+      },
+    },
     emailAndPassword: {
       enabled: config.developmentCredentials,
       minPasswordLength: 12,

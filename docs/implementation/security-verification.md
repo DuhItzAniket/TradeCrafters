@@ -1,5 +1,7 @@
 # Security slice verification — 20 October 2026
 
+This records the earlier account-security slice. The [M1 acceptance record](m1-acceptance.md) adds OAuth failure/recovery fixtures, restricted database grants and catalog integrity checks, bringing the complete suite to 80 checks. Counts below describe the earlier slice.
+
 Environment: Node **24.22.0**, real Docker MySQL **8.4**, Next.js development server on `http://127.0.0.1:3000`. No public deployment or real market-data provider participated.
 
 ## HTTP and database evidence
