@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s · TradeCrafters",
   },
   description:
-    "Explore global market identity and build a virtual multi-currency account. Foundation release with clearly labeled fictional scenarios.",
+    "Explore global market identity, practice fictional trades and follow native multi-currency holdings and receipts.",
   robots: { index: false, follow: false },
 };
 export const dynamic = "force-dynamic";
@@ -92,7 +92,7 @@ export default async function RootLayout({
             {children}
           </main>
           <footer className="workspace-footer">
-            <span>TradeCrafters / Foundation 0.1</span>
+            <span>TradeCrafters / The market lab</span>
             <span>Virtual funds. Fictional prices. No real orders.</span>
           </footer>
         </div>

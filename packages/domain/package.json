@@ -8,7 +8,8 @@
     "./market-policy": "./src/market-policy.ts",
     "./catalog": "./src/catalog.ts",
     "./fx": "./src/fx.ts",
-    "./trading": "./src/trading.ts"
+    "./trading": "./src/trading.ts",
+    "./workbench": "./src/workbench.ts"
   },
   "dependencies": {
     "@js-temporal/polyfill": "0.5.1",

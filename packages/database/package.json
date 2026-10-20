@@ -11,6 +11,7 @@
     "./aliases": "./src/aliases.ts",
     "./catalog": "./src/catalog.ts",
     "./trading": "./src/trading.ts",
+    "./workbench": "./src/workbench.ts",
     "./migrate": "./src/migrate.ts"
   },
   "dependencies": {

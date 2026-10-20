@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useRef } from "react";
 import { currency, formatMinor } from "@tradecrafters/domain";
 import type { OperationReceipt } from "@tradecrafters/domain/trading";
 const money = (value: string, code: string) =>
@@ -7,8 +9,15 @@ export function OperationReceiptView({
 }: {
   receipt: OperationReceipt;
 }) {
+  const reference = useRef<HTMLElement>(null);
+  useEffect(() => {
+    reference.current?.focus({ preventScroll: true });
+    reference.current?.scrollIntoView({ block: "start", behavior: "auto" });
+  }, [receipt.id]);
   return (
     <section
+      ref={reference}
+      tabIndex={-1}
       className={`panel receipt-panel ${receipt.status === "rejected" ? "receipt-rejected" : ""}`}
       aria-label="Operation receipt"
       aria-live="polite"

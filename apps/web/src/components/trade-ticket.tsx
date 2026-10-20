@@ -83,7 +83,7 @@ export function TradeTicket({
           <span>Fictional listing / venue</span>
           <select
             value={listingId}
-            disabled={blocked || loading}
+            disabled={loading}
             onChange={(event) => onSelect(event.target.value, side)}
           >
             {scenarios.map((item) => (

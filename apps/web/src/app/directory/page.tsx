@@ -164,7 +164,13 @@ export default async function DirectoryPage({
               {data.records.map((row) => (
                 <tr key={row.mic}>
                   <td>
-                    <strong className="mono">{row.mic}</strong>
+                    <Link
+                      className="source-link mono"
+                      href={`/trading?mic=${encodeURIComponent(row.mic)}`}
+                      aria-label={`Inspect ${row.mic} coverage in the workbench`}
+                    >
+                      {row.mic} ↗
+                    </Link>
                     <small>{row.operatingMic}</small>
                   </td>
                   <td>

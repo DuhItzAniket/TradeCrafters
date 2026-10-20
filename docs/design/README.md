@@ -6,6 +6,8 @@ An original visual direction for TradeCrafters: graphite surfaces, warm amber fo
 
 **Global scope:** the product targets all stock exchanges. This study illustrates one fictional USD listing/workbench view; global exchange discovery, native-currency wallets and FX flows still need design and verification. See the [global architecture](../architecture/global-markets.md). These screenshots are not evidence of worldwide data or trading support.
 
+The later [M3 application implementation](../implementation/workbench.md) now combines venue-qualified discovery, authored chart/table, a native ticket and M2 accounting at `/trading`. The HTML study below remains historical design evidence. Real student walkthroughs are still deferred; use the [prepared protocol](student-walkthrough.md) for the remaining M3 acceptance.
+
 Open [workbench.html](workbench.html) in a browser, or serve the design folder locally from the repository root:
 
 ```text

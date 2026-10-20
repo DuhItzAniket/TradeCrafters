@@ -4,7 +4,7 @@
 
 GitHub entry points: [research PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1) and [roadmap tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-**Execution update — 20 October 2026:** M1 foundation/identity and M2 trading/accounting are implemented. [M1 acceptance](implementation/m1-acceptance.md) records its 80-check baseline; [M2 acceptance](implementation/m2-acceptance.md) records 108 checks, browser recovery/keyboard/mobile verification and milestone boundaries. Issue #4 closes after required CI/merge. **M3 discovery/chart workbench is next.** Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original scope and exit criteria below remain the baseline.
+**Execution update — 20 October 2026:** M1/#3 and M2/#4 are complete. [M1 acceptance](implementation/m1-acceptance.md) and [M2 acceptance](implementation/m2-acceptance.md) retain their 80/108-check baselines. The [M3 workbench implementation](implementation/workbench.md) adds integrated discovery/chart/ticket and account interactions, with 116 automated checks. **M3/#5 remains open for real student feedback**, deferred by the owner; [the protocol](design/student-walkthrough.md) has no observed results yet. Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original exit criteria below remain the baseline.
 
 | Implementation issue                                         | Work                                                                |
 | ------------------------------------------------------------ | ------------------------------------------------------------------- |
@@ -70,6 +70,8 @@ Implementation: [trading/accounting contract](implementation/trading-accounting.
 - Keep the legacy bug probes as evidence; write new regression checks against the new domain behavior rather than preserving buggy outputs.
 
 ### M3: interface
+
+Software implementation and browser evidence: [workbench record](implementation/workbench.md). Remaining acceptance: [3–5 real student walkthroughs](design/student-walkthrough.md) and resulting material fixes. The owner deferred those sessions; engineering automation does not close that gate.
 
 - Translate [the design brief](research/03-product-and-experience.md) and [design study](design/workbench.html) into components with an intentional visual system.
 - Complete chart, order-review/submit/receipt, portfolio and activity flows. Query invalidation must keep cash and positions consistent.
