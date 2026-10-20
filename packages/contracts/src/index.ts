@@ -18,6 +18,40 @@ export const createAccountSchema = z
   .object({ reportingCurrency: currencyCode })
   .strict();
 export const createWalletSchema = z.object({ currency: currencyCode }).strict();
+export const accountId = z.string().uuid();
+export const listingId = z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/);
+export const idempotencyKey = z.string().regex(/^[a-zA-Z0-9_-]{16,96}$/);
+export const orderIntentSchema = z
+  .object({
+    accountId,
+    listingId,
+    quoteId: z.string().uuid(),
+    side: z.enum(["BUY", "SELL"]),
+    orderType: z.literal("MARKET"),
+    quantity: z.number().int().min(1).max(1000000),
+  })
+  .strict();
+export const trainingQuoteRequest = z.object({ accountId, listingId }).strict();
+export const fxQuoteRequest = z
+  .object({ accountId, fromCurrency: currencyCode, toCurrency: currencyCode })
+  .strict()
+  .refine((value) => value.fromCurrency !== value.toCurrency);
+export const fxIntentSchema = z
+  .object({
+    accountId,
+    quoteId: z.string().uuid(),
+    sourceMinor: z.string().regex(/^[1-9]\d{0,29}$/),
+  })
+  .strict();
+export const resetIntentSchema = z
+  .object({ accountId, confirmation: z.literal("RESET") })
+  .strict();
+export const operationQuery = z
+  .object({ accountId, key: idempotencyKey })
+  .strict();
+export const activityQuery = z
+  .object({ accountId, before: z.string().uuid().optional() })
+  .strict();
 export const verifyFactorSchema = z
   .object({ code: z.string().regex(/^\d{6}$/) })
   .strict();

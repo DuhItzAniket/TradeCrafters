@@ -1,6 +1,6 @@
 # TradeCrafters: modernization research
 
-**Research date:** 20 October 2026 · **Execution:** the M1 global foundation and verified local identity are implemented; see [M1 acceptance evidence](implementation/m1-acceptance.md), [current status and open gates](implementation/foundation-status.md), [local setup](implementation/local-development.md) and [catalog operations](implementation/catalog-operations.md). The research below remains the architecture baseline. No public deployment or real-data integration is complete.
+**Research date:** 20 October 2026 · **Execution:** M1 foundation/identity and M2 trading/accounting are implemented; see [M2 acceptance](implementation/m2-acceptance.md), [trading contract](implementation/trading-accounting.md), [M1 evidence](implementation/m1-acceptance.md), [current status/open gates](implementation/foundation-status.md) and [local setup](implementation/local-development.md). M3's full discovery/chart workbench is next. The research below remains the architecture baseline. No public deployment or real-data integration is complete.
 
 TradeCrafters began as a DBMS course project by **Aniket Kumar and Annapurna S**, using React, Node.js, MySQL, and Alpha Vantage. The next version should be a credible place to practice trading: understandable orders, consistent accounting, honest data freshness, and a focused trading workspace.
 

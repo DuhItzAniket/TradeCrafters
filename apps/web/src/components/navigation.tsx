@@ -3,9 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 const links = [
   { href: "/", title: "Market explorer", icon: "◎", number: "01" },
-  { href: "/directory", title: "Venue directory", icon: "▦", number: "02" },
-  { href: "/account", title: "Account & wallets", icon: "◫", number: "03" },
-  { href: "/security", title: "Account security", icon: "◇", number: "04" },
+  { href: "/trading", title: "Practice trading", icon: "⇄", number: "02" },
+  { href: "/directory", title: "Venue directory", icon: "▦", number: "03" },
+  { href: "/account", title: "Account & wallets", icon: "◫", number: "04" },
+  { href: "/security", title: "Account security", icon: "◇", number: "05" },
 ];
 export function Navigation() {
   const pathname = usePathname();

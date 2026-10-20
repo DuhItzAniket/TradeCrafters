@@ -1,6 +1,6 @@
 # Versioned market policies — 20 October 2026
 
-This M1 implementation adds persisted calendar and trading-rule versions, dated listing assignments, permission checks and listing halts. It supports the global simulator's foundation; it does not enable orders or certify any real exchange's rules. All ten seeded policies are **fictional training scenarios**.
+This M1 implementation adds persisted calendar and trading-rule versions, dated listing assignments, permission checks and listing halts. All ten seeded policies are **fictional training scenarios**. The later [M2 executor](trading-accounting.md) combines these policies with fresh quotes, native accounting and receipts at a declared fixed training clock. This document's read API remains a wall-clock policy preview; it does not certify real exchange rules.
 
 ## Storage and publication
 
@@ -10,7 +10,7 @@ Migration `0005_market_policies.sql` adds calendar versions, rule versions, effe
 
 Effective assignments and halts use UTC millisecond instants with inclusive starts and exclusive ends. Calendar coverage uses local dates with an exclusive end. Definitions are limited to 1–1,096 covered days, eight sessions per day and 400 dated exceptions. Holiday exceptions replace a day's sessions with an empty list; early-close exceptions replace the entire day's schedule. Overnight sessions retain their starting trading date even when they finish on a weekend or holiday.
 
-Session boundaries resolve in the listing's IANA timezone. Ambiguous or nonexistent DST boundaries are rejected at publication, as are overlaps across trading dates. This uses the [Temporal polyfill](https://github.com/js-temporal/temporal-polyfill) with explicit rejection of [timezone ambiguity](https://tc39.es/proposal-temporal/docs/timezone.html). The deployed Node/ICU timezone database still matters: runtime or timezone-rule updates require review. Before executions exist, M2 must retain the policy IDs and resolved UTC boundaries used for each decision.
+Session boundaries resolve in the listing's IANA timezone. Ambiguous or nonexistent DST boundaries are rejected at publication, as are overlaps across trading dates. This uses the [Temporal polyfill](https://github.com/js-temporal/temporal-polyfill) with explicit rejection of [timezone ambiguity](https://tc39.es/proposal-temporal/docs/timezone.html). The deployed Node/ICU timezone database still matters: runtime or timezone-rule updates require review. M2 retains the policy assignment, immutable quote snapshot and resolved UTC market instant used for each fill; policy definitions preserve the session boundaries.
 
 Rules represent whole-share board lots, maximum quantity, exact decimal quote precision, a contiguous tick ladder, inclusive fixed price bands and market-order type validation. Integer arithmetic avoids floating-point tick comparisons. Auction windows are represented but do not permit continuous-session eligibility. Odd-lot facilities, dynamic exchange bands, closing auctions, limit/stop orders, corporate actions and venue-specific exceptions beyond this model require later work.
 
@@ -20,7 +20,7 @@ Rules represent whole-share board lots, maximum quantity, exact decimal quote pr
 
 The read requires exactly one effective assignment, consistent definition IDs/hashes, matching listing timezone and data mode, and current verified display **and** simulation permission. Real mode additionally requires reviewed provenance and a verified venue capability. Unknown, blocked, future or expired permissions deny access to policy details. Missing or conflicting assignments, invalid definitions, uncovered dates, halts, auctions, breaks and closed sessions leave session eligibility false. A halt affects only its own listing.
 
-`sessionEligible` reports whether these preliminary session gates allow a continuous session. It does not validate an order or promise an execution. `executionAvailable` and `realDataEnabled` remain false in every response. The separate exact rule checker must eventually be combined with a trusted fresh quote, quantity validation, wallet/position locks, idempotency and balanced transaction journals in M2. This slice accepts no orders and changes no account balances.
+`sessionEligible` reports whether these preliminary wall-clock session gates allow a continuous session. It does not validate an order or promise an execution. `executionAvailable` and `realDataEnabled` remain false in this preview response. Practice orders use the separate `/api/trading` executor and its fixed 20 October 2026, 10:15 venue-local exercise clock, with actual-time quote/permission expiry, exact rule checks, account locks, idempotency and balanced journals. This policy read endpoint changes no balances.
 
 ## Fictional fixtures
 

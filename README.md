@@ -6,9 +6,9 @@
 
 [Get started](#run-locally) · [Architecture](docs/architecture/README.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-The M1 global foundation is implemented in `apps/web` and `packages/`; see the [acceptance evidence](docs/implementation/m1-acceptance.md). It provides a working global explorer, a searchable **2,889-record worldwide MIC reference snapshot**, verified local GitHub sign-in, authenticator/admin controls and persistent native-currency wallets on MySQL. Ten clearly labeled fictional listings span six regions. **Order execution, virtual FX conversion, real-data integration and public deployment are still being built.** Directory presence is not verified exchange trading coverage.
+The M1 foundation and **M2 trading/accounting slice** are implemented in `apps/web` and `packages/`. Explore a **2,889-record worldwide MIC reference**, sign in, practice with ten fictional listings across six regions, and track native-currency holdings, explicit FX conversions and persistent receipts on MySQL. [M2 verification](docs/implementation/m2-acceptance.md) covers exact accounting, concurrent orders and failure recovery. The full chart workbench, real-data integration and public deployment remain on the roadmap. Directory presence is not verified exchange trading coverage.
 
-<img src="docs/implementation/previews/foundation-desktop.png" width="1100" alt="TradeCrafters global market explorer with regional filters, venue and native-currency listing information, and a fictional scenario spotlight">
+<img src="docs/implementation/previews/m2-trading-desktop.png" width="1100" alt="TradeCrafters practice trading with GBP and JPY holdings, separate native wallets, reporting equity and a fictional-market order ticket">
 
 ## Current capabilities
 
@@ -21,8 +21,10 @@ The M1 global foundation is implemented in `apps/web` and `packages/`; see the [
 | GitHub OAuth                                                   | Local callback and reload verified; production HTTPS pending |
 | Authenticator, admin roles and audited funding pause           | Working locally; explicit operator provisioning required     |
 | Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled      |
-| Exact account-bound FX quote and rounding contracts            | Verified calculation; conversion posting belongs to M2       |
-| Order execution, holdings and explicit FX conversion           | Planned implementation                                       |
+| Native buy/sell, exact basis/P&L and balanced cash journals    | Working with server-owned fictional quotes and venue rules   |
+| Explicit virtual FX and reporting valuation                    | Working across twelve currencies; fixed exercise rates       |
+| Durable receipts, retry recovery and archive/reset history     | Working locally; verified with MySQL races and process death |
+| Full chart workbench and observed student walkthroughs         | M3 next                                                      |
 | Real exchange data and public deployment                       | Coverage, licensing and operational gates pending            |
 
 ## Run locally
@@ -41,14 +43,16 @@ npm run dev
 
 Open **http://127.0.0.1:3000**. Setup creates fresh ignored local credentials and separates the restricted web database identity from operator tooling. Local sign-up uses made-up test details; this mode is explicitly blocked in production. No market-data API key is required.
 
-See the [complete setup and environment contract](docs/implementation/local-development.md), [admin/security runbook](docs/implementation/admin-security.md), [catalog operator workflow](docs/implementation/catalog-operations.md), [market policies](docs/implementation/market-policies.md), [implementation status](docs/implementation/foundation-status.md), and [M1 verification evidence](docs/implementation/m1-acceptance.md). The [project logo](apps/web/public/brand/tradecrafters-mark.png) is available for the GitHub OAuth app avatar.
+Choose a reporting currency under **Account & wallets**, then open **Practice trading**. Trades use a fixed fictional training clock; convert cash explicitly before buying in another currency. Review every quote before confirming. If a response is lost, recover its receipt before submitting another operation.
+
+See the [complete setup and environment contract](docs/implementation/local-development.md), [trading/accounting contract](docs/implementation/trading-accounting.md), [admin/security runbook](docs/implementation/admin-security.md), [catalog operator workflow](docs/implementation/catalog-operations.md), [market policies](docs/implementation/market-policies.md), and [current status](docs/implementation/foundation-status.md). Acceptance evidence: [M1](docs/implementation/m1-acceptance.md), [M2](docs/implementation/m2-acceptance.md). The [project logo](apps/web/public/brand/tradecrafters-mark.png) is available for the GitHub OAuth app avatar.
 
 ## Project layout
 
 | Path                      | Purpose                                                                              |
 | ------------------------- | ------------------------------------------------------------------------------------ |
-| `apps/web`                | Next.js + React explorer, identity, wallets and same-origin APIs                     |
-| `packages/domain`         | Exact currency/quote-unit arithmetic, opening-grant rules, calendar/rule validation  |
+| `apps/web`                | Next.js + React explorer, trading desk, identity and same-origin APIs                |
+| `packages/domain`         | Exact currency/quote-unit arithmetic, fill/FX models, basis and calendar rules       |
 | `packages/contracts`      | Strict request validation                                                            |
 | `packages/database`       | MySQL queries, authentication adapter, checked-in SQL migrations                     |
 | `packages/market-catalog` | Dated worldwide MIC reference and separate fictional scenarios                       |
@@ -66,7 +70,7 @@ The new workspace pins a supported stack, runs on Node 24, and emits a productio
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning, type/lint/format, 29 domain/configuration and 51 integration checks, a dependency audit, and a production build.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning, type/lint/format, **38 domain/configuration and 70 integration checks**, a dependency audit, and a production build.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 

@@ -20,6 +20,8 @@ npm run build
 
 Integration checks require the app and MySQL to be running. Use `npm run format` to apply the repository style. UI changes need desktop/mobile screenshots and loading/error/keyboard verification. Financial changes need exact-arithmetic, retry and concurrency evidence against real MySQL. New data providers need verified permitted use, coverage and quota behavior.
 
+Read the [trading/accounting contract](docs/implementation/trading-accounting.md) before changing financial operations. Preserve same-key recovery, one-connection locking, per-currency reconciliation and archived account history. Failure-injection checks use account-scoped disposable fixtures through the local Docker operator; never run them against hosted/user databases or grant their test privileges to the web runtime.
+
 ## Review and merge
 
 `main` requires a pull request, the `verify` status check, an up-to-date branch and resolved review conversations. These rules apply to administrators too. The project currently uses zero mandatory approvals so a solo maintainer can work without self-approval; this does not authorize merging failing checks or unreviewed external contributions.

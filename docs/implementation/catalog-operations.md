@@ -62,6 +62,6 @@ Snapshot inputs contain `publishedOn`, `changesEffectiveOn`, `retrievedOn`, `sou
 
 `packages/domain/src/fx.ts` defines a server-owned, account-bound synthetic quote and a request containing only `quoteId` and positive native `sourceMinor`. A quote names its currencies, exact rational rate, provider/evidence, observation/effective/expiry timestamps and rounding policy. Validity is bounded to five minutes. Currency exponents are applied independently and integer floor rounding returns the exact remainder. Wrong account/quote, future/expired values, invalid amounts, dust and overflow are rejected.
 
-This calculation does not debit a wallet, post a journal or expose a conversion API. Opening-grant constants are separate from executable FX quotes. M2 must add quote issuance, session ownership, wallet locks, idempotency and linked balanced native-currency journals before conversion is available.
+This pure calculation does not itself debit a wallet or post a journal. The later [M2 executor](trading-accounting.md#synthetic-fx) adds persisted 60-second quote issuance, session ownership, account/wallet locks, idempotency and linked balanced native-currency journals at `/api/trading/fx`. Opening-grant constants remain separate from the independently versioned exercise FX table. The original five-minute bound is a contract maximum, not M2's issuance lifetime.
 
 See [M1 acceptance](m1-acceptance.md), [market policies](market-policies.md), [local setup](local-development.md) and [administrator operations](admin-security.md).

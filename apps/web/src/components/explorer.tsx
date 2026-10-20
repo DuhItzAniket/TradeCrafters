@@ -312,13 +312,16 @@ export function Explorer() {
             <div className="execution-note">
               <span aria-hidden="true">◷</span>
               <p>
-                <strong>Execution is being built.</strong> This release covers
-                identity, discovery and native wallets. Orders and currency
-                conversion arrive in the next milestone.
+                <strong>A fictional session, ready to practice.</strong> Trade
+                at 10:15 venue-local time on 20 October 2026. Reference prices
+                and the clock are project-owned training fixtures.
               </p>
             </div>
-            <Link href="/account" className="button secondary full-width">
-              Prepare your account <span aria-hidden="true">→</span>
+            <Link
+              href={`/trading?listing=${selected.id}`}
+              className="button secondary full-width"
+            >
+              Practice this listing <span aria-hidden="true">→</span>
             </Link>
           </section>
           <ListingRules

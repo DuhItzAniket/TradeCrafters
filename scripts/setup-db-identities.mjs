@@ -59,7 +59,7 @@ try {
     verification: "SELECT,INSERT,UPDATE,DELETE",
     twoFactor: "SELECT,INSERT,UPDATE,DELETE",
     rateLimit: "SELECT,INSERT,UPDATE,DELETE",
-    simulation_accounts: "SELECT,INSERT",
+    simulation_accounts: "SELECT,INSERT,UPDATE (state,version)",
     wallets: "SELECT,INSERT,UPDATE",
     cash_journals: "SELECT,INSERT",
     cash_entries: "SELECT,INSERT",
@@ -89,6 +89,14 @@ try {
     catalog_snapshot_changes: "SELECT",
     venue_classifications: "SELECT",
     market_capability_versions: "SELECT",
+    market_snapshots: "SELECT,INSERT",
+    fx_quotes: "SELECT,INSERT",
+    operation_records: "SELECT,INSERT",
+    orders: "SELECT,INSERT",
+    fills: "SELECT,INSERT",
+    positions: "SELECT,INSERT,UPDATE",
+    fx_conversions: "SELECT,INSERT",
+    account_resets: "SELECT,INSERT",
   };
   const identity = "'tradecrafters_web'@'%'";
   const statements = [

@@ -4,6 +4,15 @@ Changes are recorded when implemented; this file does not imply a tagged or publ
 
 ## Unreleased
 
+### Trading integrity and M2 acceptance — 20 October 2026
+
+- Added account-bound fictional quote snapshots and native market buys/sells with a declared fixed training clock, versioned spread/tick model, lots, sessions, price bands and caps.
+- Added one-connection account serialization, durable body-bound idempotency, immutable fills/receipts, balanced native journals, exact weighted basis/P&L and complete-or-unavailable reporting valuation.
+- Added explicit virtual FX with separate versioned exercise rates, exact exponent/remainder handling and atomic linked currency journals. Wallet creation never adds funds.
+- Added the practice desk with reviewed trade/conversion intents, native holdings/wallets, receipt pagination/provenance, same-tab reload recovery after unknown results, and explicit archive/reset history with one replacement grant.
+- Added migration 0008 and restricted runtime grants; expanded verification to 38 domain/configuration and 70 HTTP/MySQL checks, including cash/inventory/FX/reset races, SQL failures, actual process death before commit and response loss after commit. Verified mobile widths, keyboard trading/table scrolling and archived-history navigation.
+- Updated setup, architecture status, accounting/rollback contract and acceptance evidence. The full chart workbench is M3; real feeds and public hosting remain gated.
+
 ### Catalog integrity and M1 acceptance — 20 October 2026
 
 - Added case-sensitive dated provider aliases, serialized overlap checks, idempotent publication, audits and a server-clock read API.
@@ -37,4 +46,4 @@ Changes are recorded when implemented; this file does not imply a tagged or publ
 - Established protected-main checks, opt-in PR auto-merge, dependency alerts and private vulnerability reporting.
 - Added current setup, architecture, audit, roadmap, screenshots, verification and contribution/security documentation.
 
-Orders, positions, virtual FX conversion, real-data entitlements and public deployment remain on the [roadmap](docs/ROADMAP.md). Credits: **Aniket Kumar and Annapurna S**.
+The full chart workbench, real-data entitlements, public deployment and resting orders remain on the [roadmap](docs/ROADMAP.md). Credits: **Aniket Kumar and Annapurna S**.

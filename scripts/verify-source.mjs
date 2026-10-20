@@ -29,6 +29,9 @@ const required = [
   "packages/domain/src/fx.ts",
   "packages/database/migrations/0001_auth.sql",
   "packages/database/migrations/0007_catalog_versions.sql",
+  "packages/database/migrations/0008_trading_accounting.sql",
+  "packages/database/src/trading.ts",
+  "packages/domain/src/trading.ts",
 ];
 const missing = required.filter((file) => !files.includes(file));
 const patterns = [

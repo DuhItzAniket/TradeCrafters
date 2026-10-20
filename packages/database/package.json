@@ -10,9 +10,11 @@
     "./policies": "./src/policies.ts",
     "./aliases": "./src/aliases.ts",
     "./catalog": "./src/catalog.ts",
+    "./trading": "./src/trading.ts",
     "./migrate": "./src/migrate.ts"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "0.5.1",
     "@tradecrafters/domain": "*",
     "@tradecrafters/market-catalog": "*",
     "better-auth": "1.7.11",
