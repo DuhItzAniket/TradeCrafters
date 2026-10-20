@@ -21,6 +21,12 @@ The test harness creates disposable random local identities and removes only its
 
 The owner entered GitHub application credentials directly into ignored local configuration. Both required files were synchronized without printing their values. **Continue with GitHub** reached the registered application, the owner completed authorization, and the browser returned to `/account` showing **Aniket Kumar / Verified provider identity**. Reload retained the authenticated account. Public HTTPS callback behavior remains unverified.
 
+## Owner local administrator setup
+
+The owner completed authenticator enrollment and current-session verification privately. The signed-in provider identity was matched to the repository owner's GitHub account ID, and the database confirmed verified identity, verified factor enrollment and an unexpired session proof. The existing operator CLI granted the local administrator role and wrote its audit event. After reload, **Account security** showed **Administrator**, and **Load controls** successfully fetched the protected funding control and audit event. The funding state was not changed during this verification.
+
+No provisioning secret, recovery code, authentication token or private account identifier is included in this record. This completes local owner provisioning only; hosted identities, enrollment and operator access must be established in their own deployment environment.
+
 ## Browser and build checks
 
 Using a separate disposable local identity, the browser completed password confirmation, QR enrollment, recovery-code acknowledgement and authenticator verification. After an explicit fixture operator grant, a fresh code unlocked the real administrator API and rendered the saved funding control and audit event. The owner account was not promoted by this test.
