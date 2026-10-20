@@ -9,6 +9,12 @@
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "next typegen && tsc --noEmit"
   },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "6.0.3"
+  },
   "dependencies": {
     "@tradecrafters/contracts": "*",
     "@tradecrafters/database": "*",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 21 October 2026 — Vercel workspace build repair
+
+- Declared pinned TypeScript and React/Node type build dependencies in the web workspace, added an explicit dev-inclusive Vercel install command and aligned the container build with filtered web installation. This fixes the hosted build stopping after compilation because root-only TypeScript dependencies were not installed. Runtime hosted configuration and M4 acceptance remain separate.
+
 ## 20 October 2026 — M4 deployment foundations
 
 - Added bounded MySQL acquisition across promise and auth callback paths, recoverable capacity responses and hosted PEM CA configuration. Normal concurrent trade/idempotency behavior remains verified.
