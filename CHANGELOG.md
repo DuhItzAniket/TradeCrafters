@@ -4,6 +4,14 @@ Changes are recorded when implemented; this file does not imply a tagged or publ
 
 ## Unreleased
 
+### Global workbench implementation — 20 October 2026
+
+- Integrated venue-qualified discovery, browser watchlists, an authored training chart/table and the native order ticket; mobile discovery collapses after selection. Real reference selections expose missing coverage without invented prices or trading controls.
+- Added bounded read-only chart contracts with a fixed server cutoff, exact tick/session-aware authored paths, keyboard time inspection, rule-check expiry and isolated failure/late-response handling. Chart points never choose fill prices or move the M2 account clock.
+- Added account-record navigation, loaded-receipt filters, reporting FX source/completeness details, receipt focus and directory/workbench deep links. Preserved native accounting, same-key recovery and archive/reset semantics.
+- Expanded verification to 44 domain/configuration and 72 HTTP/MySQL checks plus responsive, keyboard, trade/FX, stale/break/outage, decline and lost-response browser checks. Fixed an ICU-dependent hydration mismatch and kept listing selection usable during outages.
+- Prepared the student walkthrough protocol. **M3 remains open for deferred real student feedback**; no observations or accessibility certification are fabricated. Real feeds and public deployment remain later work.
+
 ### Trading integrity and M2 acceptance — 20 October 2026
 
 - Added account-bound fictional quote snapshots and native market buys/sells with a declared fixed training clock, versioned spread/tick model, lots, sessions, price bands and caps.

@@ -95,7 +95,7 @@ export function Explorer() {
           prices and FX rates here are fictional. Real exchange data is not
           connected.
         </p>
-        <span className="version-tag">FOUNDATION 0.1</span>
+        <span className="version-tag">FICTIONAL SCENARIOS</span>
       </div>
       <section className="overview-grid" aria-label="Current coverage">
         <div className="overview-cell">

@@ -32,6 +32,10 @@ const required = [
   "packages/database/migrations/0008_trading_accounting.sql",
   "packages/database/src/trading.ts",
   "packages/domain/src/trading.ts",
+  "packages/domain/src/workbench.ts",
+  "packages/database/src/workbench.ts",
+  "apps/web/src/components/market-workspace.tsx",
+  "apps/web/src/app/api/listings/[listingId]/chart/route.ts",
 ];
 const missing = required.filter((file) => !files.includes(file));
 const patterns = [

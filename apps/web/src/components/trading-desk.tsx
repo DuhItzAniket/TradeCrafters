@@ -12,7 +12,9 @@ import {
 import { currency, formatMinor } from "@tradecrafters/domain";
 import type { Portfolio } from "@tradecrafters/database/trading";
 import type { OperationReceipt } from "@tradecrafters/domain/trading";
-import { TradeTicket } from "./trade-ticket";
+import { ListingBrowser, type VenueSelection } from "./listing-browser";
+import { MarketWorkspace, UnavailableVenue } from "./market-workspace";
+import { scenarios } from "@tradecrafters/market-catalog/scenarios";
 import { FxConverter } from "./fx-converter";
 import { OperationReceiptView } from "./operation-receipt";
 import { tradingRequest } from "@/lib/trading-client";
@@ -68,11 +70,13 @@ export function TradingDesk({
   initialActivity,
   initialListingId,
   ownerId,
+  initialVenue,
 }: {
   initial: Portfolio;
   initialActivity: Activity;
   initialListingId: string;
   ownerId: string;
+  initialVenue: VenueSelection | null;
 }) {
   const [data, setData] = useState(initial),
     [feed, setFeed] = useState(initialActivity),
@@ -85,6 +89,9 @@ export function TradingDesk({
     side: "BUY" | "SELL";
   }>({ listingId: initialListingId, side: "BUY" });
   const [stale, setStale] = useState(false);
+  const [venue, setVenue] = useState<VenueSelection | null>(initialVenue);
+  const [recordView, setRecordView] = useState("positions");
+  const [activityFilter, setActivityFilter] = useState("all");
   const router = useRouter(),
     storageKey = `tradecrafters.pending.v1.${ownerId}`;
   const getSnapshot = useCallback(() => {
@@ -237,6 +244,20 @@ export function TradingDesk({
     holdings = data.positions.filter(
       (position) => BigInt(position.quantity) > 0n,
     );
+  const selectedListing = scenarios.find(
+    (row) => row.id === selection.listingId,
+  )!;
+  const visibleReceipts = feed.receipts.filter(
+    (item) =>
+      activityFilter === "all" ||
+      (activityFilter === "rejected"
+        ? item.status === "rejected"
+        : item.kind === activityFilter),
+  );
+  function selectListing(listingId: string, side: "BUY" | "SELL" = "BUY") {
+    setVenue(null);
+    setSelection({ listingId, side });
+  }
   return (
     <>
       {data.state === "archived" && (
@@ -303,7 +324,7 @@ export function TradingDesk({
           {message}
         </p>
       )}
-      <div className="trading-summary">
+      <div className="trading-summary workbench-summary">
         <div>
           <span className="eyebrow">REPORTING EQUITY · {report}</span>
           <strong>{money(data.reporting.equityMinor, report)}</strong>
@@ -346,10 +367,79 @@ export function TradingDesk({
           Refresh account ↻
         </button>
       </div>
-      <div className="trading-grid">
-        <div className="trading-main">
+      <div className="workbench-grid">
+        <ListingBrowser
+          ownerId={ownerId}
+          selectedId={selection.listingId}
+          venue={venue}
+          onSelect={(id) => selectListing(id)}
+          onVenue={setVenue}
+        />
+        {venue ? (
+          <>
+            <UnavailableVenue venue={venue} onReturn={() => setVenue(null)} />
+            <aside className="workbench-order unavailable-ticket">
+              <span className="eyebrow">ORDER ACCESS</span>
+              <h2>Real-market trading is unavailable.</h2>
+              <p>
+                Choose a fictional practice listing to place a virtual order.
+                Your existing native wallets, conversions and receipts remain
+                available below.
+              </p>
+              <button
+                className="button secondary"
+                onClick={() => setVenue(null)}
+              >
+                Return to fictional practice
+              </button>
+            </aside>
+          </>
+        ) : (
+          <MarketWorkspace
+            key={selection.listingId}
+            accountId={data.accountId}
+            listingId={selection.listingId}
+            side={selection.side}
+            blocked={blocked}
+            balanceMinor={
+              data.wallets.find((w) => w.currency === selectedListing.currency)
+                ?.balanceMinor ?? "0"
+            }
+            onSelect={selectListing}
+            execute={execute}
+          />
+        )}
+        <div className="trading-main workbench-records">
           {receipt && <OperationReceiptView receipt={receipt} />}
-          <section className="panel holdings-panel">
+          <div
+            className="record-navigation"
+            role="group"
+            aria-label="Account records"
+          >
+            <button
+              aria-pressed={recordView === "positions"}
+              onClick={() => setRecordView("positions")}
+            >
+              Positions · {holdings.length}
+            </button>
+            <button
+              aria-pressed={recordView === "wallets"}
+              onClick={() => setRecordView("wallets")}
+            >
+              Wallets &amp; FX
+            </button>
+            <button
+              aria-pressed={recordView === "activity"}
+              onClick={() => setRecordView("activity")}
+            >
+              Activity · {feed.receipts.length}
+              {feed.nextCursor ? "+" : ""}
+            </button>
+          </div>
+          <section
+            className="panel holdings-panel"
+            hidden={recordView !== "positions"}
+          >
             <div className="panel-heading">
               <div>
                 <span className="eyebrow">NATIVE HOLDINGS</span>
@@ -407,6 +497,7 @@ export function TradingDesk({
                               className="text-button"
                               disabled={blocked}
                               onClick={() => {
+                                setVenue(null);
                                 setSelection({
                                   listingId: position.listingId,
                                   side: "SELL",
@@ -439,7 +530,7 @@ export function TradingDesk({
               </div>
             )}
           </section>
-          <section className="panel">
+          <section className="panel" hidden={recordView !== "wallets"}>
             <div className="panel-heading">
               <div>
                 <span className="eyebrow">SPENDABLE CAPITAL</span>
@@ -467,8 +558,48 @@ export function TradingDesk({
               Orders spend only the listing’s native currency. Reporting totals
               cannot fund another wallet; use an explicit conversion.
             </p>
+            <div className="wallet-conversion">
+              <FxConverter
+                accountId={data.accountId}
+                initialCurrency={report}
+                blocked={blocked}
+                execute={execute}
+              />
+            </div>
+            <details className="reporting-details">
+              <summary>Reporting FX source and completeness</summary>
+              <p>
+                Valuation {data.asOf}.{" "}
+                {data.reporting.complete
+                  ? "All required marks are available."
+                  : "Incomplete: required marks are missing; equity is unavailable."}{" "}
+                Fixed exercise rates are not market FX.
+              </p>
+              <p>
+                Source: {data.reporting.fx.provider} ·{" "}
+                {data.reporting.fx.version} · observed{" "}
+                {data.reporting.fx.observedAt}. Half-even reporting conversion.
+              </p>
+              <dl className="receipt-facts">
+                {data.reporting.fx.rates.map((rate) => (
+                  <div key={rate.from}>
+                    <dt>
+                      {rate.from} → {rate.to}
+                    </dt>
+                    <dd>
+                      {rate.numerator}/{rate.denominator} target units per
+                      source unit
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <p>{data.reporting.fx.assetFxAttribution}</p>
+            </details>
           </section>
-          <section className="panel activity-panel">
+          <section
+            className="panel activity-panel"
+            hidden={recordView !== "activity"}
+          >
             <div className="panel-heading">
               <div>
                 <span className="eyebrow">DURABLE OUTCOMES</span>
@@ -476,9 +607,22 @@ export function TradingDesk({
               </div>
               <span className="mono muted">{data.state.toUpperCase()}</span>
             </div>
-            {feed.receipts.length ? (
+            <label className="field activity-filter">
+              <span>Filter loaded receipts</span>
+              <select
+                value={activityFilter}
+                onChange={(e) => setActivityFilter(e.target.value)}
+              >
+                <option value="all">All outcomes</option>
+                <option value="order">Trades</option>
+                <option value="fx">Currency conversions</option>
+                <option value="reset">Archive / reset</option>
+                <option value="rejected">Declined operations</option>
+              </select>
+            </label>
+            {visibleReceipts.length ? (
               <ol className="trading-activity">
-                {feed.receipts.map((item) => (
+                {visibleReceipts.map((item) => (
                   <li key={item.id}>
                     <button onClick={() => setReceipt(item)}>
                       <span>
@@ -503,8 +647,9 @@ export function TradingDesk({
             ) : (
               <div className="trading-empty compact">
                 <p>
-                  Filled trades, conversions and saved declines appear here.
-                  Each opens its original receipt.
+                  No matching receipts in the loaded page. Filled trades,
+                  conversions and saved declines appear here. Load older
+                  receipts below when available, or change the filter.
                 </p>
               </div>
             )}
@@ -568,25 +713,6 @@ export function TradingDesk({
             performance curve or real-market integration is implied.
           </p>
         </div>
-        <aside className="trading-sidebar" aria-label="Trading controls">
-          <div id="order-ticket">
-            <TradeTicket
-              key={`${selection.listingId}:${selection.side}`}
-              accountId={data.accountId}
-              listingId={selection.listingId}
-              side={selection.side}
-              blocked={blocked}
-              onSelect={(listingId, side) => setSelection({ listingId, side })}
-              execute={execute}
-            />
-          </div>
-          <FxConverter
-            accountId={data.accountId}
-            initialCurrency={report}
-            blocked={blocked}
-            execute={execute}
-          />
-        </aside>
       </div>
     </>
   );

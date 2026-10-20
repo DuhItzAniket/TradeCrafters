@@ -33,6 +33,8 @@ Choose an initial reporting/wallet currency and create an account. Its opening b
 
 Open **Practice trading** at `/trading`. Review and confirm a native-currency buy/sell; use explicit FX to fund a different currency first. Ten fictional listings use a fixed training clock of 20 October 2026, 10:15 local to each venue, with real-time quote expiry. This differs from the explorer's wall-clock policy preview. Receipts persist on MySQL; pending-intent recovery survives reloads in the same tab. **Start a new practice account** requires typing `RESET`, preserves archived history and grants one replacement account, at most once per hour. See the [trading/accounting contract](trading-accounting.md) before changing money, clocks or recovery behavior.
 
+The workbench's discovery panel filters fictional listings and saves venue-qualified watchlist pins on this browser. The authored chart has keyboard inspection and an exact-price table; it is not live/history data and cannot choose a fill price. Market checks expire after a minute: refresh the check or select another listing. **Wallets & FX** and **Activity** are account-record controls below the chart. Selecting a real venue exposes missing coverage without an order ticket. See the [M3 implementation and limits](workbench.md); the owner deferred [student walkthroughs](../design/student-walkthrough.md), so M3 remains open.
+
 ## Commands
 
 ```sh
@@ -45,7 +47,7 @@ npm run test:integration
 npm run build
 ```
 
-The suite has **38 domain/configuration tests and 70 integration checks**. Integration requires the local app, migrated/seeded MySQL, restricted web identity and Docker access for local failure-injection fixtures. Tests create isolated random identities and disposable listing/policy/catalog fixtures, restore the funding pause control and remove only records they created. They cover HTTP/session/database boundaries, concurrent grant/trade/FX/reset reconciliation, exact native basis/P&L, quote expiry, crash and SQL rollback, unknown-response recovery, ownership/CSRF/input/rate limits, revocation/MFA/roles, policies, alias races, immutable source versions, expiring evidence, OAuth failure/recovery and actual database privilege denials.
+The suite has **44 domain/configuration tests and 72 integration checks**. Integration requires the local app, migrated/seeded MySQL, restricted web identity and Docker access for local failure-injection fixtures. Tests create isolated random identities and disposable listing/policy/catalog fixtures, restore the funding pause control and remove only records they created. They cover HTTP/session/database boundaries, concurrent grant/trade/FX/reset reconciliation, exact native basis/P&L, quote expiry, crash and SQL rollback, unknown-response recovery, ownership/CSRF/input/rate limits, revocation/MFA/roles, policies, alias races, immutable source versions, expiring evidence, OAuth failure/recovery, actual database privilege denials and bounded authored chart/session/identity contracts.
 
 OAuth transport fixtures exercise the real auth handler and MySQL without live GitHub traffic; an owner-assisted real local callback was verified separately. The automated suite does not establish hosted HTTPS behavior or exchange-data rights. See [M2 acceptance and limits](m2-acceptance.md), [M1 evidence](m1-acceptance.md), [market policies](market-policies.md) and [catalog operations](catalog-operations.md). `npm run catalog -- status` reads the reference/coverage summary using the root CLI identity.
 

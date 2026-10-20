@@ -293,6 +293,23 @@ export function sessionState(calendar: CalendarDefinition, at: Date) {
   };
 }
 
+export function nextContinuousSession(calendar: CalendarDefinition, at: Date) {
+  const instant = Temporal.Instant.from(at.toISOString());
+  const start = instant.toZonedDateTimeISO(calendar.timezone).toPlainDate();
+  for (let offset = 0; offset <= 14; offset++) {
+    const day = start.add({ days: offset });
+    if (day.toString() >= calendar.coverageTo) break;
+    if (day.toString() < calendar.coverageFrom) continue;
+    const next = intervalsOn(calendar, day).find(
+      (row) =>
+        row.kind === "continuous" &&
+        Temporal.Instant.compare(row.open, instant) > 0,
+    );
+    if (next) return { opensAt: next.opensAt, closesAt: next.closesAt };
+  }
+  return null;
+}
+
 // The price passed here must come from the server's quote/scenario, never an order's client-supplied fill price.
 export function checkOrderRules(
   rules: RuleDefinition,
