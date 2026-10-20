@@ -12,7 +12,8 @@
     "./catalog": "./src/catalog.ts",
     "./trading": "./src/trading.ts",
     "./workbench": "./src/workbench.ts",
-    "./migrate": "./src/migrate.ts"
+    "./migrate": "./src/migrate.ts",
+    "./pool": "./src/pool.ts"
   },
   "dependencies": {
     "@js-temporal/polyfill": "0.5.1",

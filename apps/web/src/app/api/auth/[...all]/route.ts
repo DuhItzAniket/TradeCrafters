@@ -10,7 +10,7 @@ import {
 import { clearStepUps, securityState } from "@tradecrafters/database/security";
 export const runtime = "nodejs";
 export async function GET(request: Request) {
-  return toNextJsHandler(getAuth()).GET(request);
+  return api(() => toNextJsHandler(getAuth()).GET(request));
 }
 export async function POST(request: Request) {
   return api(async () => {

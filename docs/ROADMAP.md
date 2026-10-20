@@ -82,6 +82,8 @@ Software implementation and browser evidence: [workbench record](implementation/
 
 ### M4: deployment
 
+**In progress:** [deployment foundations/runbook](implementation/deployment-foundations.md) implements acquisition deadlines, runtime grant/TLS preflight, a non-root container and a local encrypted recovery/aggregate-cap rehearsal. Hosted acceptance remains open. The owner explicitly deferred M3 student feedback while engineering continues; M3 is not marked complete.
+
 - Resolve hosting/DB region, free-tier limitations, TLS trust, actual connection budget and preview isolation before production setup.
 - Document credentials by **name**, never value; use separate application/migration identities and environment scopes.
 - Enable persistent rate limits, instrument/account quotas, an admin pause switch and sanitized logs.

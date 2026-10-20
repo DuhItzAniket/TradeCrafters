@@ -68,9 +68,11 @@ Start with the [research index](docs/README.md), [global architecture](docs/arch
 
 The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. A hosted MySQL database and registered OAuth application still need configuration and verification. No billable resource has been provisioned.
 
+**M4 is in progress.** [Deployment foundations and setup instructions](docs/implementation/deployment-foundations.md) cover bounded database acquisition, runtime grant/TLS inspection, a non-root standalone container, an encrypted isolated restore rehearsal and the remaining hosted release gates. Student feedback stays deferred; public deployment is not yet available.
+
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning, type/lint/format, **44 domain/configuration and 72 integration checks**, a dependency audit, and a production build.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **52 domain/configuration and 75 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 

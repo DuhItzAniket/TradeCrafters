@@ -1,0 +1,31 @@
+# Allow only the v2 build inputs. Local env files, Git history, legacy code,
+# browser state, databases and operations artifacts never enter build context.
+**
+!package.json
+!package-lock.json
+!tsconfig.json
+!apps/
+!apps/web/
+!apps/web/package.json
+!apps/web/next.config.ts
+!apps/web/tsconfig.json
+!apps/web/src/
+!apps/web/src/**
+!apps/web/public/
+!apps/web/public/**
+!packages/
+!packages/*/
+!packages/*/package.json
+!packages/*/src/
+!packages/*/src/**
+!packages/market-catalog/data/
+!packages/market-catalog/data/**
+!Dockerfile
+# Final denials also apply below re-included parent directories.
+**/node_modules
+**/.next
+**/.env*
+**/.local
+**/.git
+**/.vercel
+**/*.tcbackup

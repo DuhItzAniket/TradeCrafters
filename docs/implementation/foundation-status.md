@@ -2,6 +2,8 @@
 
 M1/#3 and M2/#4 are complete; their [80-check foundation](m1-acceptance.md) and [108-check accounting](m2-acceptance.md) records remain historical baselines. The [M3 workbench implementation](workbench.md) adds integrated discovery/chart/ticket and account-record interactions, with **116 automated checks** and responsive/failure-state browser evidence. **M3/#5 remains open for 3–5 observed student walkthroughs**, deferred by the owner. The worldwide real-market and public-deployment roadmap remains open.
 
+**M4/#6 is now in progress.** Its [deployment foundations and release runbook](deployment-foundations.md) add database acquisition deadlines, an exact runtime grant inspector, an isolated encrypted restore/aggregate-cap rehearsal and a non-root standalone container. The current suite has **127 checks (52 domain/configuration + 75 integration)** plus recovery and container verification. Hosted setup and release acceptance remain open; the owner confirmed neither Vercel nor managed MySQL is provisioned yet.
+
 ## Implemented
 
 - Additive npm workspaces; Node 24 LTS, Next 16.4.2, React 19.3.1, TypeScript 6.0.3, Better Auth 1.7.11 and MySQL 8.4. Exact package lock, repeatable local setup, tracked SQL source and CI workflow.
@@ -23,7 +25,7 @@ M1/#3 and M2/#4 are complete; their [80-check foundation](m1-acceptance.md) and 
 ## Still open
 
 - **M3 / #5:** 3–5 real student walkthroughs and resulting material UX fixes. The owner deferred feedback; the [protocol](../design/student-walkthrough.md) remains unfilled. Broader assistive-technology and representative-device performance evidence is not claimed. The integrated workbench is implemented; real regional/currency mappings remain part of reviewed inventory, not invented UI metadata.
-- **M4 / #6:** intended-domain HTTPS OAuth verification, production identity/operator provisioning, factor/recovery operations, hosted database/TLS/grant/connection checks, ingress abuse controls, backups/restore, external audit retention and public deployment. Local operator grants/enrollment do not provision a hosted environment.
+- **M4 / #6:** intended-domain HTTPS OAuth verification, production identity/operator provisioning, factor/recovery operations, hosted database/TLS/grant/connection checks, ingress abuse controls, execution pause, hosted backup/restore/rollback, external audit retention and public deployment. Local grant inspection and a disposable restore are verified; local operator grants/enrollment do not provision a hosted environment.
 - **M5 / #7 and #9:** reviewed real venue calendars/rules, listing/provider capability evidence, permitted use, quota/freshness/outage verification and real-data enablement. All real simulation remains disabled.
 - **Inventory #9 / M7:** full reviewed worldwide cash-equity classification and missing smaller/frontier/non-MIC markets. All 2,889 current reference rows are unreviewed. Version/diff software is implemented, but an actual prior effective source baseline has not been acquired. October changes become effective 26 October; the product discloses this upcoming-reference gap. Directory count is not a stock-exchange integration count.
 
