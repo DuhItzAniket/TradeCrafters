@@ -157,9 +157,14 @@ export async function listingPolicy(
   listingId: string,
   at = new Date(),
   requestedMode?: "synthetic" | "real",
+  connection?: PoolConnection,
+  evidenceAt = at,
 ) {
-  const [listings] = await getPool().execute<RowDataPacket[]>(
-    "SELECT l.id,l.mic,l.timezone,s.fictional FROM listings l JOIN securities s ON s.id=l.security_id WHERE l.id=?",
+  const reader = connection ?? getPool();
+  const lock = connection ? " FOR SHARE" : "";
+  const [listings] = await reader.execute<RowDataPacket[]>(
+    "SELECT l.id,l.mic,l.timezone,s.fictional FROM listings l JOIN securities s ON s.id=l.security_id WHERE l.id=?" +
+      lock,
     [listingId],
   );
   const listing = listings[0];
@@ -192,8 +197,9 @@ export async function listingPolicy(
       "MODE_MISMATCH",
       "Fictional and real-market policies cannot be interchanged.",
     );
-  const [rows] = await getPool().execute<RowDataPacket[]>(
-    "SELECT p.*,c.definition AS calendar_definition,c.content_hash AS calendar_hash,r.definition AS rule_definition,r.content_hash AS rule_hash,a.status,a.display_allowed,a.simulation_allowed,a.replay_allowed,a.verified_at,a.expires_at FROM listing_policy_versions p JOIN market_calendar_versions c ON c.id=p.calendar_id JOIN trading_rule_versions r ON r.id=p.rule_id LEFT JOIN listing_policy_permissions a ON a.policy_id=p.id WHERE p.listing_id=? AND p.data_mode=? AND p.effective_from<=? AND p.effective_to>? LIMIT 2",
+  const [rows] = await reader.execute<RowDataPacket[]>(
+    "SELECT p.*,c.definition AS calendar_definition,c.content_hash AS calendar_hash,r.definition AS rule_definition,r.content_hash AS rule_hash,a.status,a.display_allowed,a.simulation_allowed,a.replay_allowed,a.verified_at,a.expires_at FROM listing_policy_versions p JOIN market_calendar_versions c ON c.id=p.calendar_id JOIN trading_rule_versions r ON r.id=p.rule_id LEFT JOIN listing_policy_permissions a ON a.policy_id=p.id WHERE p.listing_id=? AND p.data_mode=? AND p.effective_from<=? AND p.effective_to>? LIMIT 2" +
+      lock,
     [listingId, mode, at, at],
   );
   if (rows.length !== 1)
@@ -232,15 +238,15 @@ export async function listingPolicy(
       Number(row.display_allowed) !== 1 ||
       Number(row.simulation_allowed) !== 1 ||
       !row.verified_at ||
-      new Date(row.verified_at) > at ||
-      new Date(row.expires_at) <= at
+      new Date(row.verified_at) > evidenceAt ||
+      new Date(row.expires_at) <= evidenceAt
     )
       return blocked(
         "PERMISSION_REQUIRED",
         "Current display and simulation permission has not been verified.",
       );
     if (mode === "real") {
-      const [rights] = await getPool().execute<RowDataPacket[]>(
+      const [rights] = await reader.execute<RowDataPacket[]>(
         "SELECT status FROM venue_capabilities WHERE mic=? AND capability='real_simulation'",
         [listing.mic],
       );
@@ -258,8 +264,9 @@ export async function listingPolicy(
       rules,
     };
     base.session = sessionState(calendar, at);
-    const [halts] = await getPool().execute<RowDataPacket[]>(
-      "SELECT id FROM listing_halts WHERE listing_id=? AND starts_at<=? AND (ends_at IS NULL OR ends_at>?) LIMIT 1",
+    const [halts] = await reader.execute<RowDataPacket[]>(
+      "SELECT id FROM listing_halts WHERE listing_id=? AND starts_at<=? AND (ends_at IS NULL OR ends_at>?) LIMIT 1" +
+        lock,
       [listingId, at, at],
     );
     if (halts.length)

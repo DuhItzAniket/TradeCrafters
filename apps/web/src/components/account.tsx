@@ -1,6 +1,7 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   currencies,
   formatMinor,
@@ -195,9 +196,9 @@ export function Account({
               </form>
             )}
             <p className="panel-footnote">
-              Balances are independent. A new wallet starts at zero. Virtual FX
-              conversion, orders and consolidated portfolio valuation are coming
-              in the next release.
+              Balances are independent. A new wallet starts at zero.{" "}
+              <Link href="/trading">Open practice trading</Link> to convert
+              virtual cash, review orders and follow positions and receipts.
             </p>
           </>
         )}

@@ -19,6 +19,7 @@ function denied(error: unknown) {
     [
       "ER_ACCESS_DENIED_ERROR",
       "ER_TABLEACCESS_DENIED_ERROR",
+      "ER_COLUMNACCESS_DENIED_ERROR",
       "ER_DBACCESS_DENIED_ERROR",
       "ER_PROCACCESS_DENIED_ERROR",
       "ER_SPECIFIC_ACCESS_DENIED_ERROR",
@@ -76,6 +77,14 @@ test("the web identity cannot grant roles, rewrite journals/audits/catalogs or a
     "UPDATE venue_classifications SET classification=classification WHERE false",
     "UPDATE catalog_audit SET reason=reason WHERE false",
     "SELECT 1 FROM schema_migrations LIMIT 1",
+    "UPDATE simulation_accounts SET grant_snapshot=grant_snapshot WHERE false",
+    "UPDATE simulation_accounts SET reporting_currency=reporting_currency WHERE false",
+    "UPDATE simulation_accounts SET user_id=user_id WHERE false",
+    "UPDATE operation_records SET receipt=receipt WHERE false",
+    "DELETE FROM fills WHERE false",
+    "UPDATE market_snapshots SET definition=definition WHERE false",
+    "UPDATE fx_quotes SET definition=definition WHERE false",
+    "DELETE FROM fx_conversions WHERE false",
   ])
     await assert.rejects(pool.query(statement), denied);
 });

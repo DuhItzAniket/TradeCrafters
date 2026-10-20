@@ -143,8 +143,10 @@ export function ListingRules({
             </>
           )}
           <p className="small-copy">
-            Checked {view.checkedAt.slice(11, 19)} UTC. Real exchange calendars
-            and prices remain unverified.
+            This check uses the current wall clock. Practice trading uses a
+            fixed training clock at 10:15 local time on 20 October 2026. Checked{" "}
+            {view.checkedAt.slice(11, 19)} UTC. Real exchange calendars and
+            prices remain unverified.
           </p>
         </>
       )}

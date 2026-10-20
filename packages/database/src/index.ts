@@ -35,7 +35,7 @@ export async function readAccount(
   userId: string,
 ): Promise<SimulationAccount | null> {
   const [accounts] = await getPool().execute<AccountRow[]>(
-    "SELECT id, reporting_currency, grant_version FROM simulation_accounts WHERE user_id = ?",
+    "SELECT id, reporting_currency, grant_version FROM simulation_accounts WHERE user_id = ? AND state='active'",
     [userId],
   );
   if (!accounts.length) return null;
@@ -73,7 +73,7 @@ export async function createAccount(userId: string, code: CurrencyCode) {
     );
     if (!users.length) throw new Error("USER_NOT_FOUND");
     const [accounts] = await connection.execute<RowDataPacket[]>(
-      "SELECT id FROM simulation_accounts WHERE user_id = ?",
+      "SELECT id FROM simulation_accounts WHERE user_id = ? AND state='active'",
       [userId],
     );
     if (!accounts.length) {
@@ -113,8 +113,11 @@ export async function createWallet(userId: string, code: CurrencyCode) {
   const connection = await getPool().getConnection();
   try {
     await connection.beginTransaction();
+    await connection.execute("SELECT id FROM user WHERE id=? FOR SHARE", [
+      userId,
+    ]);
     const [accounts] = await connection.execute<RowDataPacket[]>(
-      "SELECT id FROM simulation_accounts WHERE user_id = ? FOR SHARE",
+      "SELECT id FROM simulation_accounts WHERE user_id = ? AND state='active' FOR UPDATE",
       [userId],
     );
     if (!accounts.length) throw new Error("ACCOUNT_NOT_FOUND");

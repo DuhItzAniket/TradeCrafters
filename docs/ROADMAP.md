@@ -4,7 +4,7 @@
 
 GitHub entry points: [research PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1) and [roadmap tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-**Execution update — 20 October 2026:** M1 foundation/contracts and verified local identity are implemented; [acceptance evidence](implementation/m1-acceptance.md) records 80 automated checks, browser verification and milestone boundaries. Issue #3 closes after required CI/merge. M2 trading is next. Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original scope and exit criteria below remain the baseline.
+**Execution update — 20 October 2026:** M1 foundation/identity and M2 trading/accounting are implemented. [M1 acceptance](implementation/m1-acceptance.md) records its 80-check baseline; [M2 acceptance](implementation/m2-acceptance.md) records 108 checks, browser recovery/keyboard/mobile verification and milestone boundaries. Issue #4 closes after required CI/merge. **M3 discovery/chart workbench is next.** Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original scope and exit criteria below remain the baseline.
 
 | Implementation issue                                         | Work                                                                |
 | ------------------------------------------------------------ | ------------------------------------------------------------------- |
@@ -60,6 +60,8 @@ M1–M4 total roughly **22–37 focused days**, with substantial uncertainty. Th
 - Set up typecheck/lint/build checks and isolated MySQL integration jobs. Add dependency/secret review and lockfile reproducibility.
 
 ### M2: trading integrity
+
+Implementation: [trading/accounting contract](implementation/trading-accounting.md) and [acceptance evidence](implementation/m2-acceptance.md). The first exercise uses fixed reference quotes and a frozen local clock; historical/chart data is not fabricated for this milestone.
 
 - Implement synthetic instrument metadata, server-owned scenario clock, bounded chart/quote contracts, and no future-data access.
 - Use multi-region scenarios to verify native wallets, explicit FX and reporting conversions; adding a wallet cannot mint another opening grant.

@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import type { ApiErrorCode } from "@tradecrafters/contracts";
 import { consumeMutationBudget } from "@tradecrafters/database";
+import { TradingFault } from "@tradecrafters/domain/trading";
 import { authConfiguration, getAuth } from "@tradecrafters/database/auth";
 import {
   securityState,
@@ -22,6 +23,11 @@ export async function api(run: () => Promise<Response>) {
   try {
     return await run();
   } catch (error) {
+    if (error instanceof TradingFault)
+      return json(
+        { error: { code: error.code, message: error.message } },
+        error.status,
+      );
     if (error instanceof SimulationPausedError)
       return json(
         { error: { code: "SIMULATION_PAUSED", message: error.message } },

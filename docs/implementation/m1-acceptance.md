@@ -2,6 +2,8 @@
 
 M1 establishes a reproducible global application and verified identity with market/currency/policy contracts. This record maps the [original M1 deliverable and exit criteria](../ROADMAP.md#m1-foundation) to implementation evidence. The required PR checks must pass and the change must merge before issue #3 is closed.
 
+M1 was merged and #3 closed. This is its historical 80-check baseline; subsequent order execution, FX posting and archive/reset are documented in [M2 acceptance](m2-acceptance.md).
+
 | M1 requirement                                                                                 | Evidence                                                                                                                                                                                                           |
 | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Fresh-clone setup, pinned stack and tracked database code                                      | Node 24 workspaces, exact lockfile, one checksum-checked SQL history, repeatable setup/seed, required clean-install MySQL CI and tracked-source checks                                                             |

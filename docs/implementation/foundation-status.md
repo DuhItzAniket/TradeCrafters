@@ -1,6 +1,6 @@
 # Foundation execution status — 20 October 2026
 
-The [M1 foundation acceptance record](m1-acceptance.md) maps the implemented global foundation and verified local identity to the original milestone criteria, with 80 automated checks and browser evidence. Issue [#3](https://github.com/DuhItzAniket/TradeCrafters/issues/3) closes only after required CI and merge. Initial discovery/inventory work also contributes to #5/#9. The worldwide real-market roadmap remains open.
+The [M1 foundation acceptance record](m1-acceptance.md) maps the global foundation and verified local identity to its original 80-check baseline; #3 is complete. The [M2 acceptance record](m2-acceptance.md) adds native trading/accounting, explicit FX, durable receipts and archive/reset, with 108 checks and browser recovery/keyboard/mobile evidence. Issue [#4](https://github.com/DuhItzAniket/TradeCrafters/issues/4) closes after required CI and merge. M3's full discovery/chart workbench is next; the worldwide real-market roadmap remains open.
 
 ## Implemented
 
@@ -14,13 +14,14 @@ The [M1 foundation acceptance record](m1-acceptance.md) maps the implemented glo
 - Security/listing separation and case-sensitive provider aliases with dated non-overlap, canonical mapping checks, namespace/listing locks, idempotent retries, audit and server-clock lookup. Ten aliases are explicitly fictional.
 - Immutable reference snapshots, complete normalized MIC definitions/hashes, parent/diff history, future-effective promotion gates and audited classification/capability publication through a trusted operator CLI. The directory keeps all unknown classifications visible. Provider/dataset/feed/audience/retention/display/replay/simulation contracts independently default to disabled. See [catalog operations](catalog-operations.md).
 - Persisted immutable calendar/rule versions, non-overlapping effective assignments, dated permission checks, listing halts and transactional publication audits back the scenario-rule panel. Tests cover breaks, holidays, early closes, overnight sessions, DST, Sunday trading weeks and exact lots/ticks/bands. See [market-policy implementation](market-policies.md); all ten seeded policies remain fictional.
-- Account-bound synthetic FX quote/request contracts, exact exponent-aware rounding/remainders, five-minute validity and rejection of wrong-account, future/expired, dust or overflowing calculations. Wallet posting and executable conversion remain M2.
+- Account-bound synthetic FX contracts with exact exponent-aware rounding/remainders, plus persisted 60-second exercise quote issuance and atomic linked native-currency journal posting. Wrong-account, changed provenance, future/expired, dust and overflow calculations fail closed.
+- Native buy/sell execution, 30-second server-owned fictional quotes, 5 bps/tick-aware fill model, whole-lot/session/band/cap validation, one-connection account locking, durable body-bound idempotency and immutable fill provenance. Native holdings, weighted basis and realized/unrealized P&L reconcile to fills; incomplete marks propagate unavailable reporting totals.
+- Practice desk with explicit FX, native wallets/positions, activity pagination, provenance receipts, reload recovery after unknown outcomes, keyboard review/confirmation and internally scrolling mobile holdings. Explicit hourly archive/reset preserves history and funds only one new active account. See the [M2 contract](trading-accounting.md) for the fixed training clock, exact rounding and rollback limits.
 - Restricted local web database identity with actual privilege-denial checks, sanitized authentication logging, exact-origin configuration checks and OAuth state/failure/recovery fixtures against the real handler and MySQL. Operator/Docker credentials stay outside the web env. The owner confirmed historical credential rotation/revocation; this is recorded as attestation, not an independent issuer activity audit.
 
 ## Still open
 
-- **M2 / #4:** order execution, idempotency and receipts, positions, executable virtual FX, journal posting and reporting valuation; durable workers are M6.
-- **M3 / #5:** complete trading workbench and chart/order/portfolio interactions, broader accessibility checks and observed student walkthroughs.
+- **M3 / #5:** complete discovery/chart workbench, richer order/portfolio interactions, broader accessibility checks and observed student walkthroughs. M2 provides the functioning ticket/accounting/recovery foundation; charts and resting orders are not implied.
 - **M4 / #6:** intended-domain HTTPS OAuth verification, production identity/operator provisioning, factor/recovery operations, hosted database/TLS/grant/connection checks, ingress abuse controls, backups/restore, external audit retention and public deployment. Local operator grants/enrollment do not provision a hosted environment.
 - **M5 / #7 and #9:** reviewed real venue calendars/rules, listing/provider capability evidence, permitted use, quota/freshness/outage verification and real-data enablement. All real simulation remains disabled.
 - **Inventory #9 / M7:** full reviewed worldwide cash-equity classification and missing smaller/frontier/non-MIC markets. All 2,889 current reference rows are unreviewed. Version/diff software is implemented, but an actual prior effective source baseline has not been acquired. October changes become effective 26 October; the product discloses this upcoming-reference gap. Directory count is not a stock-exchange integration count.
@@ -33,4 +34,4 @@ For this slice, `mysql2` parameterized SQL and one checked-in SQL migration runn
 
 The reference snapshot is loaded only by server/catalog code. The interactive explorer imports a separate lightweight fictional-scenarios entry point. No provider API keys or historical credentials are copied. No paid resource or public deployment was created.
 
-See [local setup and environment contract](local-development.md), [M1 acceptance](m1-acceptance.md) and the earlier [foundation verification](verification.md). GitHub issues remain open until their own exit criteria are met.
+See [local setup and environment contract](local-development.md), [M2 acceptance](m2-acceptance.md), [M1 acceptance](m1-acceptance.md) and the earlier [foundation verification](verification.md). GitHub issues remain open until their own exit criteria are met.
