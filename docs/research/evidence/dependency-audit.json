@@ -1,0 +1,995 @@
+{
+  "checkedDate": "2026-10-20",
+  "baseline": "8fa026527631bbfa51bcd0ba5e3412eaa8df5b16",
+  "interpretation": "Registry audit includes transitive/build/install packages; not endpoint exploitability proof",
+  "scopes": [
+    {
+      "scope": "server",
+      "command": "npm audit --package-lock-only --ignore-scripts --json",
+      "lockfileSha256": "65492ca07bd0eda4aadef8d39e39c576c69fddf4fb8979c1f9b586029e0fe217",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 3,
+        "high": 7,
+        "critical": 3,
+        "total": 13
+      },
+      "affectedPackages": [
+        {
+          "name": "@mapbox/node-pre-gyp",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "axios",
+          "severity": "high",
+          "isDirect": true,
+          "fixAvailable": true
+        },
+        {
+          "name": "body-parser",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "brace-expansion",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "express",
+          "severity": "high",
+          "isDirect": true,
+          "fixAvailable": true
+        },
+        {
+          "name": "follow-redirects",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "form-data",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "minimatch",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "mysql2",
+          "severity": "high",
+          "isDirect": true,
+          "fixAvailable": true
+        },
+        {
+          "name": "path-to-regexp",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "proxy-addr",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "qs",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "tar",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        }
+      ],
+      "advisoryExamples": [
+        {
+          "package": "axios",
+          "title": "Axios is vulnerable to DoS attack through lack of data size check",
+          "url": "https://github.com/advisories/GHSA-4hjh-wcwx-xvwj",
+          "affectedRange": ">=1.0.0 <1.12.0"
+        },
+        {
+          "package": "axios",
+          "title": "Axios has a NO_PROXY Hostname Normalization Bypass that Leads to SSRF",
+          "url": "https://github.com/advisories/GHSA-3p68-rc4w-qgx5",
+          "affectedRange": ">=1.0.0 <1.15.0"
+        },
+        {
+          "package": "axios",
+          "title": "Axios: Authentication Bypass via Prototype Pollution Gadget in `validateStatus` Merge Strategy",
+          "url": "https://github.com/advisories/GHSA-w9j2-pvgh-6h63",
+          "affectedRange": ">=1.0.0 <1.15.1"
+        },
+        {
+          "package": "form-data",
+          "title": "form-data uses unsafe random function in form-data for choosing boundary",
+          "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+          "affectedRange": ">=4.0.0 <4.0.4"
+        },
+        {
+          "package": "form-data",
+          "title": "form-data: CRLF injection in form-data via unescaped multipart field names and filenames",
+          "url": "https://github.com/advisories/GHSA-hmw2-7cc7-3qxx",
+          "affectedRange": ">=4.0.0 <4.0.6"
+        },
+        {
+          "package": "mysql2",
+          "title": "MySQL2: Auth Plugin Downgrade to mysql_clear_password Leaks Plaintext Credentials",
+          "url": "https://github.com/advisories/GHSA-3f6p-5ww8-9rcr",
+          "affectedRange": "<3.22.0"
+        },
+        {
+          "package": "mysql2",
+          "title": "MySQL2: Unbounded zlib inflate in compressed MySQL protocol handler allows decompression-bomb DoS",
+          "url": "https://github.com/advisories/GHSA-rgwj-5xj2-c3m3",
+          "affectedRange": "<=3.23.0"
+        },
+        {
+          "package": "proxy-addr",
+          "title": "proxy-addr vulnerable to IP spoofing via IPv4-mapped IPv6 trust subnet",
+          "url": "https://github.com/advisories/GHSA-jqcg-44mw-7w3h",
+          "affectedRange": ">=1.1.0 <2.0.8"
+        },
+        {
+          "package": "tar",
+          "title": "node-tar Vulnerable to Arbitrary File Creation/Overwrite via Hardlink Path Traversal",
+          "url": "https://github.com/advisories/GHSA-34x7-hfp2-rc4v",
+          "affectedRange": "<7.5.7"
+        },
+        {
+          "package": "tar",
+          "title": "node-tar is Vulnerable to Arbitrary File Overwrite and Symlink Poisoning via Insufficient Path Sanitization",
+          "url": "https://github.com/advisories/GHSA-8qq5-rm4j-mr97",
+          "affectedRange": "<=7.5.2"
+        },
+        {
+          "package": "tar",
+          "title": "Arbitrary File Read/Write via Hardlink Target Escape Through Symlink Chain in node-tar Extraction",
+          "url": "https://github.com/advisories/GHSA-83g3-92jg-28cx",
+          "affectedRange": "<7.5.8"
+        }
+      ]
+    },
+    {
+      "scope": "client",
+      "command": "npm audit --package-lock-only --ignore-scripts --json",
+      "lockfileSha256": "62e761e41c1d4eff3e2d403c38e250c5b326c8126a9c1079e5ef632d958f7d09",
+      "counts": {
+        "info": 0,
+        "low": 6,
+        "moderate": 15,
+        "high": 83,
+        "critical": 4,
+        "total": 108
+      },
+      "affectedPackages": [
+        {
+          "name": "@babel/core",
+          "severity": "low",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@babel/plugin-transform-modules-systemjs",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/console",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/core",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/environment",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/fake-timers",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/globals",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/reporters",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/test-result",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/test-sequencer",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@jest/transform",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "@remix-run/router",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@svgr/plugin-svgo",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "@svgr/webpack",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "@tootallnate/once",
+          "severity": "low",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@types/jest",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@typescript-eslint/eslint-plugin",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@typescript-eslint/experimental-utils",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@typescript-eslint/parser",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@typescript-eslint/type-utils",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@typescript-eslint/typescript-estree",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "@typescript-eslint/utils",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "ajv",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "argparse",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "axios",
+          "severity": "high",
+          "isDirect": true,
+          "fixAvailable": true
+        },
+        {
+          "name": "babel-jest",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "body-parser",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "brace-expansion",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "braces",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "browserslist",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "chokidar",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "colord",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "compression",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "css-minimizer-webpack-plugin",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "css-select",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "eslint-config-react-app",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "eslint-plugin-testing-library",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "eslint-webpack-plugin",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "expect",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "express",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "fast-glob",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "fast-uri",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "flatted",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "follow-redirects",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "fork-ts-checker-webpack-plugin",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "form-data",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "glob",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "globby",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "http-proxy-agent",
+          "severity": "low",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "http-proxy-middleware",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-circus",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-cli",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-config",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-environment-jsdom",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-environment-node",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-haste-map",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-jasmine2",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-message-util",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-resolve",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-resolve-dependencies",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-runner",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-runtime",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-snapshot",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-watch-typeahead",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jest-watcher",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "js-yaml",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jsdom",
+          "severity": "low",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "jsonpath",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "launch-editor",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "lodash",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "micromatch",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "minimatch",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "nanoid",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "node-forge",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "nth-check",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "on-headers",
+          "severity": "low",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "path-to-regexp",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "picomatch",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "postcss",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "postcss-selector-parser",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "proxy-addr",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "qs",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "react-dev-utils",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "react-router",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "react-router-dom",
+          "severity": "high",
+          "isDirect": true,
+          "fixAvailable": true
+        },
+        {
+          "name": "react-scripts",
+          "severity": "high",
+          "isDirect": true,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "resolve-url-loader",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "rollup",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "rollup-plugin-terser",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "serialize-javascript",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "shell-quote",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "sockjs",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "source-map-js",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "sprintf-js",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "svgo",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "tailwindcss",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "terser-webpack-plugin",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "underscore",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "uuid",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "webpack",
+          "severity": "low",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "webpack-dev-middleware",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "webpack-dev-server",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": {
+            "name": "react-scripts",
+            "version": "0.0.0",
+            "isSemVerMajor": true
+          }
+        },
+        {
+          "name": "websocket-driver",
+          "severity": "critical",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "workbox-build",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "workbox-webpack-plugin",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "ws",
+          "severity": "high",
+          "isDirect": false,
+          "fixAvailable": true
+        },
+        {
+          "name": "yaml",
+          "severity": "moderate",
+          "isDirect": false,
+          "fixAvailable": true
+        }
+      ],
+      "advisoryExamples": [
+        {
+          "package": "axios",
+          "title": "Axios is vulnerable to DoS attack through lack of data size check",
+          "url": "https://github.com/advisories/GHSA-4hjh-wcwx-xvwj",
+          "affectedRange": ">=1.0.0 <1.12.0"
+        },
+        {
+          "package": "axios",
+          "title": "Axios has a NO_PROXY Hostname Normalization Bypass that Leads to SSRF",
+          "url": "https://github.com/advisories/GHSA-3p68-rc4w-qgx5",
+          "affectedRange": ">=1.0.0 <1.15.0"
+        },
+        {
+          "package": "axios",
+          "title": "Axios: Authentication Bypass via Prototype Pollution Gadget in `validateStatus` Merge Strategy",
+          "url": "https://github.com/advisories/GHSA-w9j2-pvgh-6h63",
+          "affectedRange": ">=1.0.0 <1.15.1"
+        },
+        {
+          "package": "form-data",
+          "title": "form-data uses unsafe random function in form-data for choosing boundary",
+          "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+          "affectedRange": ">=4.0.0 <4.0.4"
+        },
+        {
+          "package": "form-data",
+          "title": "form-data uses unsafe random function in form-data for choosing boundary",
+          "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+          "affectedRange": ">=3.0.0 <3.0.4"
+        },
+        {
+          "package": "form-data",
+          "title": "form-data: CRLF injection in form-data via unescaped multipart field names and filenames",
+          "url": "https://github.com/advisories/GHSA-hmw2-7cc7-3qxx",
+          "affectedRange": ">=4.0.0 <4.0.6"
+        },
+        {
+          "package": "proxy-addr",
+          "title": "proxy-addr vulnerable to IP spoofing via IPv4-mapped IPv6 trust subnet",
+          "url": "https://github.com/advisories/GHSA-jqcg-44mw-7w3h",
+          "affectedRange": ">=1.1.0 <2.0.8"
+        },
+        {
+          "package": "shell-quote",
+          "title": "shell-quote quote() does not escape newlines in object .op values",
+          "url": "https://github.com/advisories/GHSA-w7jw-789q-3m8p",
+          "affectedRange": ">=1.1.0 <=1.8.3"
+        },
+        {
+          "package": "shell-quote",
+          "title": "shell-quote: Quadratic-complexity Denial of Service in `parse()` (CWE-407)",
+          "url": "https://github.com/advisories/GHSA-395f-4hp3-45gv",
+          "affectedRange": "<=1.8.4"
+        },
+        {
+          "package": "websocket-driver",
+          "title": "websocket-driver: Resource limit bypass via message compression",
+          "url": "https://github.com/advisories/GHSA-mp7j-qc5w-4988",
+          "affectedRange": "<0.7.5"
+        },
+        {
+          "package": "websocket-driver",
+          "title": "websocket-driver: Message corruption via abuse of protocol length headers",
+          "url": "https://github.com/advisories/GHSA-xv26-6w52-cph6",
+          "affectedRange": "<0.7.5"
+        }
+      ]
+    }
+  ]
+}

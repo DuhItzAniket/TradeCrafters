@@ -1,0 +1,28 @@
+name: Implementation task
+description: A scoped modernization task with reviewable acceptance evidence.
+title: "[Task] "
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: User behavior and scope
+      description: Explain what the user will be able to do and what this task includes.
+    validations:
+      required: true
+  - type: input
+    id: references
+    attributes:
+      label: Milestone, dependencies, audit IDs and ADRs
+      placeholder: "M2; depends on #...; TC-03, TC-05; ADR-007"
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and verification
+      description: Include meaningful checks for relevant account access, money, retries, UI states, or deployment behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Cost, data permissions, migration and operational implications
+      description: Keep credentials, personal data and private agreements out of public issues.
