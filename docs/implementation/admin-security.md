@@ -47,4 +47,6 @@ The page shows the latest 20 role/control audit events with UTC timestamps and r
 
 ## Verification and remaining gates
 
-See the [security verification record](security-verification.md). Local GitHub OAuth callback and reload persistence were verified with the owner on 20 October 2026. An actual HTTPS deployment, production callback, provider outage/recovery testing, owner MFA enrollment and explicit operator role provisioning remain separate gates. Do not mark all of M1 complete from this slice.
+See the [security verification record](security-verification.md). Local GitHub OAuth callback and reload persistence were verified with the owner on 20 October 2026. The owner subsequently completed authenticator enrollment and session verification; the operator CLI granted the local administrator role, recorded its audit event, and the browser successfully loaded the protected funding controls.
+
+An actual HTTPS deployment, production callback, production identity/operator provisioning and provider outage/recovery testing remain separate gates. The local role and enrollment belong to the local database, not a future hosted environment. Do not mark all of M1 complete from this slice.
