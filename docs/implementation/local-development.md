@@ -34,7 +34,7 @@ npm run test:integration
 npm run build
 ```
 
-Integration checks require the local app and MySQL to be running. They create two isolated random test identities and remove only records they created. They cover actual HTTP/session/database boundaries, concurrency, grant reconciliation, ownership, CSRF, request bounds, directory SQL, rate budgets and session revocation. They do not verify a registered GitHub OAuth callback or exchange data.
+Integration checks require the local app and MySQL to be running. They create two isolated random test identities, restore the funding pause control and remove only records they created. They cover actual HTTP/session/database boundaries, concurrency, grant reconciliation, ownership, CSRF, request bounds, directory SQL, rate budgets, session revocation, MFA, role isolation and audited funding controls. The automated suite does not perform a registered GitHub OAuth callback or verify exchange data.
 
 `npm run build` checks production compilation. `npm start` runs the production build and intentionally rejects the local password configuration on requests. Configure production OAuth/HTTPS/DB first as below. Development HTTP integration tests use `npm run dev`; there is no production auth bypass for the tests.
 
@@ -48,19 +48,22 @@ Auth SQL was generated from Better Auth 1.7.11 and reviewed for MySQL: explicit 
 
 ## Environment contract
 
-| Variable | Purpose |
-| --- | --- |
-| `DATABASE_URL` | Dedicated v2 MySQL database; never the legacy database |
-| `BETTER_AUTH_SECRET` | Fresh random secret, at least 40 characters; private per environment |
-| `BETTER_AUTH_URL` | Exact origin, HTTPS in production; no wildcard preview trust |
-| `AUTH_DEV_CREDENTIALS` | Explicit local-only test sign-up/sign-in; false/unset in production |
-| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | Registered GitHub OAuth application; callback `<origin>/api/auth/callback/github` |
-| `MYSQL_SSL` | Must be true for remote MySQL; certificate verification stays enabled |
-| `MYSQL_SSL_CA_FILE` | Optional trusted provider CA file; never disable verification |
-| `MYSQL_POOL_SIZE` | Per-process bound, 1–20; default 5; total instance count still needs a connection budget |
-| `LOCAL_DB_PASSWORD`, `LOCAL_DB_ROOT_PASSWORD` | Docker-only generated credentials, not hosted secrets |
+| Variable                                      | Purpose                                                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_URL`                                | Dedicated v2 MySQL database; never the legacy database                                                       |
+| `BETTER_AUTH_SECRET`                          | Fresh random secret, at least 40 characters; private per environment                                         |
+| `BETTER_AUTH_URL`                             | Exact origin, HTTPS in production; no wildcard preview trust                                                 |
+| `AUTH_DEV_CREDENTIALS`                        | Explicit local-only test sign-up/sign-in; false/unset in production                                          |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`    | Registered GitHub OAuth application; callback `<origin>/api/auth/callback/github`                            |
+| `MYSQL_SSL`                                   | Must be true for remote MySQL; certificate verification stays enabled                                        |
+| `MYSQL_SSL_CA_FILE`                           | Optional trusted provider CA file; never disable verification                                                |
+| `MYSQL_POOL_SIZE`                             | Per-process bound, 1–20; default 5; total instance count still needs a connection budget                     |
+| `OPERATOR_DATABASE_URL`                       | Optional separately privileged DB connection for the `admin` CLI only; never provision it to the web runtime |
+| `LOCAL_DB_PASSWORD`, `LOCAL_DB_ROOT_PASSWORD` | Docker-only generated credentials, not hosted secrets                                                        |
 
-GitHub OAuth is configured in code but needs owner-created application credentials and a live callback test. Production account APIs require an email-verified provider identity. No email/password production enrollment, password recovery, admin grants or MFA workflow is exposed in this slice. Do not add public production password access without verification and recovery.
+For local GitHub OAuth, register an OAuth application with homepage `http://127.0.0.1:3000` and redirect URI `http://127.0.0.1:3000/api/auth/callback/github`. Copy the application's **Client ID** into `GITHUB_CLIENT_ID`, generate a separate **Client Secret** for `GITHUB_CLIENT_SECRET`, and save both in root `.env.local` and `apps/web/.env.local`. Keep wildcard matching and device flow off. Restart the dev server after editing OAuth configuration, then use **Continue with GitHub**. Never paste the secret into an issue or chat.
+
+Local owner-assisted OAuth callback and reload persistence were verified; production still needs its own registered application and live HTTPS callback test. Production account APIs require an email-verified provider identity. See [authenticator setup and explicit operator grants](admin-security.md). No email/password production enrollment, password recovery or public role-grant endpoint exists. Do not add public production password access without verification and recovery.
 
 For Vercel, use the repository root for workspace install/build, framework Next.js, application root `apps/web`, Node 24, and the dedicated remote MySQL/auth variables in that environment. Verify the monorepo build settings with a preview before production. Managed MySQL must be network-accessible with TLS and near the function region; a default Vercel subscription does not itself provide this MySQL database. Isolate previews from production balances and OAuth apps. No cloud project or billable database was provisioned by this change.
 

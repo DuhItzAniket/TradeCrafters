@@ -35,6 +35,14 @@ export function SignIn({
         );
         return;
       }
+      if (
+        result.data &&
+        "twoFactorRedirect" in result.data &&
+        result.data.twoFactorRedirect
+      ) {
+        router.replace("/two-factor");
+        return;
+      }
       router.replace("/account");
       router.refresh();
     } catch {

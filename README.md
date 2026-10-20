@@ -12,14 +12,15 @@ The first modernization implementation is now in `apps/web` and `packages/`. It 
 
 ## Current capabilities
 
-| Capability                                                     | Status                                                          |
-| -------------------------------------------------------------- | --------------------------------------------------------------- |
-| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                                |
-| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open    |
-| Server sessions, ownership checks and native-currency wallets  | Working locally with MySQL                                      |
-| GitHub OAuth                                                   | Configuration supported; real callback verification in progress |
-| Order execution, holdings and explicit FX conversion           | Planned implementation                                          |
-| Real exchange data and public deployment                       | Coverage, licensing and operational gates pending               |
+| Capability                                                     | Status                                                       |
+| -------------------------------------------------------------- | ------------------------------------------------------------ |
+| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                             |
+| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open |
+| Server sessions, ownership checks and native-currency wallets  | Working locally with MySQL                                   |
+| GitHub OAuth                                                   | Local callback and reload verified; production HTTPS pending |
+| Authenticator, admin roles and audited funding pause           | Working locally; explicit operator provisioning required     |
+| Order execution, holdings and explicit FX conversion           | Planned implementation                                       |
+| Real exchange data and public deployment                       | Coverage, licensing and operational gates pending            |
 
 ## Run locally
 
@@ -36,7 +37,7 @@ npm run dev
 
 Open **http://127.0.0.1:3000**. Setup creates fresh ignored local credentials. Local sign-up uses made-up test details; this mode is explicitly blocked in production. No market-data API key is required.
 
-See the [complete setup, commands and environment contract](docs/implementation/local-development.md), [implementation status and open gates](docs/implementation/foundation-status.md), and [verification evidence](docs/implementation/verification.md).
+See the [complete setup, commands and environment contract](docs/implementation/local-development.md), [admin/security runbook](docs/implementation/admin-security.md), [implementation status and open gates](docs/implementation/foundation-status.md), and [verification evidence](docs/implementation/verification.md). The [project logo](apps/web/public/brand/tradecrafters-mark.png) is available for the GitHub OAuth app avatar.
 
 ## Project layout
 

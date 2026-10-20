@@ -4,6 +4,14 @@ Changes are recorded when implemented; this file does not imply a tagged or publ
 
 ## Unreleased
 
+### Account security — 20 October 2026
+
+- Added authenticator enrollment, local QR rendering and single-use recovery-code sign-in.
+- Added explicit operator CLI role grants/revocation and session-specific, expiring administrator verification.
+- Added audited pause/resume of new simulation funding with transactional authorization and funding locks.
+- Expanded HTTP/MySQL security checks, documented operator setup and verified the owner-assisted local GitHub OAuth callback.
+- Added the requested TradeCrafters OAuth logo and compatible-runtime Dependabot constraints.
+
 ### Foundation — 20 October 2026
 
 - Added the Node 24 / Next.js / TypeScript / MySQL workspace alongside the original DBMS coursework.

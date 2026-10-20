@@ -1,6 +1,6 @@
 # Foundation execution status — 20 October 2026
 
-This is the first implementation slice of [M1 / #3](https://github.com/DuhItzAniket/TradeCrafters/issues/3), with initial discovery and inventory work from #5/#9. It is not completion of the roadmap or every M1 exit criterion.
+This records the foundation and account-security implementation slices of [M1 / #3](https://github.com/DuhItzAniket/TradeCrafters/issues/3), with initial discovery and inventory work from #5/#9. It is not completion of the roadmap or every M1 exit criterion.
 
 ## Implemented
 
@@ -8,13 +8,14 @@ This is the first implementation slice of [M1 / #3](https://github.com/DuhItzAni
 - Designed responsive global explorer, selected-listing detail, worldwide venue search/filter/pagination, local sign-in and persisted account/wallet screens. Creator credit remains Aniket Kumar and Annapurna S.
 - Official 2,889-record ISO MIC snapshot, with operating/segment identities, expired/non-equity facilities retained and publication/effective dates disclosed. Ten fictional scenarios cover six regions; ATLS disambiguates unrelated securities in London and Australia.
 - Database-backed sessions and rate limits, immediate revocation checks (no cookie session cache), exact origin/CSRF checks for mutations, strict bounded account/wallet input, session-derived ownership and sanitized application errors. GitHub OAuth wiring; local-only password mode fails closed in production.
+- Owner-assisted local GitHub OAuth callback and reload persistence verified. Authenticator enrollment with locally rendered QR and single-use recovery codes; explicit operator role grants; five-minute session-specific admin verification; audited pause/resume of new simulation funding. See the [operator runbook](admin-security.md) and [security verification](security-verification.md).
 - Native wallets and exact bigint/minor-unit helpers, zero/two/three currency exponents, GBX/ZAC quote multipliers, one fixed synthetic USD-equivalent opening grant with immutable rate provenance, one grant journal and balanced entries in its native currency. Repeated account creation and wallet creation cannot grant more money.
 - Security/listing separation, dated alias schema, unknown/disabled real-simulation capability records, versioned fixture-policy metadata and a timezone/session helper tested against breaks, holidays, DST and Sunday trading weeks. Fixture calendars/rules are not claimed as verified exchange calendars.
 
 ## Still open
 
-- Owner registration and end-to-end verification of GitHub OAuth on the intended HTTPS domain; real production identities and provider failure/recovery behavior.
-- Explicit admin bootstrap with MFA/re-authentication and server authorization. No admin API exists in this slice.
+- End-to-end verification of GitHub OAuth on the intended HTTPS domain; production identities and provider failure/recovery behavior.
+- Owner authenticator enrollment and explicit operator provisioning, self-service factor management and assisted recovery, hosted database privilege separation and external audit retention. The implemented admin API currently controls only new opening grants.
 - Complete effective-dated venue calendar/rule tables and provider capability/entitlement evidence. Current policies are intentionally non-executable fixture metadata. Alias-overlap enforcement and audited catalog administration remain future work.
 - Full reviewed worldwide **cash-equity** classification and effective-dated prior-baseline/diff handling. The newly retrieved October MIC publication has changes effective 26 October, so it is an upcoming reference snapshot only. Directory count is not a stock-exchange integration count.
 - Actual order execution, order idempotency and receipts, positions, explicit virtual FX conversion, reporting-currency valuation and durable workers (M2 onward).

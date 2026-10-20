@@ -9,6 +9,7 @@ import {
 import { directorySource, micDirectory } from "@tradecrafters/market-catalog";
 import { scenarios } from "@tradecrafters/market-catalog/scenarios";
 import { getPool } from "./pool";
+import { SimulationPausedError } from "./security";
 export { getPool, closePool } from "./pool";
 
 export type Wallet = {
@@ -61,6 +62,9 @@ export async function createAccount(userId: string, code: CurrencyCode) {
   const connection = await getPool().getConnection();
   try {
     await connection.beginTransaction();
+    const [control] = await connection.query<RowDataPacket[]>(
+      "SELECT paused FROM simulation_control WHERE id = 1 FOR SHARE",
+    );
     // All account creation for this identity serializes on the existing auth row.
     const [users] = await connection.execute<RowDataPacket[]>(
       "SELECT id FROM user WHERE id = ? FOR UPDATE",
@@ -72,6 +76,8 @@ export async function createAccount(userId: string, code: CurrencyCode) {
       [userId],
     );
     if (!accounts.length) {
+      if (!control.length || control[0].paused)
+        throw new SimulationPausedError();
       const id = randomUUID();
       const grant = openingGrant(code);
       const journal = randomUUID();
