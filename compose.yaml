@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: tradecrafters_v2
+      MYSQL_USER: tradecrafters
+      MYSQL_PASSWORD: ${LOCAL_DB_PASSWORD:?Run npm run setup:local}
+      MYSQL_ROOT_PASSWORD: ${LOCAL_DB_ROOT_PASSWORD:?Run npm run setup:local}
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+volumes:
+  mysql_data:

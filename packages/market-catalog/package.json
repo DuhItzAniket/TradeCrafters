@@ -1,0 +1,10 @@
+{
+  "name": "@tradecrafters/market-catalog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./scenarios": "./src/scenarios.ts"
+  }
+}

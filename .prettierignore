@@ -1,0 +1,7 @@
+node_modules
+.next
+package-lock.json
+packages/database/migrations/*.sql
+packages/market-catalog/data/*.json
+apps/web/next-env.d.ts
+**/*.tsbuildinfo

@@ -1,5 +1,7 @@
 # Proposed decisions
 
+**Execution note, 20 October:** the first slice implements the modular Next.js/TypeScript/MySQL direction with Better Auth database sessions, `mysql2` parameterized SQL and a single SQL migration history. Drizzle remains an unselected candidate; it is not part of the installed stack. TypeScript 6.0.3 matches the supported lint parser. See [implementation decisions and remaining gates](implementation/foundation-status.md). This records implementation evidence, not production deployment or data-provider approval.
+
 All ADRs below are **proposed**, pending review. The owner's clarified scope is **all stock exchanges globally**, with free/near-free prototype cost. The earlier US-first/India-later assumption is superseded. Architecture choices do not imply permission to buy a service or publish market data.
 
 | ADR | Proposed choice | Why | Revisit when |
