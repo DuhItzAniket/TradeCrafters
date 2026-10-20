@@ -126,11 +126,12 @@ export default async function DirectoryPage({
         </form>
         <div className="directory-summary">
           <span>
-            <strong>{data.total.toLocaleString("en")}</strong> matching records
+            <strong>{data.total.toLocaleString("en")}</strong> matching{" "}
+            {data.total === 1 ? "record" : "records"}
           </span>
           <span className="muted">Real simulation rights: unverified</span>
         </div>
-        <p className="directory-disclosure">
+        <p className="directory-disclosure directory-coverage">
           Classification register:{" "}
           {coverage.classification.cash_equity.toLocaleString("en")}{" "}
           cash-equity,{" "}

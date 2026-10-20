@@ -74,11 +74,44 @@ test("snapshot contracts require complete identity relationships and valid publi
     reason: "Disposable reference fixture",
   };
   assert.equal(snapshotSchema.safeParse(input).success, true);
+  assert.equal(
+    snapshotSchema.safeParse({
+      ...input,
+      records: [operating, { ...operating, mic: "XAA1", kind: "SGMT" }],
+    }).success,
+    true,
+  );
+  assert.equal(
+    snapshotSchema.safeParse({
+      ...input,
+      records: [
+        operating,
+        { ...operating, mic: "XAA2", kind: "SGMT" },
+        {
+          ...operating,
+          mic: "XAA1",
+          operatingMic: "XAA2",
+          kind: "SGMT",
+          status: "EXPIRED",
+          expires: "20260101",
+        },
+      ],
+    }).success,
+    true,
+    "expired source references remain visible when a former operator is now a segment",
+  );
   for (const records of [
     [operating, operating],
     [{ ...operating, operatingMic: "NONE" }],
     [{ ...operating, created: "20260230" }],
     [{ ...operating, kind: "SGMT", operatingMic: "NONE" }],
+    [{ ...operating, kind: "SGMT" }],
+    [{ ...operating, kind: "SGMT", status: "EXPIRED" }],
+    [
+      operating,
+      { ...operating, mic: "XAA1", kind: "SGMT", operatingMic: "XAA2" },
+      { ...operating, mic: "XAA2", kind: "SGMT" },
+    ],
   ])
     assert.equal(
       snapshotSchema.safeParse({ ...input, records }).success,

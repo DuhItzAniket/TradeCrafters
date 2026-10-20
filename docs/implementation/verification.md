@@ -1,5 +1,7 @@
 # Foundation verification — 20 October 2026
 
+This records the initial foundation slice. See [M1 acceptance](m1-acceptance.md) for the later 80-check suite, catalog/alias/FX contracts, identity failure checks, restricted web database identity and current browser evidence. Counts below preserve the original slice's verification history.
+
 **Story:** a visitor explores fictional listings across regions, searches a MySQL-backed worldwide MIC reference, signs in locally, creates one native-currency simulation account, adds an empty wallet, reloads saved balances, and signs out with immediate session revocation.
 
 ## Verified locally

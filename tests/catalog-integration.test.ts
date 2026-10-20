@@ -290,6 +290,36 @@ test("corrupted stored reference content fails integrity checks and is never ble
       [JSON.stringify(operating), first, operating.mic],
     );
   }
+  await getPool().execute(
+    "UPDATE catalog_snapshots SET effective_from=? WHERE snapshot_id=?",
+    [first, first],
+  );
+  try {
+    await assert.rejects(
+      registerCatalogSnapshot(initial),
+      /IMMUTABLE_CATALOG_SNAPSHOT/,
+    );
+  } finally {
+    await getPool().execute(
+      "UPDATE catalog_snapshots SET effective_from=? WHERE snapshot_id=?",
+      [initial.changesEffectiveOn, first],
+    );
+  }
+  await getPool().execute(
+    "INSERT INTO mic_records (snapshot_id,mic,operating_mic,kind,name,country,city,category,source_status) VALUES (?,'ZAXX','ZAXX','OPRT','Unversioned fixture','ZZ','Fixture','RMKT','ACTIVE')",
+    [first],
+  );
+  try {
+    await assert.rejects(
+      registerCatalogSnapshot(initial),
+      /CATALOG_INTEGRITY_FAILURE/,
+    );
+  } finally {
+    await getPool().execute(
+      "DELETE FROM mic_records WHERE snapshot_id=? AND mic='ZAXX'",
+      [first],
+    );
+  }
 });
 test("the public coverage and classification filters account for the entire reference without enabling real data", async () => {
   const response = await fetch(`${base}/api/catalog/coverage`);

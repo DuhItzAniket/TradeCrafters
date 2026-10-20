@@ -4,11 +4,12 @@ TradeCrafters is the modernization of a DBMS project by **Aniket Kumar and Annap
 
 ## Development
 
-Follow the [local setup](docs/implementation/local-development.md) with Node 24.22.0 and Docker/MySQL. Use `npm ci` at the repository root; do not install the legacy client/server as part of modern development. `npm run setup:local` creates fresh ignored local credentials. Never point development or CI at a production account database.
+Follow the [local setup](docs/implementation/local-development.md) with Node 24.22.0 and Docker/MySQL. Use `npm ci` at the repository root; do not install the legacy client/server as part of modern development. `npm run setup:local` creates fresh ignored local credentials; run `npm run setup:db-identities` after migrations/seed to provision the restricted web identity. Root and app database URLs intentionally differ. Never point development or CI at a production account database.
 
 Use an issue for a concrete task, create a branch from current `main`, and submit a focused PR back to `main`. Include the resulting behavior, verification evidence and any migration/data implications. Do not claim an audit finding is fixed without its acceptance evidence.
 
 ```sh
+npm run verify:source
 npm run typecheck
 npm run lint
 npm run format:check

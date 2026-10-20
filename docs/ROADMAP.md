@@ -4,15 +4,17 @@
 
 GitHub entry points: [research PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1) and [roadmap tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-| Implementation issue | Work |
-| --- | --- |
-| [#3](https://github.com/DuhItzAniket/TradeCrafters/issues/3) | M1 foundation and verified identity |
-| [#4](https://github.com/DuhItzAniket/TradeCrafters/issues/4) | M2 trading integrity and accounting |
-| [#5](https://github.com/DuhItzAniket/TradeCrafters/issues/5) | M3 responsive workbench and order experience |
-| [#6](https://github.com/DuhItzAniket/TradeCrafters/issues/6) | M4 deployment and hardening |
+**Execution update — 20 October 2026:** M1 foundation/contracts and verified local identity are implemented; [acceptance evidence](implementation/m1-acceptance.md) records 80 automated checks, browser verification and milestone boundaries. Issue #3 closes after required CI/merge. M2 trading is next. Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original scope and exit criteria below remain the baseline.
+
+| Implementation issue                                         | Work                                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| [#3](https://github.com/DuhItzAniket/TradeCrafters/issues/3) | M1 foundation and verified identity                                 |
+| [#4](https://github.com/DuhItzAniket/TradeCrafters/issues/4) | M2 trading integrity and accounting                                 |
+| [#5](https://github.com/DuhItzAniket/TradeCrafters/issues/5) | M3 responsive workbench and order experience                        |
+| [#6](https://github.com/DuhItzAniket/TradeCrafters/issues/6) | M4 deployment and hardening                                         |
 | [#7](https://github.com/DuhItzAniket/TradeCrafters/issues/7) | M5 broad-provider evaluation and multi-region real-data integration |
-| [#8](https://github.com/DuhItzAniket/TradeCrafters/issues/8) | Later worker and resting orders |
-| [#9](https://github.com/DuhItzAniket/TradeCrafters/issues/9) | Global venue inventory, capability register and coverage expansion |
+| [#8](https://github.com/DuhItzAniket/TradeCrafters/issues/8) | Later worker and resting orders                                     |
+| [#9](https://github.com/DuhItzAniket/TradeCrafters/issues/9) | Global venue inventory, capability register and coverage expansion  |
 
 ## Milestones and dependencies
 
@@ -32,16 +34,16 @@ flowchart LR
 
 **M4 is a prototype milestone, not completion of the global real-market objective.** Global identity, wallets, exchange policies and discovery are already required by then. Real-data investigation proceeds alongside implementation. M5 enables verified capabilities across regions; M7 closes the remaining worldwide coverage gaps. No default country order is imposed: batch readiness depends on rights, data quality, local rule support and cost.
 
-| Milestone | Indicative effort | Deliverable | Exit criteria |
-| --- | --- | --- | --- |
-| **M0 — Research and worldwide inventory design** | Research package prepared; inventory population remains work | Audit, sources, global architecture, coverage schema, design brief, GitHub plan | Record decisions and inventory provenance; account for unknown/missing markets. Documentation fixes no code vulnerabilities. |
-| **M1 — Reproducible global foundation and identity** | 6–10 days | Additive app/migrations, MySQL/auth/CI; venues, securities/listings, native wallets, policy/coverage contracts | Fresh clone and verified auth work; same-symbol cross-venue identities stay distinct; no US/USD schema restriction; no ignored source or imported secrets. |
-| **M2 — Multi-currency trading vertical slice** | 7–12 days | Synthetic quote → native-wallet fill/journal → portfolio/receipt; explicit virtual FX | Exact arithmetic, idempotency and SQL isolation; multiple currency exponents/quote units; per-currency reconciliation; native funds, lots/ticks and local sessions enforced. |
-| **M3 — Global discovery and designed workbench** | 6–10 days | Search/filter by exchange/region/currency, native ticket, reporting FX, holdings/activity and honest capabilities | Mobile/keyboard/receipt recovery and student walkthroughs; missing coverage visible; native funds distinct from converted totals; no unsupported trading controls. |
-| **M4 — Deploy and harden the public synthetic demo** | 3–5 days | Vercel + managed MySQL deployment and runbook | Isolated preview/CI data; TLS/least privilege; persistent abuse controls; sanitized logs; clean secret/dependency review; backup restore drill; measured load/connection budget; readme and creator credits. |
-| **M5 — Entitled multi-region real-data capabilities** | Re-estimate after venue/plan evidence and a provider spike | Broad-provider adapter(s), regional gap strategy, coverage register and verified multi-region pilot | Written use/retention scope per capability; quota/quality tests; native-currency/session/FX behavior; no assumed global live coverage; corporate actions or explicit session-only restriction. |
-| **M6 — Durable orders/learning extensions** | 5–10+ days, scoped separately | Worker and DAY limits, reservations, recovery; journal when useful | No offline-order promise without evaluator; cancel/fill race tests, duplicate/gap handling, restarts, costs, and reconciliation pass. |
-| **M7 — Worldwide coverage completion** | Ongoing batches; estimate per verified venue gap | Work toward every in-scope stock exchange, including smaller/frontier venues | Dated inventory denominator; no silently omitted markets; per-venue listings/data/rules/rights evidence; gaps remain open until resolved. Directory presence is not a completed trading integration. |
+| Milestone                                             | Indicative effort                                            | Deliverable                                                                                                       | Exit criteria                                                                                                                                                                                                |
+| ----------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **M0 — Research and worldwide inventory design**      | Research package prepared; inventory population remains work | Audit, sources, global architecture, coverage schema, design brief, GitHub plan                                   | Record decisions and inventory provenance; account for unknown/missing markets. Documentation fixes no code vulnerabilities.                                                                                 |
+| **M1 — Reproducible global foundation and identity**  | 6–10 days                                                    | Additive app/migrations, MySQL/auth/CI; venues, securities/listings, native wallets, policy/coverage contracts    | Fresh clone and verified auth work; same-symbol cross-venue identities stay distinct; no US/USD schema restriction; no ignored source or imported secrets.                                                   |
+| **M2 — Multi-currency trading vertical slice**        | 7–12 days                                                    | Synthetic quote → native-wallet fill/journal → portfolio/receipt; explicit virtual FX                             | Exact arithmetic, idempotency and SQL isolation; multiple currency exponents/quote units; per-currency reconciliation; native funds, lots/ticks and local sessions enforced.                                 |
+| **M3 — Global discovery and designed workbench**      | 6–10 days                                                    | Search/filter by exchange/region/currency, native ticket, reporting FX, holdings/activity and honest capabilities | Mobile/keyboard/receipt recovery and student walkthroughs; missing coverage visible; native funds distinct from converted totals; no unsupported trading controls.                                           |
+| **M4 — Deploy and harden the public synthetic demo**  | 3–5 days                                                     | Vercel + managed MySQL deployment and runbook                                                                     | Isolated preview/CI data; TLS/least privilege; persistent abuse controls; sanitized logs; clean secret/dependency review; backup restore drill; measured load/connection budget; readme and creator credits. |
+| **M5 — Entitled multi-region real-data capabilities** | Re-estimate after venue/plan evidence and a provider spike   | Broad-provider adapter(s), regional gap strategy, coverage register and verified multi-region pilot               | Written use/retention scope per capability; quota/quality tests; native-currency/session/FX behavior; no assumed global live coverage; corporate actions or explicit session-only restriction.               |
+| **M6 — Durable orders/learning extensions**           | 5–10+ days, scoped separately                                | Worker and DAY limits, reservations, recovery; journal when useful                                                | No offline-order promise without evaluator; cancel/fill race tests, duplicate/gap handling, restarts, costs, and reconciliation pass.                                                                        |
+| **M7 — Worldwide coverage completion**                | Ongoing batches; estimate per verified venue gap             | Work toward every in-scope stock exchange, including smaller/frontier venues                                      | Dated inventory denominator; no silently omitted markets; per-venue listings/data/rules/rights evidence; gaps remain open until resolved. Directory presence is not a completed trading integration.         |
 
 M1–M4 total roughly **22–37 focused days**, with substantial uncertainty. This is a global-structure prototype estimate, not a delivery estimate for every real exchange. Full worldwide coverage needs inventory/contract evidence before a defensible schedule or data budget can be set. Do not compress correctness/security gates to hit a visual-demo date.
 
@@ -49,7 +51,7 @@ M1–M4 total roughly **22–37 focused days**, with substantial uncertainty. Th
 
 ### M1: foundation
 
-- Rotate/revoke the historical configuration credentials identified by TC-19; review provider/database activity privately. A current-tree deletion alone is not remediation.
+- Rotate/revoke the historical configuration credentials identified by TC-19; review provider/database activity privately. A current-tree deletion alone is not remediation. The owner confirmed rotation/revocation on 20 October; no independent issuer activity audit is claimed. See [credential disposition](implementation/m1-acceptance.md#credential-disposition).
 - Create `apps/web` and shared packages without deleting the legacy source. Pin compatible supported framework/runtime versions.
 - Resolve schema/query/auth adapter compatibility using a real MySQL technical spike. Keep schema migration code in Git.
 - Add operating/segment venue identity, securities versus listings, effective-dated provider mappings, currencies/quote-unit multipliers, native wallets, local session/lot/tick policies and the capability register from the first schema.
@@ -92,24 +94,24 @@ M1–M4 total roughly **22–37 focused days**, with substantial uncertainty. Th
 
 ## Required verification matrix
 
-| Scenario | Required result before M4 |
-| --- | --- |
-| No session, forged username, or another user's account/order ID | Denied server-side; zero account mutation |
-| Unknown side, missing/extra fields, strings where integers are required, negative/fractional/oversized values | Deterministic validation failure; no writes or upstream work beyond the allowed request budget |
-| Concurrent buys exceeding available cash | Only affordable order(s) fill; cash/inventory/journals reconcile |
-| Concurrent sells and first purchases of the same instrument | No oversell or duplicate position rows |
-| Same idempotency key, concurrent duplicates | One order/fill/journal and the same returned outcome |
-| Same key with changed body | Conflict, no second trade |
-| Crash before commit, crash after commit before HTTP response | Rollback before commit; original result on retry after commit |
-| Decimal rounding, repeated buy/sell, partial liquidation | Exact minor-unit reconciliation and zero residual basis on final liquidation |
-| Missing/stale/future quote, closed session, upstream 429/error JSON | No execution; informative status and bounded requests |
-| SQL failure midway through posting | No partial cash/position/fill state |
-| Reset concurrent with order | Serialized explicit outcome; old history preserved |
-| Mobile/keyboard trade and unknown outcome | Usable review/receipt flow; no double submit or inaccessible blocking UI |
-| Same ticker on different exchanges, cross-listing and symbol rename | Distinct listing identity and effective-dated mappings; no accidental position merging |
-| Different currency exponents, quote-unit multipliers and explicit FX | Exact native-wallet reconciliation; no 100× quote-unit error or false cross-currency journal balance |
-| Local breaks/holidays, independent DST changes and lot/tick policies | Execution eligibility follows the specific venue/segment policy |
-| One venue/feed or FX mark unavailable | Affected execution/reporting states are explicit; unrelated eligible venues continue |
+| Scenario                                                                                                      | Required result before M4                                                                            |
+| ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| No session, forged username, or another user's account/order ID                                               | Denied server-side; zero account mutation                                                            |
+| Unknown side, missing/extra fields, strings where integers are required, negative/fractional/oversized values | Deterministic validation failure; no writes or upstream work beyond the allowed request budget       |
+| Concurrent buys exceeding available cash                                                                      | Only affordable order(s) fill; cash/inventory/journals reconcile                                     |
+| Concurrent sells and first purchases of the same instrument                                                   | No oversell or duplicate position rows                                                               |
+| Same idempotency key, concurrent duplicates                                                                   | One order/fill/journal and the same returned outcome                                                 |
+| Same key with changed body                                                                                    | Conflict, no second trade                                                                            |
+| Crash before commit, crash after commit before HTTP response                                                  | Rollback before commit; original result on retry after commit                                        |
+| Decimal rounding, repeated buy/sell, partial liquidation                                                      | Exact minor-unit reconciliation and zero residual basis on final liquidation                         |
+| Missing/stale/future quote, closed session, upstream 429/error JSON                                           | No execution; informative status and bounded requests                                                |
+| SQL failure midway through posting                                                                            | No partial cash/position/fill state                                                                  |
+| Reset concurrent with order                                                                                   | Serialized explicit outcome; old history preserved                                                   |
+| Mobile/keyboard trade and unknown outcome                                                                     | Usable review/receipt flow; no double submit or inaccessible blocking UI                             |
+| Same ticker on different exchanges, cross-listing and symbol rename                                           | Distinct listing identity and effective-dated mappings; no accidental position merging               |
+| Different currency exponents, quote-unit multipliers and explicit FX                                          | Exact native-wallet reconciliation; no 100× quote-unit error or false cross-currency journal balance |
+| Local breaks/holidays, independent DST changes and lot/tick policies                                          | Execution eligibility follows the specific venue/segment policy                                      |
+| One venue/feed or FX mark unavailable                                                                         | Affected execution/reporting states are explicit; unrelated eligible venues continue                 |
 
 M5 adds captured provider/venue contract fixtures, real calendar/halt/source/adjustment evidence and per-region quota/outage tests. M6 adds reservations, cancel/fill races, expiry, event duplication, restarts and gap recovery. M7 requires coverage accounting against the reviewed worldwide denominator, including unsupported venues.
 

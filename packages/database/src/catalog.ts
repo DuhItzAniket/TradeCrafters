@@ -87,10 +87,24 @@ export async function registerCatalogSnapshot(input: CatalogSnapshot) {
       [value.publishedOn],
     );
     if (existing.length) {
-      if (existing[0].content_hash !== hash)
+      const row = existing[0];
+      if (
+        row.content_hash !== hash ||
+        row.source_kind !== value.sourceKind ||
+        new Date(row.effective_from).toISOString().slice(0, 10) !==
+          value.changesEffectiveOn ||
+        row.source_url !== value.sourceUrl ||
+        row.parent_snapshot !== value.parentSnapshot ||
+        Number(row.record_count) !== value.records.length
+      )
         throw Error("IMMUTABLE_CATALOG_SNAPSHOT");
       const stored = await snapshotRows(connection, value.publishedOn);
+      const [rawCounts] = await connection.execute<RowDataPacket[]>(
+        "SELECT COUNT(*) AS count FROM mic_records WHERE snapshot_id=?",
+        [value.publishedOn],
+      );
       if (
+        Number(rawCounts[0].count) !== value.records.length ||
         stored.length !== value.records.length ||
         snapshotHash({ ...value, records: stored }) !== hash
       )

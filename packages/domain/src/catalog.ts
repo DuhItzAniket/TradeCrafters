@@ -104,6 +104,9 @@ export const snapshotSchema = z
   .strict()
   .superRefine((value, context) => {
     const codes = new Set(value.records.map((row) => row.mic));
+    const operatingCodes = new Set(
+      value.records.filter((row) => row.kind === "OPRT").map((row) => row.mic),
+    );
     if (
       codes.size !== value.records.length ||
       value.publishedOn > value.retrievedOn ||
@@ -113,7 +116,12 @@ export const snapshotSchema = z
       value.records.some(
         (row) =>
           !codes.has(row.operatingMic) ||
-          (row.kind === "OPRT" && row.mic !== row.operatingMic),
+          (row.kind === "OPRT" && row.mic !== row.operatingMic) ||
+          (row.kind === "SGMT" &&
+            (row.mic === row.operatingMic ||
+              // Retain expired source references whose former operator is now a segment.
+              (row.status !== "EXPIRED" &&
+                !operatingCodes.has(row.operatingMic)))),
       )
     )
       context.addIssue({

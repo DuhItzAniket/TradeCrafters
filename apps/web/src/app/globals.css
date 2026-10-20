@@ -893,6 +893,13 @@ kbd {
   color: var(--amber);
   white-space: nowrap;
 }
+.directory-panel .directory-coverage {
+  margin: 0;
+  padding: 18px 24px;
+  font-size: 11px;
+  line-height: 1.8;
+  border-bottom: 1px solid var(--line);
+}
 .directory-filters {
   display: flex;
   align-items: flex-end;

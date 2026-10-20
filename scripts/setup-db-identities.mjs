@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { appEnvironment } from "./local-env.mjs";
 const root = resolve(import.meta.dirname, "..");
 function putEnv(path, name, value) {
   const source = readFileSync(path, "utf8");
@@ -27,7 +28,8 @@ try {
   const runtime = existing ? new URL(existing) : new URL(operator);
   if (
     existing &&
-    (runtime.username !== "tradecrafters_web" ||
+    (runtime.protocol !== operator.protocol ||
+      runtime.username !== "tradecrafters_web" ||
       !/^[a-f0-9]{64}$/.test(runtime.password) ||
       runtime.hostname !== operator.hostname ||
       runtime.port !== operator.port ||
@@ -120,7 +122,12 @@ try {
     "LOCAL_RUNTIME_DATABASE_URL",
     runtime.href,
   );
-  putEnv(resolve(root, "apps/web/.env.local"), "DATABASE_URL", runtime.href);
+  const appEnv = resolve(root, "apps/web/.env.local");
+  writeFileSync(
+    appEnv,
+    appEnvironment(readFileSync(appEnv, "utf8"), runtime.href),
+    { mode: 0o600 },
+  );
   console.log(
     "Configured a separate local web identity with table-level grants. Operator credentials and OAuth configuration were preserved; values hidden.",
   );

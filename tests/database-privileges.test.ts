@@ -1,6 +1,8 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { createPool } from "mysql2/promise";
+import { readFileSync } from "node:fs";
+import { parseEnv } from "node:util";
 const raw = process.env.LOCAL_RUNTIME_DATABASE_URL;
 assert.ok(
   raw,
@@ -24,6 +26,24 @@ function denied(error: unknown) {
   );
 }
 test("the web identity can read required data and take read-only role locks", async () => {
+  const appEnv = parseEnv(readFileSync("apps/web/.env.local", "utf8"));
+  assert.equal(
+    appEnv.DATABASE_URL === raw,
+    true,
+    "the app must use the restricted runtime URL (values hidden)",
+  );
+  for (const key of [
+    "OPERATOR_DATABASE_URL",
+    "MIGRATION_DATABASE_URL",
+    "LOCAL_DB_ROOT_PASSWORD",
+    "LOCAL_DB_PASSWORD",
+    "LOCAL_RUNTIME_DATABASE_URL",
+  ])
+    assert.equal(
+      key in appEnv,
+      false,
+      `${key} must stay outside the web environment`,
+    );
   for (const table of [
     "user",
     "session",

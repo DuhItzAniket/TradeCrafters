@@ -1,11 +1,6 @@
 import { randomBytes } from "node:crypto";
-import {
-  existsSync,
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  copyFileSync,
-} from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { appEnvironment } from "./local-env.mjs";
 import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
@@ -27,22 +22,14 @@ mkdirSync(resolve(root, "apps/web"), { recursive: true });
 const appEnv = resolve(root, "apps/web/.env.local");
 if (existsSync(appEnv))
   console.log(
-    "apps/web/.env.local exists; preserved. Sync manually if needed.",
+    "apps/web/.env.local exists; preserved. Update shared auth settings individually; setup:db-identities manages the web DB URL.",
   );
 else {
-  copyFileSync(local, appEnv);
-  const runtime = readFileSync(local, "utf8").match(
-    /^LOCAL_RUNTIME_DATABASE_URL=(.+)$/m,
-  )?.[1];
-  if (runtime)
-    writeFileSync(
-      appEnv,
-      readFileSync(appEnv, "utf8").replace(
-        /^DATABASE_URL=.*$/m,
-        `DATABASE_URL=${runtime.trim()}`,
-      ),
-      { mode: 0o600 },
-    );
+  const source = readFileSync(local, "utf8");
+  const runtime = source.match(/^LOCAL_RUNTIME_DATABASE_URL=(.+)$/m)?.[1];
+  writeFileSync(appEnv, appEnvironment(source, runtime?.trim()), {
+    mode: 0o600,
+  });
 }
 console.log(
   "Next: docker compose --env-file .env.local up -d --wait; npm run db:migrate; npm run db:seed; npm run setup:db-identities; npm run dev",
