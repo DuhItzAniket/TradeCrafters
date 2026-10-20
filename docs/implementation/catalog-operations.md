@@ -12,7 +12,7 @@ The transaction locks the existing listing and a persistent provider/alias names
 
 ## Reference versions and classification
 
-Migration 0007 registers a snapshot's publication date, effective date, source, retrieval date, parent, record count and canonical content hash. Each MIC retains its complete normalized definition and hash, including operating/segment relationship and source dates. The directory projection is checked against those definitions during publication/repeat imports. Changed content or metadata under an existing publication ID is rejected. Imports have a dedicated database lock and commit the snapshot, records, diff and audit together.
+Migration 0007 registers a snapshot's publication date, effective date, source, retrieval date, parent, record count and canonical content hash. Each MIC retains its complete normalized definition and hash, including operating/segment relationship and source dates. The directory projection is checked against those definitions during publication/repeat imports. Changed content, effective date, source or parent under an existing publication ID is rejected. Retrieval date records the initial import; a repeat does not replace it. Imports have a dedicated database lock and commit the snapshot, records, diff and audit together.
 
 Active segment references must point to an operating record. The October source also retains eight expired segments whose referenced former operating record is now a segment. Those historical source relationships are preserved rather than silently removed or rewritten; they do not establish current eligibility. Missing parent codes and self-referencing segments are rejected.
 
