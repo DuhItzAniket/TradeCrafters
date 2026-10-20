@@ -49,7 +49,7 @@ The hosted inspector requires the exact table-level contract and a server-enforc
 
 ## Initial near-free hosting setup
 
-The owner confirmed neither hosting nor a managed database is set up yet. The candidate remains **Vercel Hobby + Aiven free MySQL**, subject to actual account/region/privilege eligibility. Current official documentation was checked on 20 October 2026:
+The owner started Vercel setup on 21 October 2026; managed database readiness is not yet confirmed. The candidate remains **Vercel Hobby + Aiven free MySQL**, subject to actual account/region/privilege eligibility. The original provider baseline below was checked on 20 October 2026:
 
 - [Vercel Hobby](https://vercel.com/docs/plans/hobby) is for personal noncommercial use. This project must remain within that use and plan limits; paid team collaboration is not assumed.
 - [Aiven free MySQL](https://aiven.io/docs/products/mysql/concepts/mysql-free-tier) currently offers one node, 1 GB storage, backups and a 76-connection limit, with one free service of each type per organization. It has no VPC/forking/SLA and can be powered off for inactivity. The console's actual region, privileges, backups and recovery options must be checked before choosing it.
