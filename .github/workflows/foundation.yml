@@ -12,7 +12,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -29,12 +29,20 @@ jobs:
       - run: npm run db:seed
       - run: npm run db:migrate
       - run: npm run setup:db-identities
+      - name: Inspect restricted runtime configuration and grants
+        run: node --env-file=apps/web/.env.local --import tsx scripts/preflight.ts --local-fixture
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run format:check
       - run: npm test
       - run: npm audit --audit-level=high
       - run: npm run build
+      - name: Rehearse encrypted backup and isolated restore
+        run: npm run ops:recovery-drill
+      - name: Build isolated non-root runtime image
+        run: docker build --tag tradecrafters-ci:${{ github.sha }} .
+      - name: Verify standalone runtime image
+        run: npm run ops:container-smoke -- tradecrafters-ci:${{ github.sha }}
       - name: Verify HTTP, auth and MySQL integration
         run: |
           mkdir -p .local

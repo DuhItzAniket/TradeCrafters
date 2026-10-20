@@ -86,5 +86,6 @@ export type ApiErrorCode =
   | "INVALID_FACTOR"
   | "NOT_FOUND"
   | "SIMULATION_PAUSED"
+  | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 export type ApiFailure = { error: { code: ApiErrorCode; message: string } };

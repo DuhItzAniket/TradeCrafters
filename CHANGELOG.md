@@ -1,5 +1,13 @@
 # Changelog
 
+## 20 October 2026 — M4 deployment foundations
+
+- Added bounded MySQL acquisition across promise and auth callback paths, recoverable capacity responses and hosted PEM CA configuration. Normal concurrent trade/idempotency behavior remains verified.
+- Shared the explicit runtime grant contract between local provisioning and a read-only release inspector; hosted inspection requires verified TLS and a server-enforced connection budget with an operator reserve.
+- Added a digest-pinned, non-root standalone Docker build, secret/legacy build-context exclusions and database-free liveness/container checks.
+- Rehearsed authenticated-encryption backup/restore in a disposable MySQL server, exact all-row recovery, archived receipt retrieval, accounting reconciliation and aggregate user-cap enforcement. Added these operations to CI and documented the hosted setup/release gates.
+- M3 remains open for owner-deferred student feedback. M4 remains open for actual hosting, production identity, ingress controls, execution pause and hosted recovery evidence; no public/billable resource or real feed was created.
+
 Changes are recorded when implemented; this file does not imply a tagged or publicly deployed release.
 
 ## Unreleased

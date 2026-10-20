@@ -76,6 +76,8 @@ Deployment sequence: checks pass → review additive migrations → backup → s
 
 ## Security requirements
 
+**Implementation update (20 October 2026):** see the [M4 deployment foundations and release runbook](../implementation/deployment-foundations.md). MySQL acquisition now has a two-second deadline and a 30-request burst queue across promise and auth callback paths; production defaults to two connections per process. A read-only inspector enforces the exact runtime grant contract and requires a hosted server-side user cap with reserved capacity. Non-root container/liveness and an encrypted disposable restore/aggregate-cap rehearsal are implemented. Hosted TLS/OAuth/ingress/backup acceptance remains open. The current admin pause controls new funding only; the execution kill switch below is still required.
+
 - Auth library verifies session and revocation server-side on financial/admin requests. Use Secure, HttpOnly, appropriate SameSite cookies; exact trusted origins, CSRF protections and bounded request bodies. Avoid wildcard trust of all preview domains.
 - Start with supported OAuth sign-up/sign-in. Add email/password only with verification and recovery actually delivered/tested; do not reuse unverified legacy sessions. Admin bootstrap is an explicit operator action, requires MFA/reauthentication, and cannot be claimed by the first registrant.
 - Account and order ownership checks are required even for opaque IDs. Ordinary users cannot set roles, balances, feeds, model parameters, or execution prices.

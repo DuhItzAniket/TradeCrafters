@@ -16,6 +16,9 @@ const files = execFileSync(
     "package.json",
     "package-lock.json",
     "tsconfig.json",
+    "Dockerfile",
+    ".dockerignore",
+    ".vercelignore",
   ],
   { encoding: "utf8", windowsHide: true },
 )
@@ -36,6 +39,14 @@ const required = [
   "packages/database/src/workbench.ts",
   "apps/web/src/components/market-workspace.tsx",
   "apps/web/src/app/api/listings/[listingId]/chart/route.ts",
+  "apps/web/src/app/api/health/route.ts",
+  "packages/database/runtime-grants.json",
+  "scripts/preflight.ts",
+  "scripts/rehearse-recovery.ts",
+  "scripts/check-container.mjs",
+  "Dockerfile",
+  ".dockerignore",
+  ".vercelignore",
 ];
 const missing = required.filter((file) => !files.includes(file));
 const patterns = [
@@ -49,7 +60,7 @@ const flagged = [];
 for (const file of files) {
   if (
     !/\.(?:[cm]?[jt]sx?|json|ya?ml|sql|md|css)$/.test(file) &&
-    file !== ".env.example"
+    ![".env.example", "Dockerfile"].includes(file)
   )
     continue;
   const text = readFileSync(file, "utf8");

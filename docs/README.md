@@ -8,6 +8,8 @@ The project owner's direction is **all stock exchanges globally**, with a free o
 
 The research was merged through [PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use [tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2) for the current implementation backlog. The original research delivery itself marked no implementation work complete; later acceptance is tracked separately.
 
+M4 engineering is now underway: [deployment foundations and setup runbook](implementation/deployment-foundations.md). Local bounded acquisition, runtime grant inspection, encrypted recovery and container verification are implemented; hosted release acceptance remains open. Student feedback stays deferred.
+
 ## Recommended direction
 
 - Build a **TypeScript modular monolith**: Next.js for React UI and same-origin API routes; MySQL/InnoDB for durable state; a supported authentication library for server-verified sessions. Keep trading rules independent of the web framework.

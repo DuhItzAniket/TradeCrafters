@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import type { ApiErrorCode } from "@tradecrafters/contracts";
 import { consumeMutationBudget } from "@tradecrafters/database";
+import { databaseUnavailable } from "@tradecrafters/database/pool";
 import { TradingFault } from "@tradecrafters/domain/trading";
 import { authConfiguration, getAuth } from "@tradecrafters/database/auth";
 import {
@@ -23,6 +24,20 @@ export async function api(run: () => Promise<Response>) {
   try {
     return await run();
   } catch (error) {
+    if (databaseUnavailable(error))
+      return Response.json(
+        {
+          error: {
+            code: "SERVICE_UNAVAILABLE",
+            message:
+              "The service is busy or temporarily unavailable. Recover your saved receipt before retrying a change.",
+          },
+        },
+        {
+          status: 503,
+          headers: { "Cache-Control": "no-store", "Retry-After": "1" },
+        },
+      );
     if (error instanceof TradingFault)
       return json(
         { error: { code: error.code, message: error.message } },

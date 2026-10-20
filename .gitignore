@@ -82,3 +82,5 @@ next-env.d.ts
 .local/
 output/
 .playwright-cli/
+.vercel/
+*.tcbackup
