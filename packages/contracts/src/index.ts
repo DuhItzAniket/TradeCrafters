@@ -47,6 +47,7 @@ export type ApiErrorCode =
   | "MFA_REQUIRED"
   | "REAUTH_REQUIRED"
   | "INVALID_FACTOR"
+  | "NOT_FOUND"
   | "SIMULATION_PAUSED"
   | "INTERNAL_ERROR";
 export type ApiFailure = { error: { code: ApiErrorCode; message: string } };

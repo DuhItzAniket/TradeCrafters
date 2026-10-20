@@ -1,6 +1,6 @@
 # TradeCrafters: modernization research
 
-**Research date:** 20 October 2026 · **Execution:** the first additive foundation slice is now implemented; see [current status and open gates](implementation/foundation-status.md), [local setup](implementation/local-development.md), and [verification](implementation/verification.md). The research below remains the architecture baseline. No public deployment or real-data integration is complete.
+**Research date:** 20 October 2026 · **Execution:** foundation, account security and versioned fictional market policies are implemented; see [current status and open gates](implementation/foundation-status.md), [local setup](implementation/local-development.md), [verification](implementation/verification.md) and [market policies](implementation/market-policies.md). The research below remains the architecture baseline. No public deployment or real-data integration is complete.
 
 TradeCrafters began as a DBMS course project by **Aniket Kumar and Annapurna S**, using React, Node.js, MySQL, and Alpha Vantage. The next version should be a credible place to practice trading: understandable orders, consistent accounting, honest data freshness, and a focused trading workspace.
 

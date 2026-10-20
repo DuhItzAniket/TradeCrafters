@@ -1953,6 +1953,62 @@ kbd {
   gap: 26px;
   align-items: start;
 }
+.listing-rules {
+  padding: 24px;
+  margin-top: 22px;
+}
+.rule-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.listing-rules h3 {
+  margin: 18px 0 13px;
+  text-transform: capitalize;
+}
+.rule-status {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.rule-facts {
+  margin: 20px 0;
+  display: grid;
+  gap: 15px;
+}
+.rule-facts dt {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.rule-facts dd {
+  margin: 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.rule-sessions {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+.rule-sessions li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+.rule-sessions span {
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.listing-rules .small-copy {
+  margin-top: 15px;
+  line-height: 1.8;
+}
 .security-panel {
   padding: 28px;
 }

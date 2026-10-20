@@ -4,7 +4,12 @@ This additive implementation is under `apps/web` and `packages/`. The original `
 
 ## Local setup
 
-Use **Node 24.22.0 LTS** (`.nvmrc`), npm, and a running Docker engine. Windows: start Docker Desktop first. The host's Node 25 is outside this project's supported runtime; select Node 24 with a version manager. You can also prefix npm commands with `npx --yes --package=node@24.22.0 npm` on this workstation.
+Use **Node 24.22.0 LTS** (`.nvmrc`), npm, and a running Docker engine. Windows: start Docker Desktop first. The host's Node 25 is outside this project's supported runtime; select Node 24 with a version manager. On Windows, invoking `npm.cmd` through an `npx` Node package can still launch npm under the host runtime. To use the cached Node 24 package explicitly in PowerShell:
+
+```powershell
+$taskNpmCli = Join-Path (Split-Path (Get-Command npm.cmd).Source) 'node_modules/npm/bin/npm-cli.js'
+npx.cmd --yes --package=node@24.22.0 node $taskNpmCli run typecheck
+```
 
 From the repository root:
 
@@ -34,7 +39,7 @@ npm run test:integration
 npm run build
 ```
 
-Integration checks require the local app and MySQL to be running. They create two isolated random test identities, restore the funding pause control and remove only records they created. They cover actual HTTP/session/database boundaries, concurrency, grant reconciliation, ownership, CSRF, request bounds, directory SQL, rate budgets, session revocation, MFA, role isolation and audited funding controls. The automated suite does not perform a registered GitHub OAuth callback or verify exchange data.
+Integration checks require the local app and MySQL to be running. They create two isolated random test identities and disposable listing/policy fixtures, restore the funding pause control and remove only records they created. They cover actual HTTP/session/database boundaries, concurrency, grant reconciliation, ownership, CSRF, request bounds, directory SQL, rate budgets, session revocation, MFA, role isolation, audited funding controls and effective market-policy gates. The automated suite does not perform a registered GitHub OAuth callback or verify exchange data. See [market-policy behavior and fictional fixture limits](market-policies.md).
 
 `npm run build` checks production compilation. `npm start` runs the production build and intentionally rejects the local password configuration on requests. Configure production OAuth/HTTPS/DB first as below. Development HTTP integration tests use `npm run dev`; there is no production auth bypass for the tests.
 
