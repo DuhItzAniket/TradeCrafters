@@ -38,7 +38,7 @@ lerna-debug.log*
 *.sqlite
 *.sqlite3
 *.db
-database/
+/server/database/
 sql/dump.sql
 
 # Temporary files
@@ -72,3 +72,13 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Modern application and local tooling
+.next/
+next-env.d.ts
+*.tsbuildinfo
+.env.*
+!.env.example
+.local/
+output/
+.playwright-cli/

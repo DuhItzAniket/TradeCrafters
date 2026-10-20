@@ -1,84 +1,47 @@
-# TradeCrafters - Stock Market Simulation Application
+# TradeCrafters
 
-> **Modernization research — October 2026:** Start with the [research and architecture index](docs/README.md), [global exchange architecture](docs/architecture/global-markets.md), [roadmap](docs/ROADMAP.md), and [workbench design study](docs/design/README.md). The redesign targets stock exchanges worldwide, with a near-free prototype budget. The original course project was created by **Aniket Kumar and Annapurna S**.
->
-> **Legacy status:** The application below is coursework source, not a verified production-ready release. The [audit](docs/research/01-current-state-audit.md) documents authentication, accounting, setup, and data-freshness gaps. The original JWT/real-time claims below should be read as intended features; JWT sessions are not implemented in the reviewed server. Historical configuration values require rotation before reuse. This research change does not fix or deploy the application.
+A global paper-trading laboratory, originally created by **Aniket Kumar and Annapurna S** for a DBMS course.
 
-A full-stack application that simulates stock market trading with real-time data and user portfolio management.
+The first modernization implementation is now in `apps/web` and `packages/`. It provides a working global explorer, a searchable **2,889-record worldwide MIC reference snapshot**, sign-in/session handling, and persistent native-currency wallets on MySQL. Ten clearly labeled fictional listings span six regions. **Order execution, virtual FX conversion, real-data integration and public deployment are still being built.** Directory presence is not verified exchange trading coverage.
 
-## 🚀 Features
+## Run locally
 
-- Real-time stock market simulation
-- User portfolio management
-- Buy/Sell stock functionality
-- Historical data tracking
-- User authentication and authorization
-- Responsive web interface
+Requires Node **24.22.0 LTS**, npm and Docker Desktop/Engine.
 
-## 🛠️ Tech Stack
-
-- **Frontend**: React.js
-- **Backend**: Node.js, Express.js
-- **Database**: SQL
-- **Authentication**: JWT
-- **Styling**: CSS/SCSS
-
-## 📋 Prerequisites
-
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-- SQL Database
-
-## 🚀 Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/DuhItzAniket/TradeCrafters.git
-cd TradeCrafters
+```sh
+npm ci
+npm run setup:local
+docker compose --env-file .env.local up -d --wait
+npm run db:migrate
+npm run db:seed
+npm run dev
 ```
 
-2. Install dependencies:
-```bash
-npm run install-all
-```
+Open **http://127.0.0.1:3000**. Setup creates fresh ignored local credentials. Local sign-up uses made-up test details; this mode is explicitly blocked in production. No market-data API key is required.
 
-3. Set up environment variables:
-- Copy `server/.env.example` to `server/.env`
-- Fill in the required environment variables
+See the [complete setup, commands and environment contract](docs/implementation/local-development.md), [implementation status and open gates](docs/implementation/foundation-status.md), and [verification evidence](docs/implementation/verification.md).
 
-4. Start the application:
-```bash
-# Start backend server
-npm start
+## Project layout
 
-# Start frontend development server (in a new terminal)
-npm run start-client
-```
+| Path | Purpose |
+| --- | --- |
+| `apps/web` | Next.js + React explorer, identity, wallets and same-origin APIs |
+| `packages/domain` | Exact currency/quote-unit arithmetic, opening-grant rules, session-policy helper |
+| `packages/contracts` | Strict request validation |
+| `packages/database` | MySQL queries, authentication adapter, checked-in SQL migrations |
+| `packages/market-catalog` | Dated worldwide MIC reference and separate fictional scenarios |
+| `tests` | Domain and real HTTP/MySQL integration checks |
+| `docs` | Audit, provider research, global architecture, roadmap, design and execution records |
+| `client`, `server`, `sql` | Preserved legacy coursework, separate from the new app |
 
-## 📁 Project Structure
+## Direction and tracking
 
-```
-TradeCrafters/
-├── client/           # React frontend
-├── server/           # Node.js backend
-│   ├── config/      # Configuration files
-│   ├── controllers/ # Request handlers
-│   ├── models/      # Database models
-│   ├── routes/      # API routes
-│   └── database/    # Database setup
-└── sql/             # SQL scripts
-```
+The scope is **stock exchanges worldwide**, including smaller and frontier markets. Global venue/listing identity and native currencies are part of the foundation. Real data will be enabled by verified provider coverage, permitted use and market-rule readiness; no universal free live feed is promised.
 
-## 🔧 Configuration
+Start with the [research index](docs/README.md), [global architecture](docs/architecture/global-markets.md), [market-data comparison](docs/research/02-market-data.md), [roadmap](docs/ROADMAP.md), and [GitHub tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-Create a `.env` file in the `server/` directory (see `server/.env.example`) with the following variables:
-```
-PORT=5000
-DB_HOST=localhost
-DB_USER=
-DB_PASS=
-DB_NAME=
-ALPHA_VANTAGE_KEY=
-```
+The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. A hosted MySQL database and registered OAuth application still need configuration and verification. No billable resource has been provisioned.
 
-Project Link: https://github.com/DuhItzAniket/TradeCrafters.git
+## Legacy project
+
+The original code remains available for reference. Its [audit](docs/research/01-current-state-audit.md) records authentication, accounting, setup and data-freshness gaps. Do not deploy the old server alongside the new app or reuse historical credentials. The [archived coursework README](docs/legacy-coursework-readme.md) preserves the original description; its live-data/JWT claims are historical intentions, not verified v2 behavior.

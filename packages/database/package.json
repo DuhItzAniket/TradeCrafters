@@ -1,0 +1,17 @@
+{
+  "name": "@tradecrafters/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./auth": "./src/auth.ts",
+    "./migrate": "./src/migrate.ts"
+  },
+  "dependencies": {
+    "@tradecrafters/domain": "*",
+    "@tradecrafters/market-catalog": "*",
+    "better-auth": "1.7.11",
+    "mysql2": "3.24.6"
+  }
+}
