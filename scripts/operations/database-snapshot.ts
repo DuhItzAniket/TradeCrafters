@@ -303,14 +303,18 @@ export async function restoreMaintenance(pool: Pool, database: string) {
       );
       if (
         sql.startsWith("-- @single-statement\nCREATE TRIGGER ") ||
-        sql.startsWith("CREATE EVENT ")
+        /^(?:-- @single-statement\n)?CREATE EVENT /.test(sql)
       )
         await connection.query(sql);
     }
     const [triggers] = await connection.query<RowDataPacket[]>("SHOW TRIGGERS");
     const [events] = await connection.query<RowDataPacket[]>("SHOW EVENTS");
     assert.equal(triggers.length, 2);
-    assert.equal(events.length, 2);
+    assert.deepEqual(events.map((event) => event.Name).sort(), [
+      "auth_counter_expiry",
+      "identity_record_expiry",
+      "ingress_counter_expiry",
+    ]);
     assert.ok(events.every((event) => event.Status === "ENABLED"));
     return { triggers: triggers.length, enabledEvents: events.length };
   } finally {

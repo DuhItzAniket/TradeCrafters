@@ -254,7 +254,7 @@ try {
   const [maintenance] = await getPool().query<RowDataPacket[]>(
     "SELECT EVENT_NAME,STATUS,EVENT_DEFINITION FROM information_schema.events WHERE EVENT_SCHEMA=DATABASE()",
   );
-  assert.equal(maintenance.length, 2);
+  assert.equal(maintenance.length, 3);
   assert.ok(maintenance.every((row) => row.STATUS === "ENABLED"));
   assert.ok(
     maintenance.some(
@@ -353,7 +353,7 @@ try {
     getPool(),
     logicalDatabase,
   );
-  assert.deepEqual(maintenanceRestored, { triggers: 2, enabledEvents: 2 });
+  assert.deepEqual(maintenanceRestored, { triggers: 2, enabledEvents: 3 });
   stage = "isolated identity recovery fixture";
   await exerciseRecoveryFixture(getPool(), logicalDatabase);
   await migrate();
