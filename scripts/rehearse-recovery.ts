@@ -24,6 +24,15 @@ import {
   operationByKey,
 } from "@tradecrafters/database/trading";
 import { sealBackup, openBackup } from "./operations/backup-envelope";
+import {
+  captureSnapshot,
+  snapshotBytes,
+  readSnapshot,
+  snapshotFingerprint,
+  restoreSnapshot,
+  restoreMaintenance,
+  discardRestoredAuthority,
+} from "./operations/database-snapshot";
 
 // This command has no restore-target option. It only touches a newly named,
 // disposable container and its tmpfs. It never reads an existing .env file.
@@ -201,6 +210,8 @@ try {
   });
   assert.equal(reset.receipt.status, "reset");
   const before = await fingerprint(getPool());
+  const logicalSnapshot = await captureSnapshot(getPool());
+  const logicalEncrypted = sealBackup(snapshotBytes(logicalSnapshot), key);
   stage = "encrypt snapshot";
   const backupStarted = performance.now();
   // Single InnoDB snapshot; no DDL or concurrent writers run in this fixture.
@@ -309,6 +320,40 @@ try {
   }
   assert.deepEqual(await fingerprint(getPool()), before);
   const restoreMs = Math.round(performance.now() - restoreStarted);
+  stage = "verify guarded logical restore path";
+  const logicalDatabase = `tc_restore_${runId}`;
+  await inspector.query(`CREATE DATABASE \`${logicalDatabase}\``);
+  await closePool();
+  process.env.DATABASE_URL = sourceUrl.replace(
+    "/source_fixture",
+    `/${logicalDatabase}`,
+  );
+  await migrate();
+  stage = "decode logical archive";
+  const decoded = await readSnapshot(openBackup(logicalEncrypted, key));
+  await assert.rejects(() =>
+    restoreSnapshot(getPool(), decoded, "source_fixture"),
+  );
+  stage = "restore logical archive";
+  await restoreSnapshot(getPool(), decoded, logicalDatabase);
+  stage = "fingerprint logical archive";
+  assert.deepEqual(
+    snapshotFingerprint(await captureSnapshot(getPool())),
+    snapshotFingerprint(logicalSnapshot),
+  );
+  await assert.rejects(() =>
+    restoreSnapshot(getPool(), decoded, logicalDatabase),
+  );
+  stage = "discard logical restored authority";
+  const authority = await discardRestoredAuthority(getPool(), logicalDatabase);
+  assert.equal(authority.discardedRestoredSessions, 1);
+  stage = "restore logical maintenance";
+  const maintenanceRestored = await restoreMaintenance(
+    getPool(),
+    logicalDatabase,
+  );
+  assert.deepEqual(maintenanceRestored, { triggers: 2, enabledEvents: 2 });
+  await migrate();
   // Exercise an actual server-enforced aggregate cap across independent pools.
   const limitedPassword = randomBytes(32).toString("hex");
   stage = "measure aggregate connection cap";
@@ -381,6 +426,9 @@ try {
       "wrong key rejected",
       "tampering rejected",
       "aggregate connection cap",
+      "guarded logical archive restore and foreign keys",
+      "existing target rejection",
+      "restored session authority discarded",
     ],
   };
   await writeFile(
@@ -388,7 +436,22 @@ try {
     JSON.stringify(report, null, 2) + "\n",
   );
   console.log(JSON.stringify(report));
-} catch {
+} catch (error) {
+  console.error(
+    JSON.stringify({
+      code:
+        error && typeof error === "object" && "code" in error
+          ? String(error.code)
+          : "CHECK_FAILED",
+      locations:
+        error instanceof Error
+          ? error.stack?.match(
+              /(?:database-snapshot|rehearse-recovery)\.ts:\d+:\d+/g,
+            )
+          : [],
+      detailsHidden: true,
+    }),
+  );
   console.error(
     `Recovery rehearsal failed at ${stage}. Disposable fixture only; database statements, credentials and dumps are hidden.`,
   );

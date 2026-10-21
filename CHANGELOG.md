@@ -1,5 +1,11 @@
 # Changelog
 
+## 21 October 2026 — Hosted logical recovery and measured capacity
+
+- Add encrypted, checksummed logical snapshots and a guarded restore into a new capped, unexposed hosted schema. Validate every row and foreign key, rebuild reviewed maintenance, discard restored session/provider authority and remove the temporary target.
+- Extend the disposable MySQL recovery gate to exercise the logical path, target rejection and session scrubbing. Add schema/identifier/precision regressions; 66 unit/configuration checks now accompany the 92 HTTP/MySQL checks.
+- Record the actual 48-table hosted restore, bounded valid-read latency, connection-ceiling 503/retry/recovery and Production-only environment scopes. Correct the hosting cost assumption after the console revealed Developer-1 trial; independent custody and the remaining M4 release gates are still tracked explicitly.
+
 ## 21 October 2026 — Confirmed session revocation
 
 - Confirm sign-out against the authoritative session store before reporting success. Return an uncached, retryable 503 without clearing cookies when deletion or confirmation is uncertain, preserving the client's retry path.
