@@ -8,7 +8,7 @@ The project owner's direction is **all stock exchanges globally**, with a free o
 
 The research was merged through [PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use [tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2) for the current implementation backlog. The original research delivery itself marked no implementation work complete; later acceptance is tracked separately.
 
-M4 engineering is now underway: [deployment foundations and setup runbook](implementation/deployment-foundations.md). Local bounded acquisition, runtime grant inspection, encrypted recovery and container verification are implemented; hosted release acceptance remains open. Student feedback stays deferred.
+M4 engineering is underway: [deployment foundations and setup runbook](implementation/deployment-foundations.md). The owner deployed a Vercel demo, and [Aiven Singapore provisioning](implementation/hosted-preview.md) passed schema/seed, verified CA/hostname, exact grants and actual connection-cap checks. Hosted environment/browser and operational release acceptance remain open. Student feedback stays deferred.
 
 ## Recommended direction
 
@@ -46,6 +46,6 @@ An older ZIP retained in Git history contains non-placeholder configuration secr
 
 ## Scope of this delivery
 
-The original research delivery completed repository review, official-source research, isolated legacy logic probes, dependency audit, global architecture/coverage design, domain rules, deployment paths, product/design brief, a sample listing-view design study and implementation roadmap. Later code changes are recorded in [implementation status](implementation/foundation-status.md). Population of the complete reviewed worldwide inventory remains work; no actual exchange coverage is claimed. No cloud resources, provider accounts, paid subscriptions or production migrations have been created.
+The original research delivery completed repository review, official-source research, isolated legacy logic probes, dependency audit, global architecture/coverage design, domain rules, deployment paths, product/design brief, a sample listing-view design study and implementation roadmap. Later code changes are recorded in [implementation status](implementation/foundation-status.md). Population of the complete reviewed worldwide inventory remains work; no actual exchange coverage is claimed. The owner has since created a Vercel demo and Aiven service; hosted release acceptance remains open. No paid subscription or real feed was enabled by this work.
 
 Open decisions: approve the design direction; confirm educational/data entitlements; select the exact deployment region after database provisioning options are known. Exact framework and library versions must be resolved and audited at implementation time.

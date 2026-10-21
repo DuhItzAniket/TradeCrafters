@@ -25,6 +25,28 @@ test("release grant inspection rejects wildcard, extra, inherited and incomplete
   ])
     assert.equal(exactRuntimeGrants(invalid, "fixture"), false);
 });
+test("Aiven ANSI identifier quoting preserves the exact grant boundary", () => {
+  const grants = Object.entries(runtimeGrants).map(
+    ([table, value]) =>
+      `GRANT ${value.replace("(state,version)", '("version", "state")')} ON "fixture"."${table}" TO "web"@"%"`,
+  );
+  assert.equal(exactRuntimeGrants(grants, "fixture"), true);
+  assert.equal(
+    exactRuntimeGrants(
+      [...grants, 'GRANT SELECT ON "other"."user" TO "web"@"%"'],
+      "fixture",
+    ),
+    false,
+  );
+  assert.equal(
+    exactRuntimeGrants(
+      grants.map((grant) => grant.replace('"fixture".', '"fixture`.')),
+      "fixture",
+    ),
+    false,
+  );
+});
+
 test("an aggregate user cap must reserve operator capacity and fit at least one process", () => {
   assert.deepEqual(connectionBudget(76, 20, 16, 2), {
     serverMax: 76,

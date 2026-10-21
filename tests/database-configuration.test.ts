@@ -33,6 +33,7 @@ test("remote MySQL requires verified TLS and supports one hosted PEM CA source",
   });
   assert.deepEqual(config.ssl, {
     rejectUnauthorized: true,
+    verifyIdentity: true,
     ca: "fixture-public-ca",
   });
   assert.throws(

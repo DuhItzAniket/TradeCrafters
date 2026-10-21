@@ -6,7 +6,7 @@
 
 [Get started](#run-locally) · [Architecture](docs/architecture/README.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-The M1 foundation, M2 accounting and **M3 workbench implementation** are available in `apps/web` and `packages/`. Explore a **2,889-record worldwide MIC reference**, practice with ten fictional listings across six regions, and follow native holdings, explicit FX and persistent receipts on MySQL. The workbench combines venue-qualified discovery, an authored training chart and a native-currency ticket. [Implementation and evidence](docs/implementation/workbench.md). **M3 remains open for real student walkthroughs**; real-data integration and public deployment remain later milestones. Directory presence is not verified exchange trading coverage.
+The M1 foundation, M2 accounting and **M3 workbench implementation** are available in `apps/web` and `packages/`. Explore a **2,889-record worldwide MIC reference**, practice with ten fictional listings across six regions, and follow native holdings, explicit FX and persistent receipts on MySQL. The workbench combines venue-qualified discovery, an authored training chart and a native-currency ticket. [Implementation and evidence](docs/implementation/workbench.md). **M3 remains open for real student walkthroughs**; hosted release acceptance and real-data integration remain open. Directory presence is not verified exchange trading coverage.
 
 <img src="docs/implementation/previews/m3-workbench-desktop.png" width="1100" alt="TradeCrafters workbench with venue-qualified discovery, an authored GBX training chart and a GBP-native order ticket">
 
@@ -66,13 +66,13 @@ The scope is **stock exchanges worldwide**, including smaller and frontier marke
 
 Start with the [research index](docs/README.md), [global architecture](docs/architecture/global-markets.md), [market-data comparison](docs/research/02-market-data.md), [roadmap](docs/ROADMAP.md), and [GitHub tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. A hosted MySQL database and registered OAuth application still need configuration and verification. No billable resource has been provisioned.
+The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. The owner deployed a [Vercel demo](https://tradecrafters-preview-gamma.vercel.app/); Aiven Singapore schema/seed, restricted identities, verified TLS and actual connection admission have passed operator-side checks. [Hosted setup evidence](docs/implementation/hosted-preview.md) records the remaining Vercel environment and browser acceptance work. The demo is not yet an accepted public release.
 
-**M4 is in progress.** [Deployment foundations and setup instructions](docs/implementation/deployment-foundations.md) cover bounded database acquisition, runtime grant/TLS inspection, a non-root standalone container, an encrypted isolated restore rehearsal and the remaining hosted release gates. Student feedback stays deferred; public deployment is not yet available.
+**M4 is in progress.** [Deployment foundations and setup instructions](docs/implementation/deployment-foundations.md) cover bounded database acquisition, runtime grant/TLS inspection, a non-root standalone container, an encrypted isolated restore rehearsal and the remaining hosted release gates. Student feedback stays deferred; intended-domain sign-in and the complete hosted trading journey still need verification.
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **52 domain/configuration and 75 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **53 domain/configuration and 75 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 

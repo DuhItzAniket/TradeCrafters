@@ -1,5 +1,11 @@
 # Changelog
 
+## 21 October 2026 — Hosted MySQL provisioning and verification
+
+- Explicitly enabled MySQL hostname verification alongside certificate-chain verification. Valid hosted TLS succeeded; wrong-CA and wrong-hostname probes were rejected.
+- Accepted Aiven's ANSI double-quoted grants in the strict runtime inspector, preserving exact table/column permissions and rejecting mismatched quotes and other schemas. The automated suite now has 53 domain/configuration and 75 integration checks.
+- Selected Singapore Functions to match the owner's Aiven service and documented actual schema/seed, restricted identities, privilege denials and the server-enforced runtime cap: 12 connections accepted, two rejected. Hosted OAuth/browser and the remaining M4 operational gates stay open.
+
 ## 21 October 2026 — Vercel workspace build repair
 
 - Declared pinned TypeScript and React/Node type build dependencies in the web workspace, added an explicit dev-inclusive Vercel install command and aligned the container build with filtered web installation. This fixes the hosted build stopping after compilation because root-only TypeScript dependencies were not installed. Runtime hosted configuration and M4 acceptance remain separate.
