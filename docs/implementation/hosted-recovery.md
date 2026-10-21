@@ -1,6 +1,6 @@
 # Hosted recovery and capacity
 
-Updated 21 October 2026 UTC. M4 remains open until all of its operational gates pass. This record covers a real encrypted backup and an isolated restore on the hosted MySQL service, plus bounded application capacity/overload checks. No production account was reset, restored or replaced.
+Updated 21 October 2026 UTC. M4 is accepted for the personal synthetic demo; [final acceptance](m4-acceptance.md) records the release and limits. This record covers a real encrypted backup and an isolated restore on the hosted MySQL service, plus bounded application capacity/overload checks. No production account was reset, restored or replaced.
 
 **Current hosting update:** after the owner explicitly approved the Free downgrade, Aiven completed it and shows **Running / Free-1-1gb**, with 1 CPU / 1 GB RAM / 1 GB storage. Its automatic free-tier placement moved the service to **DigitalOcean Bangalore (`blr`)**. The hostname/credentials remained stable; valid CA/hostname checks pass and wrong CA/hostname still reject. Runtime preflight reports **76 server connections / 12 runtime cap / 16 reserved**, exact grants, privilege denials and enabled counter maintenance. Public home/sign-in/directory/chart checks and accounting reconciliation pass. Vercel now serves actual requests from nearby [Mumbai (`bom1`)](https://vercel.com/docs/regions). The Free/Bangalore–Mumbai remeasurement below supersedes the dated Singapore figures.
 
@@ -70,7 +70,7 @@ The Aiven console showed **Developer-1**, one node / 1 CPU / 1 GB RAM / 8 GB sto
 
 Provider backup configuration was rechecked after the Free move at 18:27 UTC and still showed: **07:44 UTC**, backup location **do-sgp1**, with full backups completed at **20 October 19:59:35Z** and **21 October 07:59:35Z**. A visible list of two backups is not a two-day retention promise. Provider [backup documentation](https://aiven.io/docs/products/mysql/concepts/mysql-backups) makes retention plan-dependent. The encrypted logical restore supplies a tested portable path; provider disaster-recovery behavior has not been induced by destroying/replacing the live service.
 
-The owner's independent custody/retrieval confirmation was received on 21 October 2026. M4's final rollback, policy and operational rollout evidence stays explicit in the [release runbook](deployment-foundations.md#remaining-m4-acceptance). Worldwide real-market integration remains M5/M7; real prices and funds were not enabled.
+The owner's independent custody/retrieval confirmation was received on 21 October 2026. The final rollback, policy and operational rollout evidence is linked from [M4 acceptance](m4-acceptance.md). Worldwide real-market integration remains M5/M7; real prices and funds were not enabled.
 
 ## Subsequent hosted acceptance — 21 October 2026 UTC
 

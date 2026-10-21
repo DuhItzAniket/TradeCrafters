@@ -1,6 +1,6 @@
 # Hosted demo provisioning — 21 October 2026
 
-**M4/#6 remains open.** The owner deployed the synthetic application at [tradecrafters-preview-gamma.vercel.app](https://tradecrafters-preview-gamma.vercel.app/). A dedicated Aiven MySQL schema and separate migration, operator and restricted runtime identities are provisioned. Hosted sign-in, native USD/GBP orders, FX, receipts/reload and owner administration are verified; operational release gates remain open. M3/#5 remains open for owner-deferred student feedback; all real feeds remain disabled.
+**Historical provisioning record. M4/#6 is now accepted**; use the [final release record](m4-acceptance.md) for current status. The initial Singapore/46-connection observations below predate the approved Free move to Bangalore/76 connections and Vercel Mumbai alignment. M3 student feedback remains deferred and all real feeds remain disabled.
 
 ## Database evidence
 
@@ -101,8 +101,6 @@ Production `AtjZ88LJm9LcqzCHpQUXEkjVc9Jm` was verified against `c600ed96b14ab9fb
 
 The [full record](hosted-identity.md) distinguishes these fixtures from real provider identity, a live GitHub/Aiven outage, financial lost-response acceptance or owner factor recovery. The owner's previously verified browser session was left intact.
 
-## Remaining release boundary
+## Subsequent release acceptance
 
-TLS, schema, privilege denials, the actual database connection ceiling and hosted runtime preflight are verified from the operator machine. Production variables, actual public database-backed requests, idle cleanup, owner-assisted GitHub callback/reload, native synthetic orders/FX/receipt reload and hosted accounting reconciliation, private factor/session verification and explicit audited owner administration are verified. Remaining actual provider/human/factor recovery, financial lost-response checks, representative request capacity, non-Vercel trusted adapters, independent key custody, external audit retention/deletion, provider restore and release rollback remain open in the [M4 release checklist](deployment-foundations.md#remaining-m4-acceptance). The initial funding control affects new funding/reset grants only; execution control is tracked separately above.
-
-The provider console shows backups in Singapore; no provider restore was exercised. The local encrypted restore rehearsal is separate evidence. No measured monthly bill or production recovery guarantee is claimed. The near-free hosting target and worldwide real-market roadmap remain unchanged. Creator attribution remains **Aniket Kumar and Annapurna S**.
+[M4 acceptance](m4-acceptance.md) now records hosted response-loss recovery, measured capacity/overload, independent owner recovery, encrypted hosted restore, independent custody/audit anchoring, lifecycle/expiry, actual Free cost/location, CSP/monitor and compatible rollback/promotion. Provider PITR was unavailable; portable isolated recovery is the tested application path. Non-Vercel ingress, real feeds and worldwide capability completion remain future work. Creator attribution remains **Aniket Kumar and Annapurna S**.

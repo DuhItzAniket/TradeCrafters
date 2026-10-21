@@ -1,5 +1,12 @@
 # Changelog
 
+## M4 accepted — 22 October 2026
+
+- Verify Production CSP/browser hydration and the first independent GitHub-hosted six-probe smoke run on reviewed main `2992574`.
+- Complete eighteen hosted migrations, bounded idle identity expiry, encrypted 48-table/5,970-row isolated restore, independent audit anchoring and owner-confirmed backup custody.
+- Record actual compatible Production rollback/promotion with automatic domain assignment restored, small-demo capacity and financial discarded-response recovery.
+- Publish final acceptance, current README/roadmap and operating limits. M3 student feedback stays deferred; worldwide real-data coverage remains open.
+
 ## M4 browser policy and operating lifecycle
 
 - Add per-render script nonce CSP, caller-header replacement, explicit style-attribute support for chart geometry, and uncached page policy.
