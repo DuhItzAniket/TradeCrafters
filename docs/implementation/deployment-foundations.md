@@ -73,11 +73,11 @@ Do not pull hosted env values over either existing local env file. The root env 
 
 ## Remaining M4 acceptance
 
-- Intended-domain hosted OAuth/cookies/denial/state/outage/reload/revocation and complete browser → API → MySQL → receipt/portfolio journey.
-- Vercel-to-MySQL connectivity/readiness and actual request burst evidence. Provider-specific migration/operator/runtime provisioning, live verified TLS with rejected wrong CA/hostname, privilege denials and aggregate connection admission passed from the operator machine; these are separate from application request capacity.
+- Remaining intended-domain identity checks: denial/state/outage/retry, session revocation and controlled lost-response recovery. The normal GitHub callback/reload and browser → API → MySQL → native trade/FX → saved receipt/portfolio journey passed; see [hosted evidence](hosted-preview.md).
+- Actual application request bursts, overload recovery and capacity measurements. Vercel-to-MySQL connectivity, provider-specific migration/operator/runtime provisioning, verified TLS/negative probes, privilege denials, idle cleanup and aggregate connection admission passed; these are separate from request-throughput capacity.
 - Trusted ingress anonymous/read abuse controls and bounded counter retention; persistent local mutation/auth budgets alone do not complete this. Current auth IP handling still needs the selected ingress contract verified.
 - An audited **execution** pause with transaction/race verification. The current admin control pauses **new funding/reset grants only**, and must not be presented as stopping existing accounts' trades or FX.
-- Hosted admin enrollment, independent recovery procedure, secret/key custody and session revocation during recovery.
+- Independent hosted factor/admin recovery procedure, secret/key custody and session revocation during recovery. Private factor/session verification and an explicit audited owner administrator grant passed; enrollment alone does not establish recovery.
 - Protected external audit retention/export, registration/retention/deletion policy, backup scheduling/retention, provider recovery and intended-release rollback rehearsal. Code rollback cannot reverse journal entries or MySQL DDL; older pre-M2 code cannot safely serve archived-account semantics.
 - Review browser security policy and operational metrics/alerts after the deployment topology is known. Keep sanitized logs; never export raw auth responses, tokens or personal data.
 
