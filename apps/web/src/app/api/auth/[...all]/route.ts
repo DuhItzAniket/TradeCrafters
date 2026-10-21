@@ -10,7 +10,7 @@ import {
 import { clearStepUps, securityState } from "@tradecrafters/database/security";
 export const runtime = "nodejs";
 export async function GET(request: Request) {
-  return api(() => toNextJsHandler(getAuth()).GET(request));
+  return api(() => toNextJsHandler(getAuth()).GET(request), request);
 }
 export async function POST(request: Request) {
   return api(async () => {
@@ -80,5 +80,5 @@ export async function POST(request: Request) {
     )
       await clearStepUps(settingsUserId);
     return response;
-  });
+  }, request);
 }

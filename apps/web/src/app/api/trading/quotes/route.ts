@@ -10,5 +10,5 @@ export async function POST(request: Request) {
       await issueTrainingQuote(user.id, body.accountId, body.listingId),
       201,
     );
-  });
+  }, request);
 }

@@ -57,5 +57,5 @@ export async function POST(request: Request) {
         "This code was already used. Wait for a new authenticator code.",
       );
     return json(await securityState(session.user.id, session.session.id));
-  });
+  }, request);
 }

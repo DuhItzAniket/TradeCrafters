@@ -20,5 +20,5 @@ export async function GET(
     if (!view)
       throw new ApiError("NOT_FOUND", 404, "This listing was not found.");
     return json(view);
-  });
+  }, request);
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { directoryQuery } from "@tradecrafters/contracts";
 import { directory } from "@tradecrafters/database";
 import { catalogCoverage } from "@tradecrafters/database/catalog";
+import { guardPage } from "@/lib/request-guard";
 export const metadata = { title: "Worldwide venue directory" };
 const names = new Intl.DisplayNames(["en"], { type: "region" });
 export default async function DirectoryPage({
@@ -9,6 +10,7 @@ export default async function DirectoryPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  await guardPage();
   const raw = await searchParams;
   const values = Object.fromEntries(
     Object.entries(raw).filter(([, value]) => value !== ""),

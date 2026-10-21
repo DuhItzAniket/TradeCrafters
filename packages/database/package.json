@@ -13,9 +13,12 @@
     "./trading": "./src/trading.ts",
     "./workbench": "./src/workbench.ts",
     "./migrate": "./src/migrate.ts",
-    "./pool": "./src/pool.ts"
+    "./pool": "./src/pool.ts",
+    "./ingress": "./src/ingress.ts",
+    "./request-budget": "./src/request-budget.ts"
   },
   "dependencies": {
+    "@better-auth/core": "1.7.11",
     "@js-temporal/polyfill": "0.5.1",
     "@tradecrafters/domain": "*",
     "@tradecrafters/market-catalog": "*",

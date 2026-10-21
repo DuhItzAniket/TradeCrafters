@@ -42,5 +42,7 @@
   "fills": "SELECT,INSERT",
   "positions": "SELECT,INSERT,UPDATE",
   "fx_conversions": "SELECT,INSERT",
-  "account_resets": "SELECT,INSERT"
+  "account_resets": "SELECT,INSERT",
+  "ingress_budget_control": "SELECT,UPDATE (window_id,hits)",
+  "ingress_budget_clients": "SELECT,INSERT,UPDATE,DELETE"
 }

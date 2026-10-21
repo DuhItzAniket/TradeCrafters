@@ -16,5 +16,5 @@ export async function GET(request: Request) {
     return json(
       await activity(user.id, parsed.data.accountId, parsed.data.before),
     );
-  });
+  }, request);
 }

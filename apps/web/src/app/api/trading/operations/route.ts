@@ -25,5 +25,5 @@ export async function GET(request: Request) {
         "No committed outcome was found. Retry the same operation with the same key.",
       );
     return json({ receipt: result.receipt });
-  });
+  }, request);
 }

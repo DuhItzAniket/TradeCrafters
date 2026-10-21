@@ -14,5 +14,5 @@ export async function POST(request: Request) {
       body,
     );
     return operationResponse(result);
-  });
+  }, request);
 }

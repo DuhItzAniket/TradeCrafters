@@ -209,7 +209,7 @@ try {
     container,
     "sh",
     "-c",
-    'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysqldump --user=root --single-transaction --quick --skip-lock-tables --no-tablespaces --set-gtid-purged=OFF --hex-blob source_fixture',
+    'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysqldump --user=root --events --single-transaction --quick --skip-lock-tables --no-tablespaces --set-gtid-purged=OFF --hex-blob source_fixture',
   ]);
   await writeFile(backupFile, sealBackup(dump, key), {
     mode: 0o600,
@@ -239,6 +239,25 @@ try {
     "every restored table and row must match the snapshot",
   );
   stage = "reconcile restored records";
+  const [maintenance] = await getPool().query<RowDataPacket[]>(
+    "SELECT EVENT_NAME,STATUS,EVENT_DEFINITION FROM information_schema.events WHERE EVENT_SCHEMA=DATABASE()",
+  );
+  assert.equal(maintenance.length, 2);
+  assert.ok(maintenance.every((row) => row.STATUS === "ENABLED"));
+  assert.ok(
+    maintenance.some(
+      (row) =>
+        row.EVENT_NAME === "ingress_counter_expiry" &&
+        row.EVENT_DEFINITION.includes("ingress_budget_clients"),
+    ),
+  );
+  assert.ok(
+    maintenance.some(
+      (row) =>
+        row.EVENT_NAME === "auth_counter_expiry" &&
+        row.EVENT_DEFINITION.includes("rateLimit"),
+    ),
+  );
   await migrate(); // All checksums must match, with no migration reapplication.
   assert.deepEqual(
     await operationByKey(id, account.id, resetKey),
@@ -354,6 +373,7 @@ try {
       "all table/row fingerprints",
       "migration checksums",
       "restored execution guards",
+      "restored counter expiry events",
       "archived receipt recovery",
       "journal balance",
       "wallet balances",
