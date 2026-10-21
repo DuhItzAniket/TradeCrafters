@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   currencies,
   currency,
@@ -7,8 +7,16 @@ import {
   parseMinor,
   type CurrencyCode,
 } from "@tradecrafters/domain";
-import { calculateFxConversion, type FxQuote } from "@tradecrafters/domain/fx";
+import type { FxQuote } from "@tradecrafters/domain/fx";
 import { tradingRequest } from "@/lib/trading-client";
+import {
+  createFxReview,
+  previewFxReview,
+  type FxReview,
+} from "@/lib/fx-review";
+type PreparedFxReview = FxReview & {
+  preview: ReturnType<typeof previewFxReview>;
+};
 export function FxConverter({
   accountId,
   initialCurrency,
@@ -25,36 +33,48 @@ export function FxConverter({
       initialCurrency === "GBP" ? "JPY" : "GBP",
     ),
     [amount, setAmount] = useState("100"),
-    [quote, setQuote] = useState<FxQuote | null>(null),
+    [reviewedQuote, setReviewedQuote] = useState<PreparedFxReview | null>(null),
     [loading, setLoading] = useState(false),
     [message, setMessage] = useState("");
-  let sourceMinor: string | null = null,
-    preview: ReturnType<typeof calculateFxConversion> | null = null;
+  const quote = reviewedQuote?.quote;
+  const preview = reviewedQuote?.preview;
+  useEffect(() => {
+    if (!reviewedQuote) return;
+    const timer = setTimeout(
+      () => {
+        setReviewedQuote(null);
+        setMessage("This exercise quote expired. Review a fresh conversion.");
+      },
+      Math.max(0, reviewedQuote.deadline - performance.now()),
+    );
+    return () => clearTimeout(timer);
+  }, [reviewedQuote]);
+  let sourceMinor: string | null = null;
   try {
     sourceMinor = parseMinor(amount, currency(from).exponent).toString();
-    if (quote)
-      preview = calculateFxConversion(
-        quote,
-        { quoteId: quote.id, sourceMinor },
-        accountId,
-      );
   } catch {
-    /* Invalid amounts and expired quotes cannot be submitted. */
+    /* Invalid amounts cannot be reviewed. */
   }
   async function review() {
     setLoading(true);
     setMessage("");
-    setQuote(null);
+    setReviewedQuote(null);
     try {
       if (!sourceMinor || BigInt(sourceMinor) <= 0n || from === to)
         throw Error(
           "Choose different currencies and a positive amount in the source currency’s precision.",
         );
+      const requestStarted = performance.now();
       const result = await tradingRequest<{ quote: FxQuote }>(
         "/api/trading/fx-quotes",
         { accountId, fromCurrency: from, toCurrency: to },
       );
-      setQuote(result.quote);
+      const received = performance.now();
+      const quoted = createFxReview(result.quote, requestStarted, received);
+      setReviewedQuote({
+        ...quoted,
+        preview: previewFxReview(quoted, sourceMinor, accountId, received),
+      });
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Could not load FX.");
     } finally {
@@ -81,7 +101,7 @@ export function FxConverter({
               disabled={blocked || loading}
               onChange={(event) => {
                 setFrom(event.target.value as CurrencyCode);
-                setQuote(null);
+                setReviewedQuote(null);
               }}
             >
               {currencies.map((item) => (
@@ -97,7 +117,7 @@ export function FxConverter({
               disabled={blocked || loading}
               onChange={(event) => {
                 setTo(event.target.value as CurrencyCode);
-                setQuote(null);
+                setReviewedQuote(null);
               }}
             >
               {currencies.map((item) => (
@@ -114,7 +134,7 @@ export function FxConverter({
             disabled={blocked || loading}
             onChange={(event) => {
               setAmount(event.target.value);
-              setQuote(null);
+              setReviewedQuote(null);
             }}
           />
         </label>
@@ -134,7 +154,7 @@ export function FxConverter({
               className="button primary full-width"
               disabled={blocked || loading}
               onClick={() => {
-                setQuote(null);
+                setReviewedQuote(null);
                 return execute("/api/trading/fx", {
                   accountId,
                   quoteId: quote.id,
@@ -145,12 +165,6 @@ export function FxConverter({
               Confirm virtual conversion →
             </button>
           </div>
-        )}
-        {quote && !preview && (
-          <p className="form-message error">
-            The quote expired or this amount is too small. Refresh it before
-            converting.
-          </p>
         )}
         <button
           className="button secondary full-width"

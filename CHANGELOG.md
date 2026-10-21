@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Hosted FX preview timing
+
+- Decoupled FX preview arithmetic from the browser wall clock after a real hosted walkthrough rejected a fresh server quote on a clock running about two seconds slow. Review expiry now uses a monotonic clock, conservatively subtracts request latency and clears stale reviews; server execution expiry/ownership checks remain strict.
+- Added clock-skew, exact-deadline, late/invalid timing, account-binding and dust regression checks. Recorded actual hosted pool recovery, GitHub callback/reload and a synthetic grant/order/position; remaining M4 acceptance stays open.
+
 ## 21 October 2026 — Serverless database pool recovery
 
 - Enable mysql2 idle reaping, attach release events to Vercel's suspension lifecycle and impose a 60-second production session idle backstop. This addresses the actual hosted runtime retaining all 12 allowed connections while no queries were active, without raising its connection ceiling.

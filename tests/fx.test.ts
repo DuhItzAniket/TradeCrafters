@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { createFxReview, previewFxReview } from "../apps/web/src/lib/fx-review";
 import {
   fxQuoteSchema,
   fxConversionRequestSchema,
@@ -23,6 +24,52 @@ const quote: FxQuote = {
   rounding: "floor",
 };
 const at = new Date("2026-01-01T00:00:30Z");
+
+test("FX browser review survives wall-clock skew while server expiry stays strict", () => {
+  const review = createFxReview(quote, 1000, 1250);
+  assert.equal(
+    previewFxReview(review, "10000", accountId, 1500).creditMinor,
+    "15000",
+  );
+  // A slow or fast wall clock must not be used to authorize server execution.
+  for (const wrongClock of ["2025-12-31T23:59:58Z", "2026-01-01T00:02:00Z"])
+    assert.throws(() =>
+      calculateFxConversion(
+        quote,
+        { quoteId: quote.id, sourceMinor: "10000" },
+        accountId,
+        new Date(wrongClock),
+      ),
+    );
+  assert.throws(() =>
+    previewFxReview(review, "10000", accountId, review.deadline),
+  );
+  assert.throws(() =>
+    previewFxReview(
+      review,
+      "10000",
+      "00000000-0000-4000-8000-000000000002",
+      1500,
+    ),
+  );
+});
+
+test("FX browser review subtracts transport latency and rejects late or invalid timing", () => {
+  assert.equal(createFxReview(quote, 1000, 1250).deadline, 61000);
+  for (const [start, received] of [
+    [1000, 61000],
+    [1000, 999],
+    [NaN, 1000],
+    [-1, 1000],
+  ])
+    assert.throws(() => createFxReview(quote, start, received));
+  const review = createFxReview(
+    { ...quote, rateNumerator: "1", rateDenominator: "1000000" },
+    1000,
+    1250,
+  );
+  assert.throws(() => previewFxReview(review, "1", accountId, 1500));
+});
 test("FX converts native exponents exactly and discloses rounding remainder", () => {
   const jpy = calculateFxConversion(
     quote,
