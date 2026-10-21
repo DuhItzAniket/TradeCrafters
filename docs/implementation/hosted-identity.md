@@ -8,7 +8,15 @@ The 21 October 2026 hosted baseline returned `Cache-Control: no-store` for `/api
 
 The API boundary now copies response headers, enforces `Cache-Control: no-store`, and passes through the original body stream, status and status text. Copying handles immutable redirect responses and preserves separate Set-Cookie values. Existing sanitized error responses already use no-store. The change does not enable a cookie/session cache or alter origin, ownership, factor, ingress or database permissions.
 
-A regression first failed on the previous public-cache directive, then passed after the fix. It checks two distinct cookies, body/status/Vary preservation, immutable redirects and actual HTTP session success/rejection/callback responses. The complete suite is **154 checks (64 unit/configuration + 90 HTTP/MySQL)**; type/lint/format, audit and production build are part of required CI.
+A regression first failed on the previous public-cache directive, then passed after the fix. It checks two distinct cookies, body/status/Vary preservation, immutable redirects and actual HTTP session success/rejection/callback responses. With the sign-out regressions below, the complete suite is **156 checks (64 unit/configuration + 92 HTTP/MySQL)**; type/lint/format, audit and production build are part of required CI.
+
+## Confirmed sign-out
+
+A local route test with real MySQL and a fixture-only adapter deletion fault reproduced an SDK behavior: sign-out returned 200 and clearing cookies while the captured session remained valid. The SDK catches that deletion error. The account UI already stays on its page when the SDK reports an error, so the server must report uncertainty truthfully.
+
+The sign-out path now reads the authoritative session without caching or refreshing it, calls the SDK once, and confirms that a previously live credential no longer authorizes a session before returning success or a redirect. A live result or a lookup failure returns uncached `503 SERVICE_UNAVAILABLE` with `Retry-After: 1`, withholding the SDK's clearing cookies. An already committed deletion can be retried idempotently. Origin/body/ingress checks still run first; no factor freshness rule is weakened and no role/credential setting changes.
+
+Two real-MySQL/SDK regressions inject only fixture-local adapter faults. They cover deletion failure with a still-live session, lookup failure before invoking sign-out, and confirmation loss after a committed deletion. They verify no false success or clearing cookies on uncertainty, followed by safe same-cookie retry. The direct local route probe changed from **200 / live credential / clearing cookie** to **503 / live credential / no clearing cookie**. This is controlled local fault evidence, not a live Aiven outage test.
 
 ## Hosted drill boundaries
 
@@ -29,4 +37,8 @@ An invalid authorization code is not a controlled GitHub outage, a denial-shaped
 
 ## Current acceptance
 
-Implementation and local regression checks are complete. Hosted acceptance of this change is pending deployment and the scoped drill above. M4 remains open for its other operational and real-user recovery gates.
+The cache fix [PR #30](https://github.com/DuhItzAniket/TradeCrafters/pull/30) passed required [CI](https://github.com/DuhItzAniket/TradeCrafters/actions/runs/39607488386) and merged as `e0f502f2555a561b5f34756bdf4f20617d90ffc4`. Production deployment `E9BMUyxQjCK7ARkgPLCXPiyeuqZE` succeeded. The actual HTTPS drill completed **14 scoped checks at 2026-10-21T13:34:07Z**; every observed response used no-store. Two synthetic identities were removed, with existing user/session/provider/factor/role/audit and financial/control counts unchanged. No financial record or owner session was created, changed or revoked by the fixture drill.
+
+An initial run stopped at the SDK's normal social-sign-in rate limit. The completed run honored two ten-second backoffs using its retry header. No rate limit was disabled. A cross-user revoke request returned the SDK's 200 no-op response and the other fixture's session stayed valid; cross-origin revocation returned 403. Old captured cookies failed across account, security and portfolio routes after revocation. A discarded sign-out response recovered as revoked, and an unrelated fixture identity stayed signed in until its own revoke-all check.
+
+The confirmation guard above has passed local checks; its Production rollout and normal-path recheck remain pending. Provider-outage, human OAuth/factor recovery, financial lost-response and the other M4 operational gates remain open.

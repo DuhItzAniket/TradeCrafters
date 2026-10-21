@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Confirmed session revocation
+
+- Confirm sign-out against the authoritative session store before reporting success. Return an uncached, retryable 503 without clearing cookies when deletion or confirmation is uncertain, preserving the client's retry path.
+- Reproduce the earlier false-success behavior with a local fixture-only adapter fault and add deletion/read/after-commit confirmation regressions. Record fourteen actual hosted callback/session checks after the cache fix, with isolated fixture cleanup and owner state preserved; real-provider outage and owner factor recovery remain separate gates.
+
 ## 21 October 2026 — Consistent authentication response privacy
 
 - Enforce no-store at the shared API boundary for SDK responses as well as application JSON, preserving distinct cookies, body streams, status and immutable redirects. This corrects the observed public-revalidation directive on an anonymous session-list rejection.

@@ -6,8 +6,150 @@ import { promisify } from "node:util";
 import { getPool, closePool } from "@tradecrafters/database";
 import { databaseUnavailable } from "@tradecrafters/database/pool";
 import { api } from "../apps/web/src/lib/api";
+import { confirmSignOut } from "../apps/web/src/lib/sign-out";
+import { getAuth } from "@tradecrafters/database/auth";
 import { GET as health } from "../apps/web/src/app/api/health/route";
 after(closePool);
+
+async function signOutFixture() {
+  assert.equal(process.env.AUTH_DEV_CREDENTIALS, "true");
+  assert.ok(
+    ["localhost", "127.0.0.1"].includes(
+      new URL(process.env.DATABASE_URL!).hostname,
+    ),
+  );
+  const base = process.env.BETTER_AUTH_URL || "http://127.0.0.1:3000";
+  const email = `signout-fixture-${randomUUID()}@example.invalid`;
+  const network = `2001:db8:${randomUUID().slice(0, 4)}:1::1`;
+  const context = await getAuth().$context;
+  const signedUp = await getAuth().handler(
+    new Request(base + "/api/auth/sign-up/email", {
+      method: "POST",
+      headers: {
+        Origin: base,
+        "Content-Type": "application/json",
+        "X-Forwarded-For": network,
+      },
+      body: JSON.stringify({
+        email,
+        name: "Disposable sign-out fixture",
+        password: randomUUID() + randomUUID(),
+      }),
+    }),
+  );
+  assert.ok(signedUp.ok);
+  const id = (await signedUp.json()).user.id;
+  const cookie = signedUp.headers
+    .getSetCookie()
+    .map((c) => c.split(";")[0])
+    .join("; ");
+  const request = () =>
+    new Request(base + "/api/auth/sign-out", {
+      method: "POST",
+      headers: {
+        Origin: base,
+        Cookie: cookie,
+        "Content-Type": "application/json",
+        "X-Forwarded-For": network,
+      },
+      body: "{}",
+    });
+  const invoke = () => {
+    const input = request();
+    return api(
+      () => confirmSignOut(input, () => getAuth().handler(input.clone())),
+      input,
+    );
+  };
+  const lookup = () =>
+    getAuth().api.getSession({
+      headers: new Headers({ Cookie: cookie }),
+      query: { disableCookieCache: true, disableRefresh: true },
+    });
+  const cleanup = async () => {
+    const [accounts] = await getPool().execute<
+      import("mysql2/promise").RowDataPacket[]
+    >("SELECT COUNT(*) AS total FROM simulation_accounts WHERE user_id=?", [
+      id,
+    ]);
+    assert.equal(Number(accounts[0].total), 0);
+    await getPool().execute("DELETE FROM user WHERE id=? AND email=?", [
+      id,
+      email,
+    ]);
+    await getPool().execute("DELETE FROM rateLimit WHERE `key` LIKE ?", [
+      `%${network.split(":").slice(0, 4).join(":")}%`,
+    ]);
+  };
+  return { context, invoke, lookup, cleanup };
+}
+
+test("a sign-out deletion fault cannot report success or clear cookies, and a retry confirms revocation", async () => {
+  const fixture = await signOutFixture(),
+    original = fixture.context.internalAdapter.deleteSession;
+  try {
+    fixture.context.internalAdapter.deleteSession = async () => {
+      throw Error("fixture-only deletion failure");
+    };
+    const rejected = await fixture.invoke();
+    assert.equal(rejected.status, 503);
+    assert.equal(rejected.headers.get("Retry-After"), "1");
+    assert.equal(rejected.headers.get("Cache-Control"), "no-store");
+    assert.equal(rejected.headers.getSetCookie().length, 0);
+    assert.equal((await rejected.json()).error.code, "SERVICE_UNAVAILABLE");
+    assert.ok(await fixture.lookup());
+    fixture.context.internalAdapter.deleteSession = original;
+    const recovered = await fixture.invoke();
+    assert.equal(recovered.status, 200);
+    assert.ok(
+      recovered.headers
+        .getSetCookie()
+        .some((c) => c.includes("session_token=")),
+    );
+    assert.equal(await fixture.lookup(), null);
+  } finally {
+    fixture.context.internalAdapter.deleteSession = original;
+    await fixture.cleanup();
+  }
+});
+
+test("sign-out confirmation fails closed before an unreadable session and recovers after a committed deletion loses its confirmation", async () => {
+  const fixture = await signOutFixture(),
+    adapter = fixture.context.internalAdapter;
+  const find = adapter.findSession,
+    remove = adapter.deleteSession;
+  try {
+    adapter.findSession = async () => {
+      throw Error("fixture-only lookup failure");
+    };
+    const rejected = await fixture.invoke();
+    assert.equal(rejected.status, 503);
+    assert.equal(rejected.headers.getSetCookie().length, 0);
+    adapter.findSession = find;
+    assert.ok(await fixture.lookup());
+    let committed = false;
+    adapter.deleteSession = async (...args) => {
+      await remove(...args);
+      committed = true;
+    };
+    adapter.findSession = async (...args) => {
+      if (committed) throw Error("fixture-only confirmation loss");
+      return find(...args);
+    };
+    const uncertain = await fixture.invoke();
+    assert.equal(committed, true);
+    assert.equal(uncertain.status, 503);
+    assert.equal(uncertain.headers.getSetCookie().length, 0);
+    adapter.findSession = find;
+    adapter.deleteSession = remove;
+    assert.equal(await fixture.lookup(), null);
+    assert.equal((await fixture.invoke()).status, 200);
+  } finally {
+    adapter.findSession = find;
+    adapter.deleteSession = remove;
+    await fixture.cleanup();
+  }
+});
 
 test("serverless pools retain checked-out work, drain idle sockets before suspension and reconnect", async () => {
   const { stdout } = await promisify(execFile)(

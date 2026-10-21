@@ -12,6 +12,8 @@ Local password accounts must complete a second-factor challenge after password s
 
 The current UI supports enrollment and verification. Factor replacement, self-service recovery management and an assisted lost-device recovery process remain follow-up work. There is no public role-grant or MFA-reset endpoint.
 
+Sign-out now confirms that a captured session is no longer valid before returning success. An uncertain deletion or confirmation returns a retryable error without the SDK's clearing cookies; the account UI retains its error/retry path. The [session verification record](hosted-identity.md#confirmed-sign-out) distinguishes local injected write/read failures from actual hosted normal-path revocation checks.
+
 ## Explicit role bootstrap
 
 An operator first verifies the intended user's identity through an independent trusted channel. The user must already have a verified provider identity and a verified authenticator enrollment. No default email, development account or first-user rule becomes an administrator.
