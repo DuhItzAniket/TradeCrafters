@@ -1,6 +1,35 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { authConfiguration } from "@tradecrafters/database/auth";
+import { authErrorMessage } from "../apps/web/src/lib/auth-error";
+
+test("auth settings preserve actionable application guards through the SDK envelope", () => {
+  const instruction =
+    "Sign out and sign in again before changing authenticator settings.";
+  assert.equal(
+    authErrorMessage(
+      {
+        error: { code: "REAUTH_REQUIRED", message: instruction },
+        message: "",
+        status: 403,
+      },
+      "Setup failed",
+    ),
+    instruction,
+  );
+  assert.equal(
+    authErrorMessage({ message: "Invalid code" }, "Setup failed"),
+    "Invalid code",
+  );
+  for (const error of [
+    null,
+    undefined,
+    {},
+    { error: { message: 123 } },
+    { message: " " },
+  ])
+    assert.equal(authErrorMessage(error, "Setup failed"), "Setup failed");
+});
 function withConfig(run: () => void) {
   const names = [
     "NODE_ENV",

@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Authenticator setup guidance
+
+- Preserve the application's actionable auth-guard errors through the SDK's nested error envelope. Expired setup sessions now show the existing sign-out/sign-in instruction instead of a generic setup failure; the ten-minute freshness guard remains enforced.
+- Add a regression for nested/flat SDK errors and malformed responses. Record hosted native USD/GBP orders, FX, receipt/reload reconciliation and private owner-assisted factor/session verification with an explicit audited administrator grant. Independent recovery remains open.
+
 ## 21 October 2026 — Hosted FX preview timing
 
 - Decoupled FX preview arithmetic from the browser wall clock after a real hosted walkthrough rejected a fresh server quote on a clock running about two seconds slow. Review expiry now uses a monotonic clock, conservatively subtracts request latency and clears stale reviews; server execution expiry/ownership checks remain strict.
