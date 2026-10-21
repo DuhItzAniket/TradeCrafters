@@ -161,6 +161,20 @@ export async function inspectRuntime(localFixture = false) {
     await connection.query(
       "SELECT id,receipt,http_status FROM operation_records LIMIT 0",
     );
+    const [maintenance] = await connection.query<RowDataPacket[]>(
+      "SELECT @@event_scheduler AS enabled",
+    );
+    if (maintenance[0].enabled !== "ON") fail("counter maintenance scheduler");
+    const [budgetScopes] = await connection.query<RowDataPacket[]>(
+      "SELECT scope FROM ingress_budget_control ORDER BY scope",
+    );
+    if (
+      budgetScopes
+        .map((row) => row.scope)
+        .sort()
+        .join(",") !== "auth,read,write"
+    )
+      fail("request budget scope seed");
     const [control] = await connection.query<RowDataPacket[]>(
       "SELECT id,paused,execution_paused FROM simulation_control WHERE id=1",
     );
@@ -201,6 +215,7 @@ export async function inspectRuntime(localFixture = false) {
       exactGrants: true,
       privilegeDenials: true,
       requiredTablesReadable: true,
+      counterSchedulerEnabled: true,
       syntheticListings: 10,
       connectionBudget: budget,
     };

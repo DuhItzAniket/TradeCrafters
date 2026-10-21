@@ -22,5 +22,5 @@ export async function GET(
     return json(
       await trainingChart(listingId, parsed.data.window === "15m" ? 15 : 60),
     );
-  });
+  }, request);
 }

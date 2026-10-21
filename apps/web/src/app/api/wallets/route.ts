@@ -13,5 +13,5 @@ export async function POST(request: Request) {
         "Create a simulation account first.",
       );
     return json({ account: await createWallet(user.id, body.currency) }, 201);
-  });
+  }, request);
 }

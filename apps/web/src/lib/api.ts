@@ -5,6 +5,11 @@ import { databaseUnavailable } from "@tradecrafters/database/pool";
 import { TradingFault } from "@tradecrafters/domain/trading";
 import { authConfiguration, getAuth } from "@tradecrafters/database/auth";
 import {
+  IngressUnavailable,
+  RequestLimited,
+} from "@tradecrafters/database/ingress";
+import { guardRequest } from "./request-guard";
+import {
   securityState,
   SimulationPausedError,
 } from "@tradecrafters/database/security";
@@ -20,10 +25,31 @@ export class ApiError extends Error {
 }
 export const json = (value: unknown, status = 200) =>
   Response.json(value, { status, headers: { "Cache-Control": "no-store" } });
-export async function api(run: () => Promise<Response>) {
+export async function api(run: () => Promise<Response>, request: Request) {
   try {
+    await guardRequest(request);
     return await run();
   } catch (error) {
+    if (error instanceof RequestLimited || error instanceof IngressUnavailable)
+      return Response.json(
+        {
+          error: {
+            code:
+              error instanceof RequestLimited
+                ? "RATE_LIMITED"
+                : "SERVICE_UNAVAILABLE",
+            message: error.message,
+          },
+        },
+        {
+          status: error instanceof RequestLimited ? 429 : 503,
+          headers: {
+            "Cache-Control": "no-store",
+            "Retry-After":
+              error instanceof RequestLimited ? String(error.retryAfter) : "1",
+          },
+        },
+      );
     if (databaseUnavailable(error))
       return Response.json(
         {

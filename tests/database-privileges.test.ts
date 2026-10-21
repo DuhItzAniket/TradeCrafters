@@ -54,6 +54,8 @@ test("the web identity can read required data and take read-only role locks", as
     "catalog_snapshots",
     "provider_aliases",
     "venue_classifications",
+    "ingress_budget_control",
+    "ingress_budget_clients",
   ])
     await pool.query(`SELECT 1 FROM \`${table}\` LIMIT 1`);
   const connection = await pool.getConnection();
@@ -85,10 +87,19 @@ test("the web identity cannot grant roles, rewrite journals/audits/catalogs or a
     "UPDATE market_snapshots SET definition=definition WHERE false",
     "UPDATE fx_quotes SET definition=definition WHERE false",
     "DELETE FROM fx_conversions WHERE false",
+    "UPDATE ingress_budget_control SET scope=scope WHERE false",
+    "DELETE FROM ingress_budget_control WHERE false",
+    "INSERT INTO ingress_budget_control (scope) VALUES ('read')",
   ])
     await assert.rejects(pool.query(statement), denied);
 });
 test("the web identity cannot create tables, grant database privileges or inspect MySQL credentials", async () => {
+  await assert.rejects(
+    pool.query(
+      "CREATE EVENT runtime_identity_must_not_create ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR DO SELECT 1",
+    ),
+    denied,
+  );
   await assert.rejects(
     pool.query("CREATE TABLE runtime_identity_must_not_create (id INT)"),
     denied,

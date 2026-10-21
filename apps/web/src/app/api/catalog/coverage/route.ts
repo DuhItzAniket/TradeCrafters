@@ -10,5 +10,5 @@ export async function GET(request: Request) {
         "Coverage uses the current server date.",
       );
     return json(await catalogCoverage());
-  });
+  }, request);
 }

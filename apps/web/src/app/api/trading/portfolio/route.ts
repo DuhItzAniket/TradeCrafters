@@ -11,5 +11,5 @@ export async function GET(request: Request) {
     if (!parsed.success || Object.keys(input).length !== 1)
       throw new ApiError("INVALID_REQUEST", 400, "Supply one account ID.");
     return json({ portfolio: await portfolio(user.id, parsed.data) });
-  });
+  }, request);
 }

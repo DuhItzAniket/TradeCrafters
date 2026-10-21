@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   return api(async () => {
     const user = await requireIdentity(request);
     return json({ account: await readAccount(user.id) });
-  });
+  }, request);
 }
 export async function POST(request: Request) {
   return api(async () => {
@@ -16,5 +16,5 @@ export async function POST(request: Request) {
       { account: await createAccount(user.id, body.reportingCurrency) },
       201,
     );
-  });
+  }, request);
 }

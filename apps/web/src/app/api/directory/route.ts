@@ -10,5 +10,5 @@ export async function GET(request: Request) {
     if (!parsed.success)
       throw new ApiError("INVALID_REQUEST", 400, "Invalid directory filters.");
     return json(await directory(parsed.data));
-  });
+  }, request);
 }

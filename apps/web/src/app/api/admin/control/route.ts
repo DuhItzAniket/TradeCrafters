@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       control: await simulationControl(),
       audit: await auditSummary(),
     });
-  });
+  }, request);
 }
 export async function POST(request: Request) {
   return api(async () => {
@@ -36,5 +36,5 @@ export async function POST(request: Request) {
       control: await simulationControl(),
       audit: await auditSummary(),
     });
-  });
+  }, request);
 }

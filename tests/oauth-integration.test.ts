@@ -8,6 +8,7 @@ const origin = "http://127.0.0.1:3099";
 const email = `oauth-fixture-${randomUUID()}@example.test`;
 const subject = 8000000000 + Number.parseInt(randomUUID().slice(0, 8), 16);
 const names = [
+  "VERCEL",
   "NODE_ENV",
   "BETTER_AUTH_URL",
   "BETTER_AUTH_SECRET",
@@ -41,7 +42,7 @@ function request(
         Origin: origin,
         ...(body === undefined ? {} : { "Content-Type": "application/json" }),
         Cookie: cookie,
-        "X-Forwarded-For": ip,
+        "X-Vercel-Forwarded-For": ip,
       },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     }),
@@ -93,6 +94,8 @@ before(() => {
     ),
   );
   process.env.NODE_ENV = "test";
+  // Model the chosen hosted ingress inside this isolated handler fixture.
+  process.env.VERCEL = "1";
   process.env.BETTER_AUTH_URL = origin;
   process.env.BETTER_AUTH_SECRET = randomBytes(48).toString("base64url");
   process.env.AUTH_DEV_CREDENTIALS = "false";

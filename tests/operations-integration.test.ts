@@ -60,7 +60,7 @@ test("a saturated MySQL pool rejects a burst through promise and auth callback p
     const response = await api(async () => {
       await pool.query("SELECT 1");
       return Response.json({ unexpected: true });
-    });
+    }, new Request("http://127.0.0.1:3000/api/directory"));
     assert.equal(response.status, 503);
     assert.equal(response.headers.get("Retry-After"), "1");
     assert.equal(response.headers.get("Cache-Control"), "no-store");

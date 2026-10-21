@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { getPool } from "./pool";
+import { authIpHeaders } from "./ingress";
 
 export function authConfiguration() {
   const url = new URL(process.env.BETTER_AUTH_URL || "http://127.0.0.1:3000");
@@ -50,6 +51,12 @@ function createAuth() {
     baseURL: config.url.origin,
     secret: config.secret,
     trustedOrigins: [config.url.origin],
+    advanced: {
+      ipAddress: {
+        ipAddressHeaders: authIpHeaders(),
+        ipv6Subnet: 64,
+      },
+    },
     logger: {
       level: "warn",
       // Provider response bodies and SDK errors may include credentials or personal data.

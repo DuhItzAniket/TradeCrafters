@@ -24,5 +24,5 @@ export async function GET(request: Request) {
           ? 404
           : 200,
     );
-  });
+  }, request);
 }
