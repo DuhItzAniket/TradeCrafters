@@ -1,6 +1,7 @@
 # TradeCrafters
 
 [![Global foundation checks](https://github.com/DuhItzAniket/TradeCrafters/actions/workflows/foundation.yml/badge.svg?branch=main)](https://github.com/DuhItzAniket/TradeCrafters/actions/workflows/foundation.yml)
+[![Hosted public smoke](https://github.com/DuhItzAniket/TradeCrafters/actions/workflows/public-smoke.yml/badge.svg?branch=main)](https://github.com/DuhItzAniket/TradeCrafters/actions/workflows/public-smoke.yml)
 
 **A global paper-trading laboratory built with Next.js, TypeScript and MySQL.** Originally created by **Aniket Kumar and Annapurna S** for a DBMS course, now being rebuilt around trustworthy accounts, explicit market coverage and a purposeful trading interface.
 
@@ -8,28 +9,28 @@
 
 [Hosted synthetic demo](https://tradecrafters-preview-gamma.vercel.app/) · [Data lifecycle](docs/implementation/data-lifecycle.md) · [Release/incident operations](docs/implementation/release-operations.md)
 
-The M1 foundation, M2 accounting and **M3 workbench implementation** are available in `apps/web` and `packages/`. Explore a **2,889-record worldwide MIC reference**, practice with ten fictional listings across six regions, and follow native holdings, explicit FX and persistent receipts on MySQL. The workbench combines venue-qualified discovery, an authored training chart and a native-currency ticket. [Implementation and evidence](docs/implementation/workbench.md). **M3 remains open for real student walkthroughs**; hosted release acceptance and real-data integration remain open. Directory presence is not verified exchange trading coverage.
+The M1 foundation, M2 accounting and **M3 workbench implementation** are available in `apps/web` and `packages/`. Explore a **2,889-record worldwide MIC reference**, practice with ten fictional listings across six regions, and follow native holdings, explicit FX and persistent receipts on MySQL. The workbench combines venue-qualified discovery, an authored training chart and a native-currency ticket. [Implementation and evidence](docs/implementation/workbench.md). **M3 remains open for real student walkthroughs**. [M4 deployment/hardening is accepted](docs/implementation/m4-acceptance.md); real-data integration remains open. Directory presence is not verified exchange trading coverage.
 
 <img src="docs/implementation/previews/m3-workbench-desktop.png" width="1100" alt="TradeCrafters workbench with venue-qualified discovery, an authored GBX training chart and a GBP-native order ticket">
 
 ## Current capabilities
 
-| Capability                                                     | Status                                                                   |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                                         |
-| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open             |
-| Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown               |
-| Server sessions, ownership checks and native-currency wallets  | Local and hosted synthetic accounts verified                             |
-| GitHub OAuth                                                   | Local and hosted HTTPS callback/reload verified; recovery checks pending |
-| Authenticator, admin roles and audited simulation controls     | Hosted factor/session and explicit owner role verified                   |
-| Shared request budgets and anonymous/auth counter expiry       | Hosted spoof-header, throttle, retry and idle cleanup verified           |
-| Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled                  |
-| Native buy/sell, exact basis/P&L and balanced cash journals    | Working with server-owned fictional quotes and venue rules               |
-| Explicit virtual FX and reporting valuation                    | Working across twelve currencies; fixed exercise rates                   |
-| Durable receipts, retry recovery and archive/reset history     | Working locally; verified with MySQL races and process death             |
-| Chart workbench, watchlists and real-venue coverage states     | Working locally; observed student walkthroughs pending                   |
-| Hosted synthetic demo                                          | Live on Vercel; M4 operational acceptance in progress                    |
-| Real exchange data                                             | Coverage and licensing remain on the worldwide roadmap                   |
+| Capability                                                     | Status                                                                  |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                                        |
+| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open            |
+| Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown              |
+| Server sessions, ownership checks and native-currency wallets  | Local and hosted synthetic accounts verified                            |
+| GitHub OAuth                                                   | Hosted callback/reload, failure boundaries and scoped recovery verified |
+| Authenticator, admin roles and audited simulation controls     | Hosted factor/session and explicit owner role verified                  |
+| Shared request budgets and anonymous/auth counter expiry       | Hosted spoof-header, throttle, retry and idle cleanup verified          |
+| Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled                 |
+| Native buy/sell, exact basis/P&L and balanced cash journals    | Working with server-owned fictional quotes and venue rules              |
+| Explicit virtual FX and reporting valuation                    | Working across twelve currencies; fixed exercise rates                  |
+| Durable receipts, retry recovery and archive/reset history     | Working locally; verified with MySQL races and process death            |
+| Chart workbench, watchlists and real-venue coverage states     | Working locally; observed student walkthroughs pending                  |
+| Hosted synthetic demo                                          | M4 accepted on Vercel Hobby + Aiven Free                                |
+| Real exchange data                                             | Coverage and licensing remain on the worldwide roadmap                  |
 
 ## Run locally
 
@@ -70,13 +71,13 @@ The scope is **stock exchanges worldwide**, including smaller and frontier marke
 
 Start with the [research index](docs/README.md), [global architecture](docs/architecture/global-markets.md), [market-data comparison](docs/research/02-market-data.md), [roadmap](docs/ROADMAP.md), and [GitHub tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. The owner deployed a [Vercel demo](https://tradecrafters-preview-gamma.vercel.app/); Aiven Singapore schema/seed, restricted identities, verified TLS and actual connection admission have passed operator-side checks. [Hosted setup evidence](docs/implementation/hosted-preview.md) records Production configuration, the serverless idle-connection fix and the remaining operational release work. [Persistent request budgets](docs/implementation/request-admission.md) now pass hosted spoof-header, rejection/retry and idle-expiry checks. Other production ingress needs an explicit trusted proxy adapter; the standalone image's liveness check does not establish AWS readiness. The demo is not yet an accepted public release.
+The [hosted demo](https://tradecrafters-preview-gamma.vercel.app/) runs on **Vercel Hobby (Mumbai) + Aiven Free MySQL (Bangalore)**. [M4 acceptance](docs/implementation/m4-acceptance.md) records actual sign-in/trading/FX, protected TLS/grants, bounded request/connection capacity, lost-response receipt recovery, audited execution controls, independent owner recovery, encrypted hosted restore and compatible release rollback. CSP, stale-identity expiry, protected audit checkpoints and a credential-free six-hour smoke workflow are deployed. Student feedback remains deferred; worldwide real-data rights, coverage and source validation are next.
 
-**M4 is in progress.** [Deployment foundations and setup instructions](docs/implementation/deployment-foundations.md) cover bounded database acquisition, runtime grant/TLS inspection, a non-root standalone container, an encrypted isolated restore rehearsal and the remaining hosted release gates. The [execution pause runbook](docs/implementation/execution-pause.md) covers independent trading/FX and funding controls with transaction and database enforcement. Student feedback stays deferred. Intended-domain sign-in, native USD/GBP orders, FX, receipts, reload and hosted accounting reconciliation passed; operational recovery and release gates remain open.
+The [setup runbook](docs/implementation/deployment-foundations.md), [data lifecycle](docs/implementation/data-lifecycle.md) and [incident operations](docs/implementation/release-operations.md) state the personal-demo operating limits. Free hosting has no SLA; weekly portable checkpoints are an operator task. The non-root container is verified for liveness; deployment behind a different trusted ingress needs separate acceptance before AWS use.
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **66 domain/configuration and 92 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **68 domain/configuration and 96 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 

@@ -4,7 +4,7 @@
 
 GitHub entry points: [research PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1) and [roadmap tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-**Hosting update — 21 October 2026:** M4/#6 remains open. The synthetic demo is live on Vercel Hobby; actual hosted sign-in, native trading/FX, reconciliation, independent execution controls, request admission and session checks passed. [Hosted recovery/capacity](implementation/hosted-recovery.md) records an encrypted 48-table restore and bounded valid-read/overload checks. After the owner's approval, Aiven moved from Developer trial to Free and automatically relocated MySQL from Singapore to Bangalore; Functions are being aligned to Mumbai. Independent custody, rollback, retention and remaining recovery gates are still open. Required CI passes 158 checks plus build/audit/recovery/container gates. M3 student feedback stays deferred and real feeds remain disabled.
+**M4 accepted — 22 October 2026 (21 October UTC):** the [personal synthetic demo](implementation/m4-acceptance.md) is deployed on Vercel Hobby/Mumbai and Aiven Free/Bangalore. Required CI passes **164 checks** plus build/audit/recovery/container gates. Hosted identity/trading/FX, lost-response recovery, audited controls, exact TLS/grants/caps, capacity/overload, encrypted isolated restore, independent custody, lifecycle/audit protection, CSP, smoke and compatible rollback/promotion are verified with explicit limits. M3 student walkthroughs remain deferred; M5 real-data capabilities and the complete worldwide inventory remain open.
 
 **Execution update — 20 October 2026:** M1/#3 and M2/#4 are complete. [M1 acceptance](implementation/m1-acceptance.md) and [M2 acceptance](implementation/m2-acceptance.md) retain their 80/108-check baselines. The [M3 workbench implementation](implementation/workbench.md) adds integrated discovery/chart/ticket and account interactions, with 116 automated checks. **M3/#5 remains open for real student feedback**, deferred by the owner; [the protocol](design/student-walkthrough.md) has no observed results yet. Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original exit criteria below remain the baseline.
 
@@ -84,7 +84,7 @@ Software implementation and browser evidence: [workbench record](implementation/
 
 ### M4: deployment
 
-**In progress:** [deployment foundations/runbook](implementation/deployment-foundations.md) implements acquisition deadlines, runtime grant/TLS preflight, a non-root container and a local encrypted recovery/aggregate-cap rehearsal. Hosted acceptance remains open. The owner explicitly deferred M3 student feedback while engineering continues; M3 is not marked complete.
+**Accepted:** [M4 evidence](implementation/m4-acceptance.md) closes the personal synthetic-demo gates, with [setup](implementation/deployment-foundations.md), [lifecycle](implementation/data-lifecycle.md) and [release/incident operations](implementation/release-operations.md). The work items below remain the implementation baseline. M3 student feedback stays deferred and is not marked complete.
 
 - Resolve hosting/DB region, free-tier limitations, TLS trust, actual connection budget and preview isolation before production setup.
 - Document credentials by **name**, never value; use separate application/migration identities and environment scopes.
