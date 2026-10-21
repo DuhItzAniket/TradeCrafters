@@ -7,6 +7,7 @@ import { authConfiguration, getAuth } from "@tradecrafters/database/auth";
 import {
   IngressUnavailable,
   RequestLimited,
+  requestScope,
 } from "@tradecrafters/database/ingress";
 import { guardRequest } from "./request-guard";
 import {
@@ -26,6 +27,19 @@ export class ApiError extends Error {
 export const json = (value: unknown, status = 200) =>
   Response.json(value, { status, headers: { "Cache-Control": "no-store" } });
 export async function api(run: () => Promise<Response>, request: Request) {
+  const started = performance.now();
+  const response = await executeApi(run, request);
+  console.info(
+    JSON.stringify({
+      event: "api_result",
+      scope: requestScope(request),
+      status: response.status,
+      durationMs: Math.round(performance.now() - started),
+    }),
+  );
+  return response;
+}
+async function executeApi(run: () => Promise<Response>, request: Request) {
   try {
     await guardRequest(request);
     const response = await run();
@@ -90,9 +104,7 @@ export async function api(run: () => Promise<Response>, request: Request) {
         error.status,
       );
     // Do not log SQL driver messages, connection configuration, bodies or tokens.
-    console.error("TradeCrafters request failed", {
-      type: error instanceof Error ? error.name : "Unknown",
-    });
+    console.error("TradeCrafters request failed", { type: "unexpected" });
     return json(
       {
         error: {

@@ -6,6 +6,8 @@
 
 [Get started](#run-locally) · [Architecture](docs/architecture/README.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
+[Hosted synthetic demo](https://tradecrafters-preview-gamma.vercel.app/) · [Data lifecycle](docs/implementation/data-lifecycle.md) · [Release/incident operations](docs/implementation/release-operations.md)
+
 The M1 foundation, M2 accounting and **M3 workbench implementation** are available in `apps/web` and `packages/`. Explore a **2,889-record worldwide MIC reference**, practice with ten fictional listings across six regions, and follow native holdings, explicit FX and persistent receipts on MySQL. The workbench combines venue-qualified discovery, an authored training chart and a native-currency ticket. [Implementation and evidence](docs/implementation/workbench.md). **M3 remains open for real student walkthroughs**; hosted release acceptance and real-data integration remain open. Directory presence is not verified exchange trading coverage.
 
 <img src="docs/implementation/previews/m3-workbench-desktop.png" width="1100" alt="TradeCrafters workbench with venue-qualified discovery, an authored GBX training chart and a GBP-native order ticket">

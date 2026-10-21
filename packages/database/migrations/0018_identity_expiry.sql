@@ -1,0 +1,11 @@
+-- @single-statement
+CREATE EVENT identity_record_expiry
+  ON SCHEDULE EVERY 1 MINUTE
+  DO BEGIN
+    DELETE FROM mfa_stepups WHERE expires_at < UTC_TIMESTAMP(3) - INTERVAL 1 HOUR LIMIT 1000;
+    DELETE FROM session WHERE expiresAt < UTC_TIMESTAMP(3) - INTERVAL 1 HOUR LIMIT 1000;
+    DELETE FROM verification WHERE expiresAt < UTC_TIMESTAMP(3) - INTERVAL 1 HOUR LIMIT 1000;
+    DELETE FROM mfa_used_codes WHERE expires_at < UTC_TIMESTAMP(3) - INTERVAL 1 HOUR LIMIT 1000;
+    DELETE FROM mfa_attempt_budgets WHERE window_id < FLOOR(UNIX_TIMESTAMP()/60) - 10 LIMIT 1000;
+    DELETE FROM mutation_budgets WHERE window_id < FLOOR(UNIX_TIMESTAMP()/60) - 10 LIMIT 1000;
+  END;

@@ -16,6 +16,15 @@ export default function SignInPage() {
         development={config.developmentCredentials}
         github={Boolean(config.github)}
       />
+      <p className="muted">
+        This personal demo stores your GitHub profile and fictional account
+        history. Account closure is handled privately by the project owner. Read
+        the{" "}
+        <a href="https://github.com/DuhItzAniket/TradeCrafters/blob/main/docs/implementation/data-lifecycle.md">
+          data and retention policy
+        </a>{" "}
+        before joining.
+      </p>
     </>
   );
 }

@@ -1,5 +1,12 @@
 # Changelog
 
+## M4 browser policy and operating lifecycle
+
+- Add per-render script nonce CSP, caller-header replacement, explicit style-attribute support for chart geometry, and uncached page policy.
+- Expire stale sessions/verification/proofs/identity counters with bounded indexed MySQL maintenance; retain live identities, factors, receipts and audit case replay protection.
+- Add read-only comparison with an independently held encrypted audit anchor, fixed-scope API status/duration diagnostics and credential-free six-hour public smoke checks.
+- Record Free Bangalore/Mumbai measurements, real hosted financial response-loss recovery, independent backup custody, assisted deletion/retention policy and compatible Production rollback/promotion procedure.
+
 ## 21 October 2026 — Independent operator recovery
 
 - Add a private, independently checked repository-owner recovery command with exact provider/target matching, atomic role/session/factor/trusted-device revocation and a unique audited case key. A lost-response replay preserves subsequent enrollment; no session, proof or role is automatically granted.
@@ -37,7 +44,6 @@
 - Add independent trading/FX and funding controls with explicit reasons, current-session authorization and atomic audit events.
 - Serialize pause acknowledgement with admitted executions, preserve saved receipts and durably reject new paused operations. Add database guards for older deployments and verify those guards survive encrypted restore.
 - Add guarded local trigger installation, scoped hosted migration requirements and five HTTP/MySQL race/accounting regressions plus a strict scope contract check. Runtime grants remain unchanged; hosted rollout is tracked in M4 #6.
-
 
 ## 21 October 2026 — Authenticator setup guidance
 

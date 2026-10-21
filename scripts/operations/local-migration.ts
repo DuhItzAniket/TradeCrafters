@@ -10,7 +10,9 @@ export async function applyLocalCompoundMigration(sql: string) {
     !/^[a-zA-Z0-9_]{1,64}$/.test(database) ||
     process.env.AUTH_DEV_CREDENTIALS !== "true" ||
     !process.env.LOCAL_DB_ROOT_PASSWORD ||
-    !sql.startsWith("-- @single-statement\nCREATE TRIGGER ")
+    !/^-- @single-statement\nCREATE (?:TRIGGER |EVENT identity_record_expiry\n)/.test(
+      sql,
+    )
   )
     throw Error(
       "Local compound migrations require the retained Docker fixture.",
@@ -42,7 +44,7 @@ export async function applyLocalCompoundMigration(sql: string) {
     );
   } catch {
     throw Error(
-      "Local trigger migration failed; driver details hidden. Inspect the incomplete migration before retrying.",
+      "Local compound migration failed; driver details hidden. Inspect the incomplete migration before retrying.",
     );
   }
 }
