@@ -2,6 +2,8 @@
 
 Updated 21 October 2026 UTC. M4 remains open until all of its operational gates pass. This record covers a real encrypted backup and an isolated restore on the hosted MySQL service, plus bounded application capacity/overload checks. No production account was reset, restored or replaced.
 
+**Current hosting update:** after the owner explicitly approved the Free downgrade, Aiven completed it and shows **Running / Free-1-1gb**, with 1 CPU / 1 GB RAM / 1 GB storage. Its automatic free-tier placement moved the service to **DigitalOcean Bangalore (`blr`)**. The hostname/credentials remained stable; valid CA/hostname checks pass and wrong CA/hostname still reject. Runtime preflight reports **76 server connections / 12 runtime cap / 16 reserved**, exact grants, privilege denials and enabled counter maintenance. Public home/sign-in/directory/chart checks and accounting reconciliation pass. Vercel is being aligned to nearby [Mumbai (`bom1`)](https://vercel.com/docs/regions); the earlier Singapore capacity measurements below remain dated historical evidence until the new placement is remeasured.
+
 ## Recovery contract
 
 `scripts/backup.ts` reads one consistent InnoDB snapshot while holding the same advisory lock as the migration command. It checks every applied migration checksum and completion marker. The bounded logical archive contains table/column names and parameter data, never executable SQL, grants or a restore destination. JSON stays UTF-8, timestamps stay UTC strings and large integer/decimal strings retain precision. Current limits are 100,000 rows / 64 MiB; this is a small-demo tool, not a general database backup product.

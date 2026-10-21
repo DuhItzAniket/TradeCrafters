@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Free hosting and regional placement
+
+- Complete the owner's approved Developer-to-Free MySQL downgrade. Record the provider's automatic move to Bangalore and align Vercel Functions to Mumbai rather than retaining the initial Singapore setting.
+- Recheck certificate/hostname rejection, exact grants/denials, enabled maintenance, the retained twelve-connection runtime cap, public application behavior and unchanged synthetic accounting. The server now reports 76 connections. Record the earlier capacity results as historical until the new placement is remeasured.
+
 ## 21 October 2026 — Hosted logical recovery and measured capacity
 
 - Add encrypted, checksummed logical snapshots and a guarded restore into a new capped, unexposed hosted schema. Validate every row and foreign key, rebuild reviewed maintenance, discard restored session/provider authority and remove the temporary target.
