@@ -37,6 +37,8 @@ npm run ops:container-smoke -- tradecrafters:review
 
 The local inspector reports `scope: local fixture; not hosted acceptance`, no TLS, and no aggregate production budget. It must not be used to tick hosted acceptance boxes. The smoke container has no identity configuration and only tests liveness; a full authenticated journey remains a release gate.
 
+The shared pool reaps released sockets on mysql2's next idle sweep (`maxIdle: 0`), attaches its release events to Vercel's suspension lifecycle, and sets a 60-second production session idle ceiling. The [hosted incident record](hosted-preview.md#serverless-connection-lifecycle) explains the observed cap exhaustion and distinguishes checked-out work, pooled idle cleanup and server session expiry. A real-MySQL regression with a simulated runtime context verifies drain/reconnect without killing checked-out work.
+
 For a configured hosted **runtime** env file, stored only under ignored `.local/hosting/`, use:
 
 ```sh

@@ -50,6 +50,8 @@ test("remote MySQL requires verified TLS and supports one hosted PEM CA source",
 test("production uses a small pool with a finite driver burst queue", () => {
   const config = databaseConfiguration({ ...local, NODE_ENV: "production" });
   assert.equal(config.connectionLimit, 2);
+  assert.equal(config.maxIdle, 0);
+  assert.equal(config.idleTimeout, 5000);
   assert.equal(config.waitForConnections, true);
   assert.equal(config.queueLimit, 30);
   assert.equal(config.connectTimeout, 5000);

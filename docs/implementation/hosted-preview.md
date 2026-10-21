@@ -31,6 +31,16 @@ Aiven returned grants with ANSI double-quoted identifiers. The release inspector
 
 `apps/web/vercel.json` selects Singapore Functions (`sin1`) to match the database. The deployment build region is independent of the Functions region. Confirm the deployed runtime region after the reviewed change lands. See [Vercel's region configuration](https://vercel.com/docs/functions/configuring-functions/region).
 
+## Serverless connection lifecycle
+
+After the owner saved Production variables, deployment `Bnm6o3GMjp1etKboEAW1s4xCBhob` built successfully from `38c65c7`. Public database-backed routes still failed. Its runtime logs identified the enforced user limit; an operator inspection found **12 sleeping runtime connections, zero active queries**, with idle ages of 120–170 seconds. The connection ceiling was working, but released connections from warm/suspended Functions were retaining all admission slots.
+
+The shared pool now sets `maxIdle: 0` and a five-second idle timeout. This explicitly enables mysql2's reaper even for a one-connection pool; its next one-second sweep closes released sockets. Checked-out connections remain available to their work. The pinned Vercel Functions helper attaches to the actual pool's release events and holds the request context open for cleanup before suspension. Its documented event/idle interface is used because this SDK version otherwise detects the raw mysql2 config as the legacy MySQL shape and uses a 60-second default. See [Vercel pooling guidance](https://vercel.com/kb/guide/connection-pooling-with-functions).
+
+Production sessions also set their own `wait_timeout=60` as a server-side idle backstop if a process is suspended or lost. This is an idle-session ceiling, not a query execution deadline; a transaction abandoned while idle can be rolled back by the server. Financial requests retain their existing transactional/idempotent recovery contract. The runtime user cap stays at 12.
+
+A new local MySQL regression fixture exercises a one-connection production pool with the actual Vercel helper and a simulated request context: checked-out work survives beyond the pool idle timeout, released sockets disappear before the helper's wait resolves, and a subsequent query reconnects. Actual hosted drain and intended-domain sign-in still require deployment acceptance; local lifecycle verification does not substitute for them.
+
 ## Private environment handoff
 
 The stable demo alias is served from Vercel's **Production environment**, even though the project name contains “preview.” Configure its credentials only for that environment. Unreviewed Preview/fork deployments must not receive this database identity or auth secret.
@@ -41,10 +51,10 @@ The stable demo alias is served from Vercel's **Production environment**, even t
 4. Import the runtime variables into the project's **Production** environment and mark the database URL, auth secret and OAuth secret as Secret. Preserve the complete multiline CA. Redeploy a reviewed commit; environment changes do not update an existing deployment. [Vercel environment variables](https://vercel.com/docs/environment-variables).
 5. Verify access from Vercel, then complete sign-in/reload/revocation and the native trade → receipt → portfolio → FX journey. Provision hosted admin/factor/recovery separately after verifying the owner's hosted identity.
 
-The connected Vercel integration could list this project but returned a missing-team-grant error for project/deployment inspection. Direct environment upload through that integration is therefore not claimed. An owner dashboard import or an appropriately scoped reconnection is still needed. Do not overwrite either existing local env file with hosted values.
+The connected Vercel integration could list this project but returned a missing-team-grant error for project/deployment inspection. The owner imported Production variables; an authenticated dashboard session allowed a normal Production redeploy. No secret readback or connector upload is claimed. Do not overwrite either existing local env file with hosted values.
 
 ## Remaining release boundary
 
-TLS, schema, privilege denials, the actual database connection ceiling and hosted runtime preflight are verified from the operator machine. Preflight checks the OAuth pair is present; it does not perform GitHub authorization. Vercel environment import and network acceptance, intended-domain browser acceptance, trusted anonymous/read ingress limits, an audited execution pause, independent recovery/key custody, external audit retention/deletion, provider restore and release rollback remain open in the [M4 release checklist](deployment-foundations.md#remaining-m4-acceptance). The existing pause affects new funding/reset grants only.
+TLS, schema, privilege denials, the actual database connection ceiling and hosted runtime preflight are verified from the operator machine. Preflight checks the OAuth pair is present; it does not perform GitHub authorization. Production variables are owner-confirmed saved, but actual hosted lifecycle recovery and intended-domain browser acceptance remain open, alongside trusted anonymous/read ingress limits, an audited execution pause, independent recovery/key custody, external audit retention/deletion, provider restore and release rollback in the [M4 release checklist](deployment-foundations.md#remaining-m4-acceptance). The existing pause affects new funding/reset grants only.
 
 The provider console shows backups in Singapore; no provider restore was exercised. The local encrypted restore rehearsal is separate evidence. No measured monthly bill or production recovery guarantee is claimed. The near-free hosting target and worldwide real-market roadmap remain unchanged. Creator attribution remains **Aniket Kumar and Annapurna S**.

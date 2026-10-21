@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Serverless database pool recovery
+
+- Enable mysql2 idle reaping, attach release events to Vercel's suspension lifecycle and impose a 60-second production session idle backstop. This addresses the actual hosted runtime retaining all 12 allowed connections while no queries were active, without raising its connection ceiling.
+- Add a real-MySQL regression with a simulated Vercel request context: checked-out work survives idle cleanup, released sockets drain before suspension and the pool reconnects. Hosted browser acceptance and the remaining M4 gates stay open.
+
 ## 21 October 2026 — Hosted MySQL provisioning and verification
 
 - Explicitly enabled MySQL hostname verification alongside certificate-chain verification. Valid hosted TLS succeeded; wrong-CA and wrong-hostname probes were rejected.
