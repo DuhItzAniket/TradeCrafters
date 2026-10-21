@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Independent operator recovery
+
+- Add a private, independently checked repository-owner recovery command with exact provider/target matching, atomic role/session/factor/trusted-device revocation and a unique audited case key. A lost-response replay preserves subsequent enrollment; no session, proof or role is automatically granted.
+- Verify subject isolation, real rollback on an audit failure and denial of an actual HTTP administrator write observed waiting across recovery. Extend disposable restore drills with an isolated recovery fixture; no live owner's factor or provider identity is used by these tests.
+
 ## 21 October 2026 — Free hosting and regional placement
 
 - Complete the owner's approved Developer-to-Free MySQL downgrade. Record the provider's automatic move to Bangalore and align Vercel Functions to Mumbai rather than retaining the initial Singapore setting.
