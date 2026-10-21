@@ -25,7 +25,7 @@ export function webEnvironment(env: NodeJS.ProcessEnv = process.env) {
 function privileges(value: string) {
   return (
     value
-      .replaceAll("`", "")
+      .replace(/[`\"]/g, "")
       .toUpperCase()
       .match(/[A-Z]+(?:\s*\([^)]*\))?/g) || []
   )
@@ -50,16 +50,20 @@ export function exactRuntimeGrants(
       continue;
     // Reject inherited roles, wildcard schema grants and any extra privilege.
     const match = grant.match(
-      /^GRANT (.+) ON `([^`]+)`\.`([^`]+)` TO `[^`]+`@`[^`]+`$/,
+      /^GRANT (.+) ON ([`"])([a-zA-Z0-9_]+)\2\.([`"])([a-zA-Z0-9_]+)\4 TO ([`"])[^`"]+\6@([`"])[^`"]+\7$/,
     );
-    if (!match || match[2] !== database || !(match[3] in runtimeGrants))
+    if (
+      !match ||
+      match[3] !== database ||
+      !Object.hasOwn(runtimeGrants, match[5])
+    )
       return false;
     if (
       privileges(match[1]) !==
-      privileges(runtimeGrants[match[3] as keyof typeof runtimeGrants])
+      privileges(runtimeGrants[match[5] as keyof typeof runtimeGrants])
     )
       return false;
-    found.add(match[3]);
+    found.add(match[5]);
   }
   return found.size === Object.keys(runtimeGrants).length;
 }

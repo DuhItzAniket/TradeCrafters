@@ -4,6 +4,8 @@
 
 GitHub entry points: [research PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1) and [roadmap tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
+**Hosting update — 21 October 2026:** M4/#6 remains open. The owner deployed a Vercel demo; [Aiven Singapore provisioning](implementation/hosted-preview.md) passed eight migrations/seed, separate restricted identities, CA/hostname negative probes, runtime preflight and actual connection-cap enforcement. Vercel environment/browser verification and the remaining operational release gates are pending. M3 student feedback stays deferred and real feeds remain disabled.
+
 **Execution update — 20 October 2026:** M1/#3 and M2/#4 are complete. [M1 acceptance](implementation/m1-acceptance.md) and [M2 acceptance](implementation/m2-acceptance.md) retain their 80/108-check baselines. The [M3 workbench implementation](implementation/workbench.md) adds integrated discovery/chart/ticket and account interactions, with 116 automated checks. **M3/#5 remains open for real student feedback**, deferred by the owner; [the protocol](design/student-walkthrough.md) has no observed results yet. Public HTTPS deployment remains M4, evidence-backed real-data enablement M5, and the complete reviewed worldwide universe #9/M7. The original exit criteria below remain the baseline.
 
 | Implementation issue                                         | Work                                                                |

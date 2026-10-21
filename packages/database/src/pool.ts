@@ -58,6 +58,7 @@ export function databaseConfiguration(
       env.MYSQL_SSL === "true"
         ? {
             rejectUnauthorized: true,
+            verifyIdentity: true,
             ...(env.MYSQL_SSL_CA
               ? { ca: env.MYSQL_SSL_CA }
               : env.MYSQL_SSL_CA_FILE
