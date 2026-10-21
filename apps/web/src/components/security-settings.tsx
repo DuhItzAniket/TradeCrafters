@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { authErrorMessage } from "@/lib/auth-error";
 
 type SecurityState = {
   mfaEnabled: boolean;
@@ -61,7 +62,10 @@ export function SecuritySettings({
       });
       if (result.error)
         throw new Error(
-          result.error.message || "Could not begin authenticator setup.",
+          authErrorMessage(
+            result.error,
+            "Could not begin authenticator setup.",
+          ),
         );
       if (!result.data || !("totpURI" in result.data))
         throw new Error("Authenticator setup did not return a QR code.");
@@ -87,7 +91,9 @@ export function SecuritySettings({
         trustDevice: false,
       });
       if (result.error)
-        throw new Error(result.error.message || "Could not verify the code.");
+        throw new Error(
+          authErrorMessage(result.error, "Could not verify the code."),
+        );
       setEnrollment(null);
       const response = await fetch("/api/security");
       if (!response.ok)

@@ -17,9 +17,9 @@ The M1 foundation, M2 accounting and **M3 workbench implementation** are availab
 | Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                             |
 | Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open |
 | Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown   |
-| Server sessions, ownership checks and native-currency wallets  | Working locally with MySQL                                   |
+| Server sessions, ownership checks and native-currency wallets  | Local and hosted synthetic accounts verified                                   |
 | GitHub OAuth                                                   | Local and hosted HTTPS callback/reload verified; recovery checks pending |
-| Authenticator, admin roles and audited funding pause           | Working locally; explicit operator provisioning required     |
+| Authenticator, admin roles and audited funding pause           | Hosted factor/session and explicit owner role verified     |
 | Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled      |
 | Native buy/sell, exact basis/P&L and balanced cash journals    | Working with server-owned fictional quotes and venue rules   |
 | Explicit virtual FX and reporting valuation                    | Working across twelve currencies; fixed exercise rates       |
@@ -66,13 +66,13 @@ The scope is **stock exchanges worldwide**, including smaller and frontier marke
 
 Start with the [research index](docs/README.md), [global architecture](docs/architecture/global-markets.md), [market-data comparison](docs/research/02-market-data.md), [roadmap](docs/ROADMAP.md), and [GitHub tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2).
 
-The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. The owner deployed a [Vercel demo](https://tradecrafters-preview-gamma.vercel.app/); Aiven Singapore schema/seed, restricted identities, verified TLS and actual connection admission have passed operator-side checks. [Hosted setup evidence](docs/implementation/hosted-preview.md) records Production configuration, the serverless idle-connection fix and the remaining hosted/browser acceptance work. The demo is not yet an accepted public release.
+The new workspace pins a supported stack, runs on Node 24, and emits a production build with a Vercel/Node-container path. The owner deployed a [Vercel demo](https://tradecrafters-preview-gamma.vercel.app/); Aiven Singapore schema/seed, restricted identities, verified TLS and actual connection admission have passed operator-side checks. [Hosted setup evidence](docs/implementation/hosted-preview.md) records Production configuration, the serverless idle-connection fix and the remaining operational release work. The demo is not yet an accepted public release.
 
-**M4 is in progress.** [Deployment foundations and setup instructions](docs/implementation/deployment-foundations.md) cover bounded database acquisition, runtime grant/TLS inspection, a non-root standalone container, an encrypted isolated restore rehearsal and the remaining hosted release gates. Student feedback stays deferred; intended-domain sign-in and the complete hosted trading journey still need verification.
+**M4 is in progress.** [Deployment foundations and setup instructions](docs/implementation/deployment-foundations.md) cover bounded database acquisition, runtime grant/TLS inspection, a non-root standalone container, an encrypted isolated restore rehearsal and the remaining hosted release gates. Student feedback stays deferred. Intended-domain sign-in, native USD/GBP orders, FX, receipts, reload and hosted accounting reconciliation passed; operational recovery and release gates remain open.
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **55 domain/configuration and 76 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **56 domain/configuration and 76 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 
