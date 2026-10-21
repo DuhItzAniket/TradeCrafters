@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { createPool, type Pool, type PoolOptions } from "mysql2/promise";
+import { attachDatabasePool } from "@vercel/functions";
 
 const state = globalThis as typeof globalThis & { tradecraftersPool?: Pool };
 export function databaseConfiguration(
@@ -44,6 +45,10 @@ export function databaseConfiguration(
     database: decodeURIComponent(url.pathname.slice(1)),
     timezone: "Z",
     connectionLimit: size,
+    // mysql2 only starts its idle reaper when maxIdle < connectionLimit.
+    // Reap released sockets on its next sweep, including one-connection pools.
+    maxIdle: 0,
+    idleTimeout: 5000,
     // A small burst may queue, but getPool adds an acquisition deadline to the
     // callback pool so direct queries and the auth adapter share the same bound.
     waitForConnections: true,
@@ -94,8 +99,16 @@ export function databaseUnavailable(error: unknown): boolean {
 }
 export function getPool(): Pool {
   if (state.tradecraftersPool) return state.tradecraftersPool;
-  state.tradecraftersPool = createPool(databaseConfiguration());
+  const config = databaseConfiguration();
+  state.tradecraftersPool = createPool(config);
   const driver = state.tradecraftersPool.pool;
+  if (process.env.VERCEL === "1")
+    // Expose the documented event/idle interface. Passing mysql2's raw config
+    // makes this SDK version detect legacy MySQL's connectionConfig instead.
+    attachDatabasePool({
+      config: { idleTimeout: Number(config.idleTimeout) },
+      on: driver.on.bind(driver),
+    });
   const acquire = driver.getConnection.bind(driver);
   driver.getConnection = (callback) => {
     let completed = false;
@@ -122,7 +135,11 @@ export function getPool(): Pool {
   };
   // Driver timezone controls serialization; set the MySQL session timezone too.
   state.tradecraftersPool.pool.on("connection", (connection) => {
-    connection.query("SET time_zone = '+00:00'", (error) => {
+    const session =
+      process.env.NODE_ENV === "production"
+        ? "SET SESSION time_zone = '+00:00', wait_timeout = 60"
+        : "SET SESSION time_zone = '+00:00'";
+    connection.query(session, (error) => {
       if (error) connection.destroy();
     });
   });

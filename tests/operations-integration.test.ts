@@ -1,11 +1,27 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { getPool, closePool } from "@tradecrafters/database";
 import { databaseUnavailable } from "@tradecrafters/database/pool";
 import { api } from "../apps/web/src/lib/api";
 import { GET as health } from "../apps/web/src/app/api/health/route";
 after(closePool);
+
+test("serverless pools retain checked-out work, drain idle sockets before suspension and reconnect", async () => {
+  const { stdout } = await promisify(execFile)(
+    process.execPath,
+    [
+      "--import",
+      "tsx",
+      "--env-file=.env.local",
+      "tests/fixtures/pool-lifecycle.ts",
+    ],
+    { cwd: process.cwd(), windowsHide: true, timeout: 30000 },
+  );
+  assert.match(stdout, /Pool lifecycle verified/);
+});
 test("a saturated MySQL pool rejects a burst through promise and auth callback paths, then recovers", async () => {
   const pool = getPool();
   const held = [];

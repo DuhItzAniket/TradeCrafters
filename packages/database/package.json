@@ -19,6 +19,7 @@
     "@js-temporal/polyfill": "0.5.1",
     "@tradecrafters/domain": "*",
     "@tradecrafters/market-catalog": "*",
+    "@vercel/functions": "3.10.2",
     "better-auth": "1.7.11",
     "mysql2": "3.24.6"
   }
