@@ -257,6 +257,38 @@ try {
     "SELECT p.account_id,p.listing_id FROM positions p JOIN (SELECT o.account_id,o.listing_id,SUM(IF(o.side='BUY',o.quantity,-CAST(o.quantity AS SIGNED))) AS quantity,SUM(IF(o.side='BUY',CAST(JSON_UNQUOTE(JSON_EXTRACT(f.definition,'$.notionalMinor')) AS DECIMAL(30,0)),-CAST(JSON_UNQUOTE(JSON_EXTRACT(f.definition,'$.allocatedBasisMinor')) AS DECIMAL(30,0)))) AS basis,SUM(CAST(JSON_UNQUOTE(JSON_EXTRACT(f.definition,'$.realizedMinor')) AS DECIMAL(30,0))) AS realized FROM orders o JOIN fills f ON f.order_id=o.id GROUP BY o.account_id,o.listing_id) expected ON expected.account_id=p.account_id AND expected.listing_id=p.listing_id WHERE p.quantity<>expected.quantity OR p.cost_basis_minor<>expected.basis OR p.realized_minor<>expected.realized",
   );
   assert.equal(positionMismatch.length, 0);
+  stage = "verify restored execution guards";
+  const guard = await getPool().getConnection();
+  try {
+    await guard.beginTransaction();
+    await guard.query(
+      "UPDATE simulation_control SET execution_paused=true WHERE id=1",
+    );
+    const blocked = (error: unknown) =>
+      error instanceof Error &&
+      "sqlState" in error &&
+      error.sqlState === "45000" &&
+      "sqlMessage" in error &&
+      error.sqlMessage === "TRADECRAFTERS_EXECUTION_PAUSED";
+    await assert.rejects(
+      guard.execute(
+        "INSERT INTO orders (id,account_id,listing_id,side,quantity) VALUES (?,?,'sim-xnas-kite','BUY',1)",
+        [randomUUID(), account.id],
+      ),
+      blocked,
+    );
+    await assert.rejects(
+      guard.execute(
+        "INSERT INTO fx_conversions (id,account_id,quote_id,source_journal_id,target_journal_id,definition) SELECT ?,account_id,quote_id,source_journal_id,target_journal_id,definition FROM fx_conversions LIMIT 1",
+        [randomUUID()],
+      ),
+      blocked,
+    );
+  } finally {
+    await guard.rollback();
+    guard.release();
+  }
+  assert.deepEqual(await fingerprint(getPool()), before);
   const restoreMs = Math.round(performance.now() - restoreStarted);
   // Exercise an actual server-enforced aggregate cap across independent pools.
   const limitedPassword = randomBytes(32).toString("hex");
@@ -321,6 +353,7 @@ try {
     checks: [
       "all table/row fingerprints",
       "migration checksums",
+      "restored execution guards",
       "archived receipt recovery",
       "journal balance",
       "wallet balances",

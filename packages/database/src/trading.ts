@@ -378,10 +378,11 @@ async function transact(
     try {
       await connection.query("SET SESSION innodb_lock_wait_timeout=5");
       await connection.beginTransaction();
-      if (kind === "reset")
-        await connection.query(
-          "SELECT paused FROM simulation_control WHERE id=1 FOR SHARE",
-        );
+      // Control first, then user/account/session: the pause writer takes the
+      // same row exclusively and cannot commit ahead of admitted executions.
+      const [control] = await connection.query<RowDataPacket[]>(
+        "SELECT paused,execution_paused FROM simulation_control WHERE id=1 FOR SHARE",
+      );
       await connection.execute(
         "SELECT id FROM user WHERE id=?" +
           (kind === "reset" ? " FOR UPDATE" : " FOR SHARE"),
@@ -414,6 +415,15 @@ async function transact(
       };
       try {
         active(account);
+        if (
+          kind !== "reset" &&
+          (!control.length || Number(control[0].execution_paused) !== 0)
+        )
+          throw new TradingFault(
+            "EXECUTION_PAUSED",
+            "Trading and currency conversion are temporarily paused. Recover any previous receipt before reviewing a new operation after trading resumes.",
+            409,
+          );
         const result = await run(connection, account);
         receipt = { ...base, ...result };
         await connection.execute(

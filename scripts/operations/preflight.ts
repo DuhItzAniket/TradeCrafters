@@ -162,7 +162,7 @@ export async function inspectRuntime(localFixture = false) {
       "SELECT id,receipt,http_status FROM operation_records LIMIT 0",
     );
     const [control] = await connection.query<RowDataPacket[]>(
-      "SELECT id FROM simulation_control WHERE id=1",
+      "SELECT id,paused,execution_paused FROM simulation_control WHERE id=1",
     );
     const [catalog] = await connection.query<RowDataPacket[]>(
       "SELECT COUNT(*) AS count FROM listings WHERE id LIKE 'sim-%'",

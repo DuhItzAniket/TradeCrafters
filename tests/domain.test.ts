@@ -12,6 +12,7 @@ import {
   createAccountSchema,
   createWalletSchema,
   directoryQuery,
+  simulationControlSchema,
 } from "@tradecrafters/contracts";
 import { micDirectory, directorySource } from "@tradecrafters/market-catalog";
 import { scenarios } from "@tradecrafters/market-catalog/scenarios";
@@ -143,4 +144,23 @@ test("same symbol on separate venues keeps separate security/listing identity", 
   assert.notEqual(atlas[0].securityId, atlas[1].securityId);
   assert.notEqual(atlas[0].currency, atlas[1].currency);
   assert.equal(new Set(scenarios.map((row) => row.region)).size, 6);
+});
+
+test("admin control contracts distinguish execution from legacy funding and reject unknown scope", () => {
+  const command = { paused: true, reason: "Scheduled maintenance window" };
+  assert.equal(simulationControlSchema.parse(command).scope, "funding");
+  assert.equal(
+    simulationControlSchema.parse({ ...command, scope: "execution" }).scope,
+    "execution",
+  );
+  for (const extra of [
+    { scope: "all" },
+    { paused: "true" },
+    { executionPaused: true },
+    { reason: "short" },
+  ])
+    assert.equal(
+      simulationControlSchema.safeParse({ ...command, ...extra }).success,
+      false,
+    );
 });

@@ -56,7 +56,11 @@ export const verifyFactorSchema = z
   .object({ code: z.string().regex(/^\d{6}$/) })
   .strict();
 export const simulationControlSchema = z
-  .object({ paused: z.boolean(), reason: z.string().trim().min(10).max(300) })
+  .object({
+    scope: z.enum(["funding", "execution"]).default("funding"),
+    paused: z.boolean(),
+    reason: z.string().trim().min(10).max(300),
+  })
   .strict();
 export const directoryQuery = z
   .object({

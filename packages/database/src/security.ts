@@ -146,10 +146,12 @@ export async function manageAdmin(
 
 export async function simulationControl() {
   const [rows] = await getPool().query<RowDataPacket[]>(
-    "SELECT paused, updated_at FROM simulation_control WHERE id = 1",
+    "SELECT paused, execution_paused, updated_at FROM simulation_control WHERE id = 1",
   );
+  if (rows.length !== 1) throw new Error("Simulation controls unavailable.");
   return {
     paused: Number(rows[0].paused) === 1,
+    executionPaused: Number(rows[0].execution_paused) !== 0,
     updatedAt: new Date(rows[0].updated_at).toISOString(),
   };
 }
@@ -158,13 +160,25 @@ export async function updateSimulationControl(
   sessionId: string,
   paused: boolean,
   reason: string,
+  scope: "funding" | "execution" = "funding",
 ) {
+  if (
+    !["funding", "execution"].includes(scope) ||
+    typeof paused !== "boolean" ||
+    reason.trim().length < 10 ||
+    reason.length > 300
+  )
+    throw new Error(
+      "Supply a control scope, boolean state and a 10–300 character reason.",
+    );
   const connection = await getPool().getConnection();
   try {
     await connection.beginTransaction();
-    await connection.query(
+    const [control] = await connection.query<RowDataPacket[]>(
       "SELECT id FROM simulation_control WHERE id = 1 FOR UPDATE",
     );
+    if (control.length !== 1)
+      throw new Error("Simulation controls unavailable.");
     await connection.execute("SELECT id FROM user WHERE id = ? FOR UPDATE", [
       userId,
     ]);
@@ -182,7 +196,9 @@ export async function updateSimulationControl(
       return false;
     }
     await connection.execute(
-      "UPDATE simulation_control SET paused = ?, updated_at = UTC_TIMESTAMP(3) WHERE id = 1",
+      scope === "execution"
+        ? "UPDATE simulation_control SET execution_paused = ?, updated_at = UTC_TIMESTAMP(3) WHERE id = 1"
+        : "UPDATE simulation_control SET paused = ?, updated_at = UTC_TIMESTAMP(3) WHERE id = 1",
       [paused],
     );
     await connection.execute(
@@ -190,7 +206,13 @@ export async function updateSimulationControl(
       [
         userId,
         userId,
-        paused ? "simulation_pause" : "simulation_resume",
+        scope === "execution"
+          ? paused
+            ? "execution_pause"
+            : "execution_resume"
+          : paused
+            ? "simulation_pause"
+            : "simulation_resume",
         reason,
       ],
     );

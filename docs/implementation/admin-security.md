@@ -1,6 +1,6 @@
 # Authenticator and administrator operations
 
-This M1 slice adds account security and one privileged operation: pausing or resuming **new simulation opening grants**. It does not execute orders, move money or administer the worldwide catalog.
+The M1 foundation provides verified identity, authenticator enrollment, explicit administrator roles and a pause for new simulation opening grants. M4 adds an independent, audited **trading and FX execution pause**. These controls do not administer the worldwide catalog.
 
 ## Member setup
 
@@ -37,13 +37,17 @@ The commands validate prerequisites and record a reason in `security_audit`. Rev
 
 After a grant, reload **Account security** and enter a current authenticator code. The server checks the role, provider verification, enabled factor and current database session. Successful verification lasts five minutes for that session only. A code cannot be reused for another step-up during its validity window. Attempts have a persistent five-per-minute user budget in addition to the library's authentication limits.
 
-Administrator reads check authorization on each request. The funding write rechecks role, identity, session validity and proof expiry inside its MySQL transaction. Expired or revoked access is denied even when the browser still shows controls. Disabling a factor, revealing its provisioning URI or regenerating recovery codes also requires a recent sign-in and current authenticator verification; those management operations are not yet exposed by the UI. Successful enrollment setup or disabling clears existing privileged proofs across that user's sessions.
+Administrator reads check authorization on each request. Every control write rechecks role, identity, session validity and proof expiry inside its MySQL transaction. Expired or revoked access is denied even when the browser still shows controls. Disabling a factor, revealing its provisioning URI or regenerating recovery codes also requires a recent sign-in and current authenticator verification; those management operations are not yet exposed by the UI. Successful enrollment setup or disabling clears existing privileged proofs across that user's sessions.
 
 ## Funding pause and audit
 
 An administrator can pause/resume new account funding with a 10–300 character operational reason. The control and its audit event commit atomically. New opening grants acquire a shared lock on that control before the account transaction; the pause update acquires the corresponding exclusive lock. After a pause completes, a new grant fails with `503 / SIMULATION_PAUSED`. Existing account reads/retries retain their balances, and adding an empty wallet cannot mint funds.
 
 The page shows the latest 20 role/control audit events with UTC timestamps and reasons. Avoid private details in reasons. This application audit is not a tamper-proof external log: privileged database operators can modify it. Retention, operator attribution outside the database and centralized audit export belong to hosted operational hardening.
+
+## Trading and FX execution pause
+
+Account security now exposes separate execution and funding controls. The execution flag stops new buy/sell and currency conversion operations while preserving portfolio and receipt reads. Its shared/exclusive transaction boundary, older-deployment database guards, durable rejection/replay contract, migration permissions and restore requirements are specified in the [execution pause runbook](execution-pause.md). Hosted walkthrough status remains in #6.
 
 ## Verification and remaining gates
 

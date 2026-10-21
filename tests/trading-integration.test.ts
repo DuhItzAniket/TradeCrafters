@@ -18,6 +18,11 @@ import {
   type Actor,
 } from "@tradecrafters/database/trading";
 import { policyHash } from "../packages/database/src/policies";
+import {
+  manageAdmin,
+  simulationControl,
+  updateSimulationControl,
+} from "@tradecrafters/database/security";
 import { fixtureSql } from "./fixtures/mysql-operator";
 import {
   trainingScenario,
@@ -225,6 +230,10 @@ after(async () => {
       await getPool().execute("DELETE FROM mutation_budgets WHERE user_id=?", [
         user,
       ]);
+      await getPool().execute(
+        "DELETE FROM security_audit WHERE actor_user_id=? OR subject_user_id=?",
+        [user, user],
+      );
       await getPool().execute("DELETE FROM user WHERE id=?", [user]);
     }
   } finally {
@@ -885,4 +894,352 @@ test("receipt pagination is stable, bounded and cannot use another account's cur
     /not found/,
   );
   await reconcile();
+});
+
+async function executionAdmin() {
+  // Privileged synthetic fixture only; never enroll or alter the owner's factor.
+  await getPool().execute(
+    "UPDATE user SET emailVerified=true,twoFactorEnabled=true WHERE id=?",
+    [trader.id],
+  );
+  await getPool().execute(
+    "INSERT INTO twoFactor (id,secret,backupCodes,userId,verified) VALUES (?,?,?,?,true)",
+    [randomUUID(), "fixture-factor-not-a-real-secret", "[]", trader.id],
+  );
+  await getPool().execute(
+    "INSERT INTO mfa_stepups (session_id,expires_at) VALUES (?,UTC_TIMESTAMP(3)+INTERVAL 5 MINUTE)",
+    [trader.actor.sessionId],
+  );
+  await manageAdmin(trader.id, "grant", "Isolated execution control fixture");
+}
+async function awaitControlWaits(minimum = 1) {
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const waiting = Number(
+      fixtureSql(
+        "SELECT COUNT(*) FROM performance_schema.data_lock_waits w JOIN performance_schema.data_locks l ON l.ENGINE_LOCK_ID=w.REQUESTING_ENGINE_LOCK_ID WHERE l.OBJECT_SCHEMA=DATABASE() AND l.OBJECT_NAME='simulation_control'",
+      ),
+    );
+    if (waiting >= minimum) return;
+    await delay(50);
+  }
+  assert.fail("Expected an observed control-row lock wait");
+}
+async function restoreControls(
+  initial: Awaited<ReturnType<typeof simulationControl>>,
+) {
+  await getPool().execute(
+    "UPDATE simulation_control SET paused=?,execution_paused=? WHERE id=1",
+    [initial.paused, initial.executionPaused],
+  );
+}
+
+test("audited execution pause rejects HTTP buy/sell/FX, preserves receipts and resumes independently of funding", async () => {
+  const initial = await simulationControl();
+  await executionAdmin();
+  const originalBody = await intent(),
+    originalKey = randomUUID();
+  const original = await submitOrder(trader.actor, originalKey, originalBody);
+  const buys = await intent(),
+    sells = await intent(trader, "sim-xnas-kite", 1, "SELL");
+  const quote = await issueFxQuote(trader.id, trader.accountId, "USD", "GBP");
+  const fxBody = {
+    accountId: trader.accountId,
+    quoteId: quote.id,
+    sourceMinor: "10000",
+  };
+  const before = await portfolio(trader.id, trader.accountId),
+    rejectedKey = randomUUID();
+  try {
+    const pause = await post(
+      "/api/admin/control",
+      {
+        scope: "execution",
+        paused: true,
+        reason: "Isolated execution maintenance test",
+      },
+      trader.cookie,
+    );
+    assert.equal(pause.status, 200);
+    const data = await pause.json();
+    assert.equal(data.control.executionPaused, true);
+    assert.equal(data.control.paused, initial.paused);
+    assert.equal(data.audit[0].action, "execution_pause");
+    for (const [path, body, key] of [
+      ["/api/trading/orders", buys, rejectedKey],
+      ["/api/trading/orders", sells, randomUUID()],
+      ["/api/trading/fx", fxBody, randomUUID()],
+    ] as const) {
+      const response = await post(path, body, trader.cookie, key);
+      assert.equal(response.status, 409);
+      const saved = await response.json();
+      assert.equal(saved.receipt.status, "rejected");
+      assert.equal(saved.receipt.code, "EXECUTION_PAUSED");
+    }
+    assert.deepEqual(
+      await submitOrder(trader.actor, originalKey, originalBody),
+      original,
+    );
+    assert.deepEqual(
+      await operationByKey(trader.id, trader.accountId, originalKey),
+      original,
+    );
+    const during = await portfolio(trader.id, trader.accountId);
+    assert.deepEqual(during.wallets, before.wallets);
+    assert.deepEqual(during.positions, before.positions);
+    assert.equal((await counts()).orders, 1);
+    const pausedReceipt = await operationByKey(
+      trader.id,
+      trader.accountId,
+      rejectedKey,
+    );
+    const resumed = await post(
+      "/api/admin/control",
+      {
+        scope: "execution",
+        paused: false,
+        reason: "Isolated execution maintenance completed",
+      },
+      trader.cookie,
+    );
+    assert.equal(resumed.status, 200);
+    assert.equal((await resumed.json()).audit[0].action, "execution_resume");
+    assert.deepEqual(
+      await submitOrder(trader.actor, rejectedKey, buys),
+      pausedReceipt,
+      "resuming must not reinterpret a durable rejected key",
+    );
+    filled(await submitOrder(trader.actor, randomUUID(), await intent()));
+    assert.equal(
+      (await convertFx(trader.actor, randomUUID(), fxBody)).receipt.status,
+      "converted",
+    );
+    assert.equal(
+      await updateSimulationControl(
+        trader.id,
+        trader.actor.sessionId,
+        true,
+        "Independent funding-only pause fixture",
+      ),
+      true,
+    );
+    filled(await submitOrder(trader.actor, randomUUID(), await intent()));
+    await reconcile();
+  } finally {
+    await restoreControls(initial);
+  }
+});
+
+test("database guards reject old-style order/FX inserts without changing financial records", async () => {
+  const initial = await simulationControl();
+  const quote = await issueFxQuote(trader.id, trader.accountId, "USD", "GBP");
+  const fx = await convertFx(trader.actor, randomUUID(), {
+    accountId: trader.accountId,
+    quoteId: quote.id,
+    sourceMinor: "10000",
+  });
+  assert.equal(fx.receipt.status, "converted");
+  const before = await portfolio(trader.id, trader.accountId),
+    beforeCounts = await counts();
+  const connection = await getPool().getConnection();
+  try {
+    await getPool().query(
+      "UPDATE simulation_control SET execution_paused=true WHERE id=1",
+    );
+    await connection.beginTransaction();
+    await connection.execute(
+      "UPDATE wallets SET balance_minor=balance_minor-1 WHERE account_id=? AND currency='USD'",
+      [trader.accountId],
+    );
+    const blocked = (error: unknown) =>
+      error instanceof Error &&
+      "sqlState" in error &&
+      error.sqlState === "45000" &&
+      "sqlMessage" in error &&
+      error.sqlMessage === "TRADECRAFTERS_EXECUTION_PAUSED";
+    await assert.rejects(
+      connection.execute(
+        "INSERT INTO orders (id,account_id,listing_id,side,quantity) VALUES (?,?,'sim-xnas-kite','BUY',1)",
+        [randomUUID(), trader.accountId],
+      ),
+      blocked,
+    );
+    await assert.rejects(
+      connection.execute(
+        "INSERT INTO fx_conversions (id,account_id,quote_id,source_journal_id,target_journal_id,definition) SELECT ?,account_id,quote_id,source_journal_id,target_journal_id,definition FROM fx_conversions WHERE account_id=? LIMIT 1",
+        [randomUUID(), trader.accountId],
+      ),
+      blocked,
+    );
+  } finally {
+    await connection.rollback();
+    connection.release();
+    await restoreControls(initial);
+  }
+  assert.deepEqual(
+    (await portfolio(trader.id, trader.accountId)).wallets,
+    before.wallets,
+  );
+  assert.deepEqual(await counts(), beforeCounts);
+  await reconcile();
+});
+
+test("orders and FX waiting behind a committed pause reject using the current locked state", async () => {
+  const initial = await simulationControl(),
+    body = await intent();
+  const quote = await issueFxQuote(trader.id, trader.accountId, "USD", "GBP");
+  const writer = await getPool().getConnection();
+  const pending: Promise<OperationResult>[] = [];
+  try {
+    await writer.beginTransaction();
+    await writer.query(
+      "UPDATE simulation_control SET execution_paused=true WHERE id=1",
+    );
+    pending.push(
+      submitOrder(trader.actor, randomUUID(), body),
+      convertFx(trader.actor, randomUUID(), {
+        accountId: trader.accountId,
+        quoteId: quote.id,
+        sourceMinor: "10000",
+      }),
+    );
+    await awaitControlWaits(2);
+    await writer.commit();
+    for (const result of await Promise.all(pending)) {
+      assert.equal(result.receipt.status, "rejected");
+      if (result.receipt.status !== "rejected") throw Error();
+      assert.equal(result.receipt.code, "EXECUTION_PAUSED");
+    }
+    assert.equal((await counts()).orders, 0);
+    assert.equal((await counts()).journals, 1);
+    await reconcile();
+  } finally {
+    await writer.rollback();
+    writer.release();
+    await Promise.allSettled(pending);
+    await restoreControls(initial);
+  }
+});
+
+test("pause acknowledgement waits for an admitted trade commit and records the operator reason", async () => {
+  const initial = await simulationControl();
+  await executionAdmin();
+  const body = await intent(),
+    lock = `tc_pause_${randomUUID()}`,
+    trigger = `tc_pause_${randomUUID().replaceAll("-", "")}`;
+  const blocker = await getPool().getConnection();
+  await blocker.query("SELECT GET_LOCK(?,5)", [lock]);
+  fixtureSql(
+    `CREATE TRIGGER ${trigger} BEFORE INSERT ON fills FOR EACH ROW BEGIN IF EXISTS(SELECT 1 FROM orders WHERE id=NEW.order_id AND account_id='${trader.accountId}') THEN SET @fixture_lock=GET_LOCK('${lock}',15); END IF; END`,
+  );
+  const order = submitOrder(trader.actor, randomUUID(), body);
+  let pause: Promise<boolean> | undefined;
+  try {
+    let blocked = false;
+    for (let i = 0; i < 40; i++) {
+      if (
+        Number(
+          fixtureSql(
+            `SELECT COUNT(*) FROM performance_schema.metadata_locks WHERE OBJECT_TYPE='USER LEVEL LOCK' AND OBJECT_NAME='${lock}' AND LOCK_STATUS='PENDING'`,
+          ),
+        ) > 0
+      ) {
+        blocked = true;
+        break;
+      }
+      await delay(50);
+    }
+    assert.equal(
+      blocked,
+      true,
+      "trade must reach its controlled pre-commit barrier",
+    );
+    pause = updateSimulationControl(
+      trader.id,
+      trader.actor.sessionId,
+      true,
+      "Wait for admitted execution before acknowledgement",
+      "execution",
+    );
+    await awaitControlWaits();
+    await blocker.query("SELECT RELEASE_LOCK(?)", [lock]);
+    filled(await order);
+    assert.equal(await pause, true);
+    const [audits] = await getPool().execute<RowDataPacket[]>(
+      "SELECT reason FROM security_audit WHERE actor_user_id=? AND action='execution_pause'",
+      [trader.id],
+    );
+    assert.equal(audits.length, 1);
+    assert.equal(
+      audits[0].reason,
+      "Wait for admitted execution before acknowledgement",
+    );
+    const afterPause = await submitOrder(
+      trader.actor,
+      randomUUID(),
+      await intent(),
+    );
+    assert.equal(afterPause.receipt.status, "rejected");
+    assert.equal((await counts()).orders, 1);
+    await reconcile();
+  } finally {
+    await blocker.query("SELECT RELEASE_LOCK(?)", [lock]);
+    blocker.release();
+    await Promise.allSettled([order, ...(pause ? [pause] : [])]);
+    fixtureSql(`DROP TRIGGER IF EXISTS ${trigger}`);
+    await restoreControls(initial);
+  }
+});
+
+test("queued pause writes recheck expired session proof and revoked roles before changing state", async () => {
+  const initial = await simulationControl();
+  await executionAdmin();
+  for (const mode of ["expired", "revoked"] as const) {
+    if (mode === "revoked")
+      await getPool().execute(
+        "UPDATE mfa_stepups SET expires_at=UTC_TIMESTAMP(3)+INTERVAL 5 MINUTE WHERE session_id=?",
+        [trader.actor.sessionId],
+      );
+    const blocker = await getPool().getConnection();
+    let pending: Promise<boolean> | undefined;
+    try {
+      await blocker.beginTransaction();
+      await blocker.query(
+        "SELECT id FROM simulation_control WHERE id=1 FOR UPDATE",
+      );
+      pending = updateSimulationControl(
+        trader.id,
+        trader.actor.sessionId,
+        true,
+        "Queued unauthorized pause must not commit",
+        "execution",
+      );
+      await awaitControlWaits();
+      if (mode === "expired")
+        await getPool().execute(
+          "UPDATE mfa_stepups SET expires_at=UTC_TIMESTAMP(3)-INTERVAL 1 SECOND WHERE session_id=?",
+          [trader.actor.sessionId],
+        );
+      else
+        await manageAdmin(
+          trader.id,
+          "revoke",
+          "Queued pause role revocation fixture",
+        );
+      await blocker.commit();
+      assert.equal(await pending, false);
+      assert.equal(
+        (await simulationControl()).executionPaused,
+        initial.executionPaused,
+      );
+    } finally {
+      await blocker.rollback();
+      blocker.release();
+      if (pending) await Promise.allSettled([pending]);
+    }
+  }
+  const [audits] = await getPool().execute<RowDataPacket[]>(
+    "SELECT COUNT(*) AS count FROM security_audit WHERE actor_user_id=? AND action='execution_pause'",
+    [trader.id],
+  );
+  assert.equal(Number(audits[0].count), 0);
 });
