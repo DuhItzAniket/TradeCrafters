@@ -1,5 +1,6 @@
 import { toNextJsHandler } from "better-auth/next-js";
 import { getAuth } from "@tradecrafters/database/auth";
+import { confirmSignOut } from "@/lib/sign-out";
 import {
   api,
   assertOrigin,
@@ -63,14 +64,19 @@ export async function POST(request: Request) {
       }
     }
     const body = await boundedBody(request);
-    const response = await toNextJsHandler(getAuth()).POST(
-      new Request(request.url, {
-        method: request.method,
-        headers: request.headers,
-        body,
-        signal: request.signal,
-      }),
-    );
+    const invoke = () =>
+      toNextJsHandler(getAuth()).POST(
+        new Request(request.url, {
+          method: request.method,
+          headers: request.headers,
+          body,
+          signal: request.signal,
+        }),
+      );
+    const response =
+      path === "/api/auth/sign-out"
+        ? await confirmSignOut(request, invoke)
+        : await invoke();
     if (
       response.ok &&
       settingsUserId &&

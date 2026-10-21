@@ -73,7 +73,7 @@ The new workspace pins a supported stack, runs on Node 24, and emits a productio
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **64 domain/configuration and 90 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **64 domain/configuration and 92 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 
