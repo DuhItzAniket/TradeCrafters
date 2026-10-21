@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm ci --include=dev --workspace=@tradecrafters/web",
-  "regions": ["sin1"]
+  "regions": ["bom1"]
 }

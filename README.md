@@ -12,21 +12,22 @@ The M1 foundation, M2 accounting and **M3 workbench implementation** are availab
 
 ## Current capabilities
 
-| Capability                                                     | Status                                                       |
-| -------------------------------------------------------------- | ------------------------------------------------------------ |
-| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                             |
-| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open |
-| Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown   |
-| Server sessions, ownership checks and native-currency wallets  | Local and hosted synthetic accounts verified                                   |
+| Capability                                                     | Status                                                                   |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                                         |
+| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open             |
+| Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown               |
+| Server sessions, ownership checks and native-currency wallets  | Local and hosted synthetic accounts verified                             |
 | GitHub OAuth                                                   | Local and hosted HTTPS callback/reload verified; recovery checks pending |
-| Authenticator, admin roles and audited simulation controls           | Hosted factor/session and explicit owner role verified     |
-| Shared request budgets and anonymous/auth counter expiry       | Hosted spoof-header, throttle, retry and idle cleanup verified |
-| Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled      |
-| Native buy/sell, exact basis/P&L and balanced cash journals    | Working with server-owned fictional quotes and venue rules   |
-| Explicit virtual FX and reporting valuation                    | Working across twelve currencies; fixed exercise rates       |
-| Durable receipts, retry recovery and archive/reset history     | Working locally; verified with MySQL races and process death |
-| Chart workbench, watchlists and real-venue coverage states     | Working locally; observed student walkthroughs pending       |
-| Real exchange data and public deployment                       | Coverage, licensing and operational gates pending            |
+| Authenticator, admin roles and audited simulation controls     | Hosted factor/session and explicit owner role verified                   |
+| Shared request budgets and anonymous/auth counter expiry       | Hosted spoof-header, throttle, retry and idle cleanup verified           |
+| Versioned calendars, lots, ticks, bands and permission checks  | Ten fictional policies; real-market simulation disabled                  |
+| Native buy/sell, exact basis/P&L and balanced cash journals    | Working with server-owned fictional quotes and venue rules               |
+| Explicit virtual FX and reporting valuation                    | Working across twelve currencies; fixed exercise rates                   |
+| Durable receipts, retry recovery and archive/reset history     | Working locally; verified with MySQL races and process death             |
+| Chart workbench, watchlists and real-venue coverage states     | Working locally; observed student walkthroughs pending                   |
+| Hosted synthetic demo                                          | Live on Vercel; M4 operational acceptance in progress                    |
+| Real exchange data                                             | Coverage and licensing remain on the worldwide roadmap                   |
 
 ## Run locally
 
@@ -73,7 +74,7 @@ The new workspace pins a supported stack, runs on Node 24, and emits a productio
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **64 domain/configuration and 92 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **66 domain/configuration and 92 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 
