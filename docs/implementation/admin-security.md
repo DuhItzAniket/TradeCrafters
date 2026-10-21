@@ -10,7 +10,7 @@ QR data, authenticator keys, recovery codes and cookies must never enter issues,
 
 Local password accounts must complete a second-factor challenge after password sign-in. A recovery code is single use. GitHub OAuth continues to use GitHub's own sign-in protection; the library's two-factor plugin does not automatically challenge OAuth login. TradeCrafters therefore verifies a separate authenticator code before every five-minute window of administrator access. Neither OAuth sign-in nor recovery-code sign-in grants that access.
 
-The current UI supports enrollment and verification. Factor replacement, self-service recovery management and an assisted lost-device recovery process remain follow-up work. There is no public role-grant or MFA-reset endpoint.
+The current UI supports enrollment and verification. The [independent owner-recovery procedure](owner-recovery.md) provides a separate operator command to revoke a matched repository owner's role, sessions, trusted devices and old factor atomically, with durable case replay. It issues no replacement authority; fresh sign-in/enrollment and an independently reviewed grant are required. Other members' self-service factor replacement remains follow-up work. There is no public role-grant or MFA-reset endpoint.
 
 Sign-out now confirms that a captured session is no longer valid before returning success. An uncertain deletion or confirmation returns a retryable error without the SDK's clearing cookies; the account UI retains its error/retry path. The [session verification record](hosted-identity.md#confirmed-sign-out) distinguishes local injected write/read failures from actual hosted normal-path revocation checks.
 

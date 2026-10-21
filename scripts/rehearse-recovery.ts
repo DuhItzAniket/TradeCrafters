@@ -24,6 +24,7 @@ import {
   operationByKey,
 } from "@tradecrafters/database/trading";
 import { sealBackup, openBackup } from "./operations/backup-envelope";
+import { exerciseRecoveryFixture } from "./operations/recovery-fixture";
 import {
   captureSnapshot,
   snapshotBytes,
@@ -353,6 +354,8 @@ try {
     logicalDatabase,
   );
   assert.deepEqual(maintenanceRestored, { triggers: 2, enabledEvents: 2 });
+  stage = "isolated identity recovery fixture";
+  await exerciseRecoveryFixture(getPool(), logicalDatabase);
   await migrate();
   // Exercise an actual server-enforced aggregate cap across independent pools.
   const limitedPassword = randomBytes(32).toString("hex");
@@ -429,6 +432,7 @@ try {
       "guarded logical archive restore and foreign keys",
       "existing target rejection",
       "restored session authority discarded",
+      "isolated identity recovery, scope and durable replay",
     ],
   };
   await writeFile(

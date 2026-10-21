@@ -21,6 +21,7 @@ import {
   snapshotFingerprint,
 } from "./operations/database-snapshot";
 import { openBackup } from "./operations/backup-envelope";
+import { exerciseRecoveryFixture } from "./operations/recovery-fixture";
 
 // No existing-target option. Every run provisions its own random, capped
 // restore identity/schema; it has no app URL, OAuth app or public runtime.
@@ -127,6 +128,8 @@ try {
   Object.assign(report, await discardRestoredAuthority(target, database));
   stage = "restore reviewed maintenance";
   report.maintenance = await restoreMaintenance(target, database);
+  stage = "isolated owner-recovery fixture";
+  report.identityRecovery = await exerciseRecoveryFixture(target, database);
   await target.end();
   target = undefined;
   stage = "migration checksum recheck";
