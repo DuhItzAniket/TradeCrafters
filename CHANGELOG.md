@@ -1,5 +1,12 @@
 # Changelog
 
+## 21 October 2026 — Audited execution pause
+
+- Add independent trading/FX and funding controls with explicit reasons, current-session authorization and atomic audit events.
+- Serialize pause acknowledgement with admitted executions, preserve saved receipts and durably reject new paused operations. Add database guards for older deployments and verify those guards survive encrypted restore.
+- Add guarded local trigger installation, scoped hosted migration requirements and five HTTP/MySQL race/accounting regressions plus a strict scope contract check. Runtime grants remain unchanged; hosted rollout is tracked in M4 #6.
+
+
 ## 21 October 2026 — Authenticator setup guidance
 
 - Preserve the application's actionable auth-guard errors through the SDK's nested error envelope. Expired setup sessions now show the existing sign-out/sign-in instruction instead of a generic setup failure; the ten-minute freshness guard remains enforced.

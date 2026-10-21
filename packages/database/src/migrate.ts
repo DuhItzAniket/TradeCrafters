@@ -3,7 +3,9 @@ import { readdir, readFile } from "node:fs/promises";
 import type { RowDataPacket } from "mysql2/promise";
 import { getPool } from "./pool";
 
-export async function migrate() {
+export async function migrate(options?: {
+  applyCompoundStatement?: (sql: string) => Promise<void>;
+}) {
   const connection = await getPool().getConnection();
   try {
     const [lock] = await connection.query<RowDataPacket[]>(
@@ -40,12 +42,23 @@ export async function migrate() {
         "INSERT INTO schema_migrations (name, checksum) VALUES (?, ?)",
         [name, checksum],
       );
-      const statements = sql
-        .replace(/^--.*$/gm, "")
-        .split(";")
-        .map((part) => part.trim())
-        .filter(Boolean);
-      for (const statement of statements) await connection.query(statement);
+      // Compound trigger bodies contain semicolons. A marked file is one SQL
+      // statement, sent intact; mysql2 still disallows multiple statements.
+      const statements = sql.startsWith("-- @single-statement\n")
+        ? [sql]
+        : sql
+            .replace(/^--.*$/gm, "")
+            .split(";")
+            .map((part) => part.trim())
+            .filter(Boolean);
+      for (const statement of statements) {
+        if (
+          sql.startsWith("-- @single-statement\n") &&
+          options?.applyCompoundStatement
+        )
+          await options.applyCompoundStatement(statement);
+        else await connection.query(statement);
+      }
       await connection.execute(
         "UPDATE schema_migrations SET completed = true WHERE name = ?",
         [name],

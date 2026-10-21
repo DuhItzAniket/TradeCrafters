@@ -13,7 +13,7 @@ type SecurityState = {
   stepUpExpiresAt: string | null;
 };
 type AdminControl = {
-  control: { paused: boolean; updatedAt: string };
+  control: { paused: boolean; executionPaused: boolean; updatedAt: string };
   audit: {
     action: string;
     reason: string;
@@ -139,7 +139,10 @@ export function SecuritySettings({
       setPending(false);
     }
   }
-  async function toggle(event: FormEvent<HTMLFormElement>) {
+  async function toggle(
+    event: FormEvent<HTMLFormElement>,
+    scope: "funding" | "execution",
+  ) {
     event.preventDefault();
     if (!admin) return;
     setPending(true);
@@ -149,7 +152,10 @@ export function SecuritySettings({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          paused: !admin.control.paused,
+          scope,
+          paused: !(scope === "execution"
+            ? admin.control.executionPaused
+            : admin.control.paused),
           reason: new FormData(event.currentTarget).get("reason"),
         }),
       });
@@ -160,13 +166,15 @@ export function SecuritySettings({
             "The change could not be confirmed. Reload the controls before retrying.",
         );
       setAdmin(data);
-      setMessage("Funding control updated and recorded in the audit log.");
+      setMessage(
+        `${scope === "execution" ? "Execution" : "Funding"} control updated and recorded in the audit log.`,
+      );
     } catch (error) {
       setAdmin(null);
       setMessage(
         error instanceof Error
           ? error.message
-          : "Reload to confirm the funding state before retrying.",
+          : "Reload to confirm the control state before retrying.",
       );
     } finally {
       setPending(false);
@@ -311,7 +319,7 @@ export function SecuritySettings({
           <div className="panel-heading">
             <div>
               <span className="eyebrow">ADMINISTRATOR CONTROLS</span>
-              <h2>Simulation funding</h2>
+              <h2>Simulation controls</h2>
             </div>
             <span className="synthetic-pill">Privileged access</span>
           </div>
@@ -347,31 +355,48 @@ export function SecuritySettings({
             </div>
           ) : (
             <div className="admin-content">
-              <div className="admin-state">
-                <span className="status-dot" /> New account funding is{" "}
-                {admin.control.paused ? "paused" : "available"}
-              </div>
-              <p>
-                This control gates new opening grants. Include an operational
-                reason for every change.
-              </p>
-              <form onSubmit={toggle}>
-                <label className="field">
-                  <span>Reason for this change</span>
-                  <input
-                    name="reason"
-                    required
-                    minLength={10}
-                    maxLength={300}
-                    placeholder="For example: maintenance window completed"
-                  />
-                </label>
-                <button disabled={pending} className="button primary">
-                  {admin.control.paused
-                    ? "Resume new account funding"
-                    : "Pause new account funding"}
-                </button>
-              </form>
+              {(["execution", "funding"] as const).map((scope) => {
+                const paused =
+                  scope === "execution"
+                    ? admin.control.executionPaused
+                    : admin.control.paused;
+                const label =
+                  scope === "execution"
+                    ? "Trading and FX"
+                    : "New account funding";
+                return (
+                  <section key={scope} aria-label={label}>
+                    <h3>{label}</h3>
+                    <div className="admin-state">
+                      <span className="status-dot" /> {label}{" "}
+                      {paused ? "paused" : "available"}
+                    </div>
+                    <p>
+                      {scope === "execution"
+                        ? "Pauses new buy/sell orders and currency conversions. Admitted transactions finish before the pause is confirmed. Portfolios and saved receipts remain available."
+                        : "Pauses new opening grants and account resets. This is separate from trading and currency conversion."}
+                    </p>
+                    <form onSubmit={(event) => toggle(event, scope)}>
+                      <label className="field">
+                        <span>Reason for {scope} change</span>
+                        <input
+                          name="reason"
+                          required
+                          minLength={10}
+                          maxLength={300}
+                          placeholder="For example: maintenance window completed"
+                        />
+                      </label>
+                      <button disabled={pending} className="button primary">
+                        {paused ? "Resume" : "Pause"}{" "}
+                        {scope === "execution"
+                          ? "trading and FX"
+                          : "new account funding"}
+                      </button>
+                    </form>
+                  </section>
+                );
+              })}
               <h3>Recent audit events</h3>
               <ul className="audit-list">
                 {admin.audit.map((entry, index) => (

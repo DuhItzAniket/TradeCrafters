@@ -24,6 +24,7 @@ export async function POST(request: Request) {
         session.session.id,
         body.paused,
         body.reason,
+        body.scope,
       ))
     )
       throw new ApiError(
