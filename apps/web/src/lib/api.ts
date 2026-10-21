@@ -28,7 +28,17 @@ export const json = (value: unknown, status = 200) =>
 export async function api(run: () => Promise<Response>, request: Request) {
   try {
     await guardRequest(request);
-    return await run();
+    const response = await run();
+    // SDK responses include redirects and errors as well as session data.
+    // Copy headers so immutable redirects work and separate Set-Cookie values
+    // survive; pass the original stream through without buffering it.
+    const headers = new Headers(response.headers);
+    headers.set("Cache-Control", "no-store");
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
   } catch (error) {
     if (error instanceof RequestLimited || error instanceof IngressUnavailable)
       return Response.json(
