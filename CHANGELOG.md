@@ -1,5 +1,10 @@
 # Changelog
 
+## 21 October 2026 — Consistent authentication response privacy
+
+- Enforce no-store at the shared API boundary for SDK responses as well as application JSON, preserving distinct cookies, body streams, status and immutable redirects. This corrects the observed public-revalidation directive on an anonymous session-list rejection.
+- Add a regression for the response semantics and actual HTTP SDK success/rejection/callback paths. The suite now includes 64 unit/configuration and 90 HTTP/MySQL checks. Document the scoped hosted callback/session drill separately from provider identity and owner factor recovery.
+
 ## 21 October 2026 — Persistent request admission
 
 - Add shared database-backed read/auth/write network and service allowances, strict Vercel client-address selection, IPv6 /64 normalization, rotating HMAC counters and fail-closed bounded admission locks. Keep stronger auth endpoint limits and existing financial transaction settings.

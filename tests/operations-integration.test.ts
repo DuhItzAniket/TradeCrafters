@@ -87,6 +87,54 @@ test("HTTP liveness is database-free and discloses no configuration", async () =
   assert.deepEqual(await response.json(), { status: "ok" });
 });
 
+test("API admission preserves SDK cookies, redirects and bodies while making every response non-storable", async () => {
+  const request = new Request("http://127.0.0.1:3000/api/auth/get-session");
+  const source = Response.json(
+    { fixture: true },
+    {
+      status: 201,
+      headers: { "Cache-Control": "public, max-age=3600", Vary: "Cookie" },
+    },
+  );
+  source.headers.append(
+    "Set-Cookie",
+    "fixture_a=one; Path=/; HttpOnly; Secure; SameSite=Lax",
+  );
+  source.headers.append(
+    "Set-Cookie",
+    "fixture_b=two; Path=/; HttpOnly; Secure; SameSite=Lax",
+  );
+  const expectedCookies = source.headers.getSetCookie();
+  const response = await api(async () => source, request);
+  assert.equal(response.status, 201);
+  assert.equal(response.headers.get("Cache-Control"), "no-store");
+  assert.equal(response.headers.get("Vary"), "Cookie");
+  assert.deepEqual(response.headers.getSetCookie(), expectedCookies);
+  assert.deepEqual(await response.json(), { fixture: true });
+  // Response.redirect has immutable headers; mutating it in place would fail.
+  const redirected = await api(
+    async () => Response.redirect("http://127.0.0.1:3000/sign-in", 307),
+    request,
+  );
+  assert.equal(redirected.status, 307);
+  assert.equal(
+    redirected.headers.get("Location"),
+    "http://127.0.0.1:3000/sign-in",
+  );
+  assert.equal(redirected.headers.get("Cache-Control"), "no-store");
+  const base = process.env.BETTER_AUTH_URL || "http://127.0.0.1:3000";
+  for (const path of [
+    "/api/auth/get-session",
+    "/api/auth/list-sessions",
+    "/api/auth/callback/github?code=fixture-code&state=forged-fixture-state",
+  ]) {
+    const actual = await fetch(base + path, { redirect: "manual" });
+    assert.ok([200, 302, 401].includes(actual.status));
+    assert.equal(actual.headers.get("Cache-Control"), "no-store");
+    await actual.arrayBuffer();
+  }
+});
+
 test("an acquisition timeout never executes its queued SQL after a connection becomes available", async () => {
   const pool = getPool(),
     held = [],
