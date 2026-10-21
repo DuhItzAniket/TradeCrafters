@@ -1,5 +1,11 @@
 # Changelog
 
+## 21 October 2026 — Persistent request admission
+
+- Add shared database-backed read/auth/write network and service allowances, strict Vercel client-address selection, IPv6 /64 normalization, rotating HMAC counters and fail-closed bounded admission locks. Keep stronger auth endpoint limits and existing financial transaction settings.
+- Add bounded subject storage, minute-scheduled anonymous/auth expiry, an auth expiry index, restricted counter grants and an authored retry page. Encrypted recovery now includes enabled expiry events; the suite passes 64 unit/configuration and 89 HTTP/MySQL checks.
+- Verify hosted schema preparation and Production rollout, a 192-request spoof-header exercise (180 admitted invalid reads, 12 throttles), retry/browser recovery and a separate two-row idle expiry fixture. Preserve the original operator polling timeout in the evidence. M4 remains open for representative capacity and other operational gates; non-Vercel ingress requires a trusted adapter.
+
 ## 21 October 2026 — Audited execution pause
 
 - Add independent trading/FX and funding controls with explicit reasons, current-session authorization and atomic audit events.
