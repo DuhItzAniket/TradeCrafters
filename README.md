@@ -30,6 +30,7 @@ The M1 foundation, M2 accounting and **M3 workbench implementation** are availab
 | Durable receipts, retry recovery and archive/reset history     | Working locally; verified with MySQL races and process death            |
 | Chart workbench, watchlists and real-venue coverage states     | Working locally; observed student walkthroughs pending                  |
 | Hosted synthetic demo                                          | M4 accepted on Vercel Hobby + Aiven Free                                |
+| Historical provider adapters                                   | Private operator boundary; Twelve Data/EODHD simulated contracts pass  |
 | Real exchange data                                             | Coverage and licensing remain on the worldwide roadmap                  |
 
 ## Run locally
@@ -77,7 +78,9 @@ The [setup runbook](docs/implementation/deployment-foundations.md), [data lifecy
 
 ## Engineering workflow
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **68 domain/configuration and 96 integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+M5 has started with [private historical-data adapters and their acceptance gates](docs/implementation/provider-history.md). `npm run test:providers` exercises the actual HTTP clients against local Postman contract fixtures; no accounts or provider keys are needed. These checks add zero to verified real-exchange coverage. Live provider acceptance, public usage rights and shared runtime quotas remain open.
+
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **76 domain/configuration, four provider HTTP and 96 MySQL/HTTP integration checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 

@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { createRequire } from "node:module";
+import { parseGlobalConfig } from "@vercel/cli-config";
 import {
   databaseConfiguration,
   databaseUnavailable,
@@ -7,6 +9,17 @@ import {
 const local = {
   DATABASE_URL: "mysql://fixture:fixture@127.0.0.1:3307/fixture_db",
 };
+
+test("Vercel configuration resolves patched Zod and preserves valid/invalid configuration behavior", () => {
+  const require = createRequire(import.meta.url);
+  const vendorRequire = createRequire(require.resolve("@vercel/cli-config"));
+  assert.equal(vendorRequire("zod/package.json").version, "4.6.7");
+  assert.equal(
+    parseGlobalConfig({ currentTeam: "team_fixture" }).currentTeam,
+    "team_fixture",
+  );
+  assert.throws(() => parseGlobalConfig({ currentTeam: 123 }));
+});
 test("database URLs cannot smuggle TLS options or expose invalid URL values", () => {
   for (const value of [
     "private-invalid-value",
