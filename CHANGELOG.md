@@ -1,5 +1,11 @@
 # Changelog
 
+## Worldwide inventory evidence — 24 October 2026
+
+- Add fifteen source-bound MIC assessments across six regions: eleven cash-equity-presence records, two other facilities and two unresolved. Keep all 2,889 reference rows visible and preserve explicit Bhutan/Ethiopia mapping gaps outside the MIC denominator.
+- Add canonical identity/source hashes, scope/access checks, expiring assessments, operating-group counts and reproducible Markdown/CSV artifacts. Publish classifications through the existing audited, retry-safe operator workflow; no data capability or financial write is enabled.
+- Add four regression checks and CI artifact verification. The suite now contains 201 checks; worldwide classification, prior effective baseline and M5 real-provider acceptance remain open.
+
 ## M5 private research coordination — 24 October 2026
 
 - Add a separate MySQL research store with atomic account/feed credit reservations, fenced request leases, durable cooldown/denial and conservative crash charging. Keep provider HTTP outside transactions and real data outside the trading ledger.
