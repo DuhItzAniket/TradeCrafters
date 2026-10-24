@@ -13,6 +13,10 @@ const fail = (check: string): never => {
   throw new PreflightFailure(check);
 };
 export function webEnvironment(env: NodeJS.ProcessEnv = process.env) {
+  if (
+    Object.keys(env).some((name) => name.startsWith("PROVIDER_") && env[name])
+  )
+    fail("provider credentials/configuration in web environment");
   for (const name of [
     "OPERATOR_DATABASE_URL",
     "MIGRATION_DATABASE_URL",

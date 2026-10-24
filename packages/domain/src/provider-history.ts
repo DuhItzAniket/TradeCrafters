@@ -260,3 +260,90 @@ export function normalizeDailyHistory(
     throw new HistoryFault("INVALID_DATA");
   }
 }
+
+export type DailyHistory = ReturnType<typeof normalizeDailyHistory>;
+export function validatedCachedHistory(
+  plan: HistoryPlan,
+  input: unknown,
+): DailyHistory {
+  try {
+    const candidate = z
+      .object({
+        observedAt: catalogTimestamp,
+        bars: z
+          .array(
+            z
+              .object({
+                tradingDate: catalogDate,
+                ...fields,
+                adjustedClose: decimal.optional(),
+              })
+              .strict(),
+          )
+          .min(1)
+          .max(31),
+      })
+      .passthrough()
+      .parse(input);
+    // Reapply the original value/identity contract; cached flags cannot grant
+    // execution/display rights or change adjustment/composite provenance.
+    const body =
+      plan.provider === "twelvedata"
+        ? JSON.stringify({
+            status: "ok",
+            meta: {
+              symbol: plan.symbol,
+              interval: "1day",
+              currency: plan.providerCurrency,
+              exchange_timezone: plan.timezone,
+              exchange: plan.providerExchange,
+              mic_code: plan.mic,
+              type: "Common Stock",
+            },
+            values: candidate.bars.map((row) => ({
+              datetime: row.tradingDate,
+              open: row.open,
+              high: row.high,
+              low: row.low,
+              close: row.close,
+              volume: row.volume,
+            })),
+          })
+        : "Date,Open,High,Low,Close,Adjusted_close,Volume\n" +
+          candidate.bars
+            .map((row) =>
+              [
+                row.tradingDate,
+                row.open,
+                row.high,
+                row.low,
+                row.close,
+                row.adjustedClose,
+                row.volume,
+              ].join(","),
+            )
+            .join("\n");
+    const expected = normalizeDailyHistory(plan, body, candidate.observedAt);
+    if (
+      Object.keys(candidate).length !== Object.keys(expected).length ||
+      Object.entries(expected).some(
+        ([key, value]) => key !== "bars" && candidate[key] !== value,
+      )
+    )
+      throw Error();
+    if (
+      expected.bars.some(
+        (row, i) =>
+          Object.keys(row).length !== Object.keys(candidate.bars[i]).length ||
+          Object.entries(row).some(
+            ([key, value]) =>
+              (candidate.bars[i] as Record<string, unknown>)[key] !== value,
+          ),
+      )
+    )
+      throw Error();
+    return expected;
+  } catch {
+    throw new HistoryFault("INVALID_DATA");
+  }
+}
