@@ -37,11 +37,31 @@ Prepare an ignored operator env file containing **`OPERATOR_DATABASE_URL`** and 
 node --env-file=.local/inventory-operator.env --import tsx scripts/inventory.ts publish
 ```
 
+The catalog operator needs its existing catalog read/publication grants plus permission for the serialization reads. In MySQL 8.4, `SELECT ... FOR UPDATE` requires an additional applicable locking privilege beyond `SELECT`; see [MySQL locking reads](https://dev.mysql.com/doc/refman/8.4/en/innodb-locking-reads.html). This workflow was verified with `UPDATE` limited to three catalog key columns. A database administrator can apply the following to the **existing catalog operator**, replacing the example schema/account names:
+
+```sql
+GRANT UPDATE (id) ON `your_database`.`catalog_import_guard` TO 'catalog_operator'@'%';
+GRANT UPDATE (snapshot_id) ON `your_database`.`catalog_snapshots` TO 'catalog_operator'@'%';
+GRANT UPDATE (mic) ON `your_database`.`mic_record_versions` TO 'catalog_operator'@'%';
+```
+
+These are operator permissions for locking reads; the publisher does not update those keys. Its normal writes remain audited classification publication. Preserve the web identity's exact grant contract and do not add these grants to it. A privilege rejection must be diagnosed against the documented statement/table; do not replace it with a wildcard or full-schema write grant.
+
 Publication requires a current review and explicit operator URL. Before the first classification, the existing immutable snapshot importer verifies the persisted source definitions, projection, hash and metadata; on an empty initialized application database it registers that source with its normal audit. A conflicting retained snapshot rejects the operation. All fifteen classification inputs are schema-validated before publication. The operation uses one existing transaction per MIC, with before/after catalog audits. It reports how many rows completed if interrupted. An identical retry is idempotent and retains completed work; it is not a single all-or-nothing batch. A newer review already stored for a row rejects an older one rather than overwriting it.
 
 After publication, inspect `GET /api/catalog/coverage` and each directory classification filter. Expect the counts above while reviews remain current, all 2,889 reference rows still accounted for, `universeReviewComplete=false`, `realSimulationEnabled=0`, and zero enabled venues for all nine capability types. Confirm a second identical publish adds no classification audit events. A change to classification never supplies price, rule or public-simulator permission.
 
 To correct a finding, retain this dated manifest and publish a later review with its own evidence and expiry. Do not alter the registered source or an applied migration. The current classification table retains the latest assessment; catalog audit retains prior before/after values. Changing a row to unknown requires a new explicit review, or occurs naturally when its review expires.
+
+## Hosted verification — 24 October 2026
+
+[PR #40](https://github.com/DuhItzAniket/TradeCrafters/pull/40) merged after [required CI](https://github.com/DuhItzAniket/TradeCrafters/actions/runs/40063865432) passed **201 checks** (86 unit/configuration, 19 provider HTTP/MySQL, 96 application HTTP/MySQL), artifact verification, clean installation, audit, production build, encrypted recovery and standalone container checks.
+
+The first hosted attempt stopped at 0/15 classifications because the existing operator could read the catalog but lacked the locking-read grants above. The three column grants corrected that configuration gap; no identities or table schemas changed. The web identity's full grant list was compared before/after and remained identical. Its independent runtime preflight then passed exact grants, actual privilege denials, verified TLS, required reads, expiry scheduler and the existing 12-connection user cap with two connections per process (server limit 76, reserve 16).
+
+At **04:58:36 UTC**, all fifteen hosted reviews were published. An identical retry kept classification audit count **15 → 15**. At **04:59:50 UTC**, the public coverage endpoint and all three classification filters returned **11 / 2 / 2,876**, summing to **2,889**, with exact reviewed MIC membership in the two classified filters. The effective snapshot remained null before 26 October; all real simulation/capability enablement remained zero. These checks used public metadata and did not require an owner session.
+
+Production deployment `dpl_D5MvDLEgJtkQXrB1nGK6JqApYyjf` was verified READY on exact merged main `324923c9d5e22291463f3145c26e6b3c68cd28d3`, with the canonical demo alias assigned in Mumbai. All six public synthetic smoke probes passed at **05:00:27 UTC**. This records public liveness, rendered policy, reference/chart reads and anonymous portfolio denial; it does not claim a new authenticated trading walkthrough or real provider acceptance. M3 feedback, M5 real-data acceptance and the complete worldwide inventory remain open.
 
 ## Remaining work
 
