@@ -1,0 +1,9 @@
+version: 1
+name: EODHD historical contract fixture
+slug: eodhd-history
+protocol: http
+interceptRequests: true
+scenarios:
+  - name: default
+    path: ./default.cjs
+    default: true

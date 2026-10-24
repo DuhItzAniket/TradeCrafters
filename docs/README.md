@@ -8,7 +8,7 @@ The project owner's direction is **all stock exchanges globally**, with a free o
 
 The research was merged through [PR #1](https://github.com/DuhItzAniket/TradeCrafters/pull/1); use [tracker #2](https://github.com/DuhItzAniket/TradeCrafters/issues/2) for the current implementation backlog. The original research delivery itself marked no implementation work complete; later acceptance is tracked separately.
 
-M4 engineering is underway: [deployment foundations and setup runbook](implementation/deployment-foundations.md). The owner deployed a Vercel demo, and [Aiven Singapore provisioning](implementation/hosted-preview.md) passed schema/seed, verified CA/hostname, exact grants and actual connection-cap checks. Hosted environment/browser and operational release acceptance remain open. Student feedback stays deferred.
+M4 is [accepted](implementation/m4-acceptance.md): the public synthetic demo runs on Vercel Hobby/Mumbai and Aiven Free/Bangalore with verified hosted identity, accounting, recovery and operating limits. M5 has started with [private historical-data adapters and HTTP contract checks](implementation/provider-history.md); actual data rights, live provider acceptance and worldwide coverage remain open. The owner is collecting M3 student feedback separately.
 
 ## Recommended direction
 

@@ -17,10 +17,10 @@
     "start": "npm run start -w @tradecrafters/web",
     "typecheck": "tsc --noEmit && npm run typecheck -w @tradecrafters/web",
     "lint": "eslint apps packages scripts tests",
-    "format": "prettier --write apps \"packages/*/src/**/*.ts\" \"packages/*/package.json\" packages/database/runtime-grants.json scripts tests *.json *.mjs compose.yaml \".github/workflows/*.yml\"",
-    "format:check": "prettier --check apps \"packages/*/src/**/*.ts\" \"packages/*/package.json\" packages/database/runtime-grants.json scripts tests *.json *.mjs compose.yaml \".github/workflows/*.yml\"",
+    "format": "prettier --write apps \"packages/*/src/**/*.ts\" \"packages/*/package.json\" packages/database/runtime-grants.json scripts tests *.json *.mjs compose.yaml \".github/workflows/*.yml\" postman",
+    "format:check": "prettier --check apps \"packages/*/src/**/*.ts\" \"packages/*/package.json\" packages/database/runtime-grants.json scripts tests *.json *.mjs compose.yaml \".github/workflows/*.yml\" postman",
     "verify:source": "node scripts/verify-source.mjs",
-    "test": "tsx --test tests/domain.test.ts tests/market-policy.test.ts tests/catalog.test.ts tests/fx.test.ts tests/auth-configuration.test.ts tests/trading.test.ts tests/workbench.test.ts tests/database-configuration.test.ts tests/backup-envelope.test.ts tests/database-snapshot.test.ts tests/release-preflight.test.ts tests/ingress.test.ts tests/browser-policy.test.ts tests/audit-anchor.test.ts",
+    "test": "tsx --test tests/domain.test.ts tests/market-policy.test.ts tests/catalog.test.ts tests/fx.test.ts tests/auth-configuration.test.ts tests/trading.test.ts tests/workbench.test.ts tests/database-configuration.test.ts tests/backup-envelope.test.ts tests/database-snapshot.test.ts tests/release-preflight.test.ts tests/ingress.test.ts tests/browser-policy.test.ts tests/audit-anchor.test.ts tests/provider-history.test.ts",
     "test:integration": "tsx --env-file=.env.local --test --test-concurrency=1 tests/integration.test.ts tests/policy-integration.test.ts tests/alias-integration.test.ts tests/catalog-integration.test.ts tests/oauth-integration.test.ts tests/database-privileges.test.ts tests/trading-integration.test.ts tests/workbench-integration.test.ts tests/operations-integration.test.ts tests/request-budget-integration.test.ts tests/identity-recovery-integration.test.ts tests/identity-expiry-integration.test.ts",
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
     "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
@@ -37,7 +37,9 @@
     "ops:hosted-recovery": "tsx scripts/rehearse-hosted-recovery.ts",
     "ops:recover-owner": "tsx scripts/recover-owner.ts",
     "ops:public-smoke": "node scripts/public-smoke.mjs",
-    "ops:audit-anchor": "tsx scripts/check-audit-anchor.ts"
+    "ops:audit-anchor": "tsx scripts/check-audit-anchor.ts",
+    "test:providers": "node scripts/check-provider-simulation.mjs",
+    "market-data:probe": "tsx scripts/market-data/probe.ts"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
@@ -48,11 +50,17 @@
     "prettier": "3.9.10",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.0"
+    "typescript-eslint": "8.72.0",
+    "@vercel/cli-config": "0.3.2"
   },
   "contributors": [
     "Aniket Kumar",
     "Annapurna S"
   ],
-  "license": "ISC"
+  "license": "ISC",
+  "overrides": {
+    "@vercel/cli-config": {
+      "zod": "4.6.7"
+    }
+  }
 }

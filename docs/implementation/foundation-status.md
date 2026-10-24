@@ -1,4 +1,6 @@
-# Project execution status — 22 October 2026
+# Project execution status — 24 October 2026
+
+**M5 has started:** [operator-only historical adapters](provider-history.md) for Twelve Data/EODHD pass seven contract and four real HTTP simulation checks. A patched Vercel dependency adds one compatibility check; the suite now has 76 unit/configuration checks, four provider HTTP checks and 96 existing MySQL/HTTP checks. No provider account is configured, no real provider request has been accepted, and hosted trading remains synthetic. Shared quota/lease services, actual venue data/rights and worldwide classification remain open. M3 student feedback is being collected by the owner.
 
 M1/#3, M2/#4 and **M4/#6 are complete**. [M4 acceptance](m4-acceptance.md) records the deployed personal synthetic demo, **164 checks (68 unit/configuration + 96 HTTP/MySQL)** and required build/audit/container/recovery gates. Current hosting is Vercel Hobby/Mumbai + Aiven Free/Bangalore. Identity, native trading/FX, receipt recovery, exact grants/TLS, bounded admission/capacity, audited controls/recovery, encrypted hosted restore, independent custody, lifecycle/audit protection, CSP/smoke and compatible rollback/promotion are verified with explicit limits.
 

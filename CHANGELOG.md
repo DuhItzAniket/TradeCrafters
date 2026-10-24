@@ -1,5 +1,12 @@
 # Changelog
 
+## M5 historical provider boundary — 24 October 2026
+
+- Add operator-only Twelve Data/EODHD daily-history clients, strict expiring private research approvals, exact decimal normalization, venue/unit/date validation and explicit adjustment/composite provenance.
+- Bound HTTP requests, body sizes and timeouts; hide provider errors/credentials, reject redirects and avoid retries. Return history with public display and execution disabled.
+- Add seven domain and four real HTTP simulation tests, pinned local Postman fixtures, CI traffic-count checks and an account/entitlement handoff. No real provider account or production data capability is enabled; M3 student feedback remains open.
+- Pin transitive Zod to the already used 4.6.7 patch, removing the Vercel CLI configuration dependency's vulnerable 4.1.11 copy flagged by the updated GHSA-mrhx-c7xc-m3w5 advisory. Recheck clean installation, audit and runtime/build compatibility.
+
 ## M4 accepted — 22 October 2026
 
 - Verify Production CSP/browser hydration and the first independent GitHub-hosted six-probe smoke run on reviewed main `2992574`.

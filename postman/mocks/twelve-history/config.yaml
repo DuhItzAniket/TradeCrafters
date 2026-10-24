@@ -1,0 +1,9 @@
+version: 1
+name: Twelve Data historical contract fixture
+slug: twelve-history
+protocol: http
+interceptRequests: true
+scenarios:
+  - name: default
+    path: ./default.cjs
+    default: true

@@ -1,0 +1,7 @@
+simulation: history-research
+routing: path
+mocks:
+  - routeKey: twelve
+    path: ../mocks/twelve-history/config.yaml
+  - routeKey: eodhd
+    path: ../mocks/eodhd-history/config.yaml

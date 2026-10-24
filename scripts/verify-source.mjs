@@ -10,6 +10,7 @@ const files = execFileSync(
     "packages",
     "scripts",
     "tests",
+    "postman",
     ".github",
     ".env.example",
     ".nvmrc",

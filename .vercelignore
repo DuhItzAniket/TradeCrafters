@@ -14,5 +14,6 @@ server/
 sql/
 docs/
 tests/
+postman/
 .playwright-cli/
 output/
