@@ -74,6 +74,9 @@ test("web release configuration rejects privileged operator/bootstrap secrets", 
     "LOCAL_RUNTIME_DATABASE_URL",
     "LOCAL_DB_PASSWORD",
     "LOCAL_DB_ROOT_PASSWORD",
+    "PROVIDER_DATABASE_URL",
+    "PROVIDER_API_KEY",
+    "PROVIDER_MYSQL_SSL_CA",
   ])
     assert.throws(() => webEnvironment({ [name]: "fixture" }));
 });

@@ -13,6 +13,13 @@ await new Promise((resolve, reject) => {
 const port = reservation.address().port;
 await new Promise((resolve) => reservation.close(resolve));
 await mkdir(".local/provider-simulation", { recursive: true });
+const withStore = process.argv.includes("--with-store");
+if (withStore && process.env.PROVIDER_FIXTURE !== "true")
+  throw Error("Use npm run test:provider-store for isolated MySQL fixtures.");
+const simulationEnv = { ...process.env };
+for (const name of Object.keys(simulationEnv))
+  if (/DATABASE|AUTH|SECRET|TOKEN|API_KEY|PROVIDER_LEASE/i.test(name))
+    delete simulationEnv[name];
 const simulation = spawn(
   process.execPath,
   [
@@ -35,6 +42,7 @@ const simulation = spawn(
     windowsHide: true,
     detached: process.platform !== "win32",
     stdio: ["ignore", "pipe", "pipe"],
+    env: simulationEnv,
   },
 );
 let log = "",
@@ -85,7 +93,13 @@ try {
   );
   tests = spawn(
     process.execPath,
-    ["--import", "tsx", "--test", "tests/provider-http.test.ts"],
+    [
+      "--import",
+      "tsx",
+      "--test",
+      "tests/provider-http.test.ts",
+      ...(withStore ? ["tests/provider-store-integration.test.ts"] : []),
+    ],
     {
       windowsHide: true,
       stdio: "inherit",
@@ -116,7 +130,10 @@ try {
       requests.filter((event) => event.routeKey === member).length,
     ]),
   );
-  if (counts.twelve !== 25 || counts.eodhd !== 3)
+  if (
+    counts.twelve !== (withStore ? 30 : 25) ||
+    counts.eodhd !== (withStore ? 4 : 3)
+  )
     throw Error(
       "Unexpected simulation request count; check for missing calls or automatic retries.",
     );
@@ -125,6 +142,7 @@ try {
     JSON.stringify(
       {
         postmanVersion: "1.76.0",
+        isolatedMySql: withStore,
         scope: "synthetic HTTP contract checks, not live provider acceptance",
         requests: counts,
         passed: true,

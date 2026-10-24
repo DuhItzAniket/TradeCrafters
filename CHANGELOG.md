@@ -1,5 +1,12 @@
 # Changelog
 
+## M5 private research coordination — 24 October 2026
+
+- Add a separate MySQL research store with atomic account/feed credit reservations, fenced request leases, durable cooldown/denial and conservative crash charging. Keep provider HTTP outside transactions and real data outside the trading ledger.
+- Add permission-bound, revalidated cache entries with default no-store, explicit retention/backup approval, finite capacity, transactional eviction and bounded idle expiry. Require reviewed private policies; no provider account or hosted research service is enabled.
+- Verify actual worker death/takeover, concurrent pools, expiry, SQL rollback and provider failures through fifteen new MySQL/HTTP checks. Add five coordination unit checks and one multiline web-env exclusion regression; CI now contains 197 checks plus the existing build/audit/recovery/container gates.
+- Update the private operator probe, runbook and project status. M3 student feedback and M5 real account/venue/rights acceptance remain open.
+
 ## M5 historical provider boundary — 24 October 2026
 
 - Add operator-only Twelve Data/EODHD daily-history clients, strict expiring private research approvals, exact decimal normalization, venue/unit/date validation and explicit adjustment/composite provenance.

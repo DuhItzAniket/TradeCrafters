@@ -6,7 +6,7 @@ Implementation record, **24 October 2026**. Tracks [M5 #7](https://github.com/Du
 
 Two operator-only adapters retrieve bounded daily history: Twelve Data `/time_series` and EODHD `/api/eod/{symbol.exchange}`. They normalize exact decimal strings, local trading dates, provider identity and adjustment provenance. This is an implementation and simulated-contract milestone, **not acceptance of real provider data**. There is no provider account/key configured, no live request has passed, and no real exchange gains coverage from these fixtures.
 
-No web route, browser subscription, background worker, database migration or ledger connection is added. The hosted experience stays explicitly synthetic. A standalone operator invocation makes at most one provider request, with no redirects or automatic retry, a five-second default timeout (ten-second ceiling), a 256 KiB decoded response cap and at most 31 calendar days/31 returned bars. Repeating invocations still consumes quota; this command is not a shared quota scheduler.
+No web route, browser subscription, background worker, application database migration or ledger connection is added. The subsequent [coordination slice](provider-coordination.md) uses a separate private research schema. The hosted experience stays explicitly synthetic. A standalone operator invocation makes at most one provider request, with no redirects or automatic retry, a five-second default timeout (ten-second ceiling), a 256 KiB decoded response cap and at most 31 calendar days/31 returned bars. Operator probes now require the durable account/feed gate described in the [coordination runbook](provider-coordination.md); cache misses reserve credits before HTTP, and reviewed cache hits preserve their original timestamp.
 
 ## Provider contracts and research
 
@@ -29,7 +29,7 @@ Twelve Data distinguishes personal/internal development from external display an
 - Only same-currency units and explicitly mapped GBX/GBP hundredths are accepted in this first slice. Other minor units, ADRs, ETFs, special security types, slash/batch aliases and unsupported decimal/volume shapes remain rejected pending evidence and tests. No implicit FX conversion occurs.
 - Nonpositive/impossible OHLC, duplicate or unordered dates, out-of-range bars, numeric JSON prices and incorrect provider metadata fail. Unadjusted close and EODHD adjusted close remain separate fields. Splits, dividends and cash-ledger actions are not implemented by these adapters.
 - Normalized history always carries `purpose=private_research`, `executionEligible=false` and `publicDisplayAuthorized=false`. It cannot promote catalog permissions or count as verified venue coverage.
-- HTTP 429, status-200 provider errors, denied access, upstream failure, HTML, redirects, oversized/invalid bodies, timeouts and transport failure return fixed error codes. Provider messages, request URLs and credentials are hidden. A throttle carries a bounded retry hint; the operator must honor it before another invocation.
+- HTTP 429, status-200 provider errors, denied access, upstream failure, HTML, redirects, oversized/invalid bodies, timeouts and transport failure return fixed error codes. Provider messages, request URLs and credentials are hidden. A throttle carries a bounded retry hint; the coordinator persists its cooldown across invocations.
 
 ## Repeatable checks without accounts
 
@@ -56,13 +56,13 @@ There is deliberately no provider-key variable in the web app. Keep research cre
 1. Copy the examples below into `.local/market-data/`. Replace the synthetic listing and mapping with a real, dated, verified catalog mapping. Use the actual provider's currency/unit conventions; do not infer them from fixture values.
 2. Review the account's private research terms, including the requested venues. Keep the underlying agreement privately. Update the access record and its evidence reference only when approval is established. Public display, simulation, retention and replay remain independent decisions.
 3. Save the provider key as `{"apiKey":"..."}` in a separate private JSON file. Keep it out of command arguments, screenshots, chat and commits. Do not enable debug fetch/proxy URL logging.
-4. Run once, substituting the private file paths:
+4. Prepare the separately reviewed account/feed store using the [coordination runbook](provider-coordination.md). Keep caching disabled unless storage and backup terms are approved. Run once with its private database env file, substituting the file paths and configured account ID:
 
 ```sh
-npm run market-data:probe -- --plan .local/market-data/plan.json --access .local/market-data/access.json --credentials .local/market-data/credentials.json
+node --env-file=.local/market-data/provider-store.env --import tsx scripts/market-data/probe.ts --plan .local/market-data/plan.json --access .local/market-data/access.json --credentials .local/market-data/credentials.json --account research-account
 ```
 
-The probe validates before sending a single request and prints only a count/date/provenance summary. It does not print or save the returned prices. Approval does not authorize importing them into MySQL or displaying them publicly. Do not change the example's `unknown` status just to make the command pass.
+The probe validates before sending a single request and prints only a count/date/provenance summary. It never prints prices. The default no-store policy persists no returned prices; a separately reviewed positive cache TTL can store bounded results in the dedicated research database. Private research approval alone does not authorize retention or public display. Do not change the example's `unknown` status just to make the command pass.
 
 `plan.json` template (fictional and not suitable for a live call):
 
@@ -107,7 +107,7 @@ The probe validates before sending a single request and prints only a count/date
 | Real contract acceptance | Capture and compare authorized source responses privately; check aliases, actual unit conventions, adjustments, history completeness and failure shapes. |
 | Worldwide denominator | 2,889 MIC reference rows remain unclassified; acquire the actual prior effective source and classify cash-equity venues with dated evidence. The October update becomes effective 26 October, not early. |
 | Provider coverage | No production coverage is enabled. Compare directory/history/EOD/delayed/live/actions/FX and usage rights per venue/segment/listing; retain smaller/frontier gaps. |
-| Runtime data service | Add durable shared provider/feed budgets, active subscriptions, leases, cache freshness/retention and quality gates before browser requests or workers can call providers. |
+| Runtime data service | Private daily-history account/feed budgets, leases and bounded opt-in cache are [implemented and tested](provider-coordination.md). Hosted grants/capacity/retention, streaming subscriptions and public/worker acceptance remain open. |
 | Execution | Verify local sessions/holidays/breaks, ticks/lots/bands, halts, actions and FX; enforce freshness and permissions independently of chart availability. |
 | Rollout | Select a genuinely entitled multi-region batch, document cost and fidelity, verify isolated outages, then enable explicit modes behind reviewed capabilities. |
 

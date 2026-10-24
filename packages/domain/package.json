@@ -10,7 +10,8 @@
     "./fx": "./src/fx.ts",
     "./trading": "./src/trading.ts",
     "./workbench": "./src/workbench.ts",
-    "./provider-history": "./src/provider-history.ts"
+    "./provider-history": "./src/provider-history.ts",
+    "./provider-coordination": "./src/provider-coordination.ts"
   },
   "dependencies": {
     "@js-temporal/polyfill": "0.5.1",
