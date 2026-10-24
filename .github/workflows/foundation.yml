@@ -34,6 +34,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run format:check
+      - run: npm run inventory -- check
       - run: npm test
       - name: Verify provider HTTP and isolated MySQL coordination
         run: npm run test:provider-store

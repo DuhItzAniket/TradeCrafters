@@ -18,7 +18,7 @@ The M1 foundation, M2 accounting and **M3 workbench implementation** are availab
 | Capability                                                     | Status                                                                  |
 | -------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | Responsive global explorer and disambiguated exchange listings | Working with fictional scenarios                                        |
-| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; cash-equity classification remains open            |
+| Worldwide MIC reference search, filters and pagination         | 2,889 dated records; first 15-row evidence review; worldwide review open            |
 | Immutable reference versions/diffs and dated provider aliases  | Audited operator workflow; all real coverage stays unknown              |
 | Server sessions, ownership checks and native-currency wallets  | Local and hosted synthetic accounts verified                            |
 | GitHub OAuth                                                   | Hosted callback/reload, failure boundaries and scoped recovery verified |
@@ -81,7 +81,9 @@ The [setup runbook](docs/implementation/deployment-foundations.md), [data lifecy
 
 M5 has started with [private historical-data adapters and their acceptance gates](docs/implementation/provider-history.md). `npm run test:providers` exercises the actual HTTP clients against local Postman contract fixtures; no accounts or provider keys are needed. These checks add zero to verified real-exchange coverage. The [private research coordinator](docs/implementation/provider-coordination.md) adds durable account/feed quotas, fenced leases and an opt-in bounded cache. `npm run test:provider-store` verifies it with isolated local MySQL and Postman HTTP fixtures. Real provider acceptance, public usage rights and hosted research-service capacity remain open.
 
-Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **82 unit/configuration, 19 provider HTTP/MySQL and 96 application MySQL/HTTP checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
+The [worldwide inventory review](docs/implementation/inventory-review.md) adds a reproducible complete CSV and a first evidence batch, including explicit Bhutan/Ethiopia mapping gaps. Classification supplies no data or simulation permission.
+
+Changes land through pull requests to protected `main`. Auto-merge is available for authorized PRs once the required `verify` check passes, the branch is up to date, and review conversations are resolved. The check covers tracked-source/credential patterns, clean installation, MySQL migrations and seed, restricted web DB provisioning/inspection, type/lint/format, **86 unit/configuration, 19 provider HTTP/MySQL and 96 application MySQL/HTTP checks**, a dependency audit, a production build, isolated encrypted recovery and standalone-container smoke checks.
 
 Read the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), [change history](CHANGELOG.md), and [local setup guide](docs/implementation/local-development.md) before making a change. Project status distinguishes verified behavior from work still on the roadmap.
 
