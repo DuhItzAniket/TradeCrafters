@@ -54,7 +54,7 @@
     "tsx": "4.23.15",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0",
-    "@vercel/cli-config": "0.3.2"
+    "@vercel/cli-config": "0.3.3"
   },
   "contributors": [
     "Aniket Kumar",
